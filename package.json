@@ -1,6 +1,6 @@
 {
   "name": "maus",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The jQuery extension library (not jQuery plugin).",
   "main": "src/maus.js",
   "scripts": {
@@ -19,7 +19,7 @@
   "author": "Tsukimi Shion <tsukimishion@gmail.com>",
   "license": "GNU GPL v3.0",
   "bugs": {
-    "url": "https://github.com/kics/maus/issues"
+    "url": "https://github.com/TsukimiShion/maus/issues"
   },
   "homepage": "https://github.com/TsukimiShion/maus",
   "devDependencies": {
