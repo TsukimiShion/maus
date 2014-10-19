@@ -1,0 +1,40 @@
+{
+    "name": "maus",
+    "main": "src/maus.js",
+    "version": "1.0.0",
+    "homepage": "https://github.com/TsukimiShion/maus",
+    "authors": [
+        "Tsukimi Shion <tsukimishion@gmail.com>"
+    ],
+    "description": "The jQuery extension library (not jQuery plugin).",
+    "keywords": [
+        "maus",
+        "utility",
+        "jQuery",
+        "JavaScript"
+    ],
+    "license": "GNU GPL v3.0",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "jquery": null,
+        "underscore": null
+    },
+    "devDependencies": {
+        "mocha": null,
+        "chai": null
+    },
+    "exportsOverride": {
+        "jquery": {
+            "": ["dist/jquery.js", "dist/jquery.min.js", "dist/jquery.min.map"]
+        },
+        "underscore": {
+            "": ["underscore.js", "underscore-min.js", "underscore-min.map"]
+        }
+    }
+}

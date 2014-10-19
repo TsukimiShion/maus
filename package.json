@@ -1,0 +1,38 @@
+{
+  "name": "maus",
+  "version": "1.0.0",
+  "description": "The jQuery extension library (not jQuery plugin).",
+  "main": "src/maus.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/TsukimiShion/maus.git"
+  },
+  "keywords": [
+    "JavaScript",
+    "maus",
+    "jQuery",
+    "utility"
+  ],
+  "author": "Tsukimi Shion <tsukimishion@gmail.com>",
+  "license": "GNU GPL v3.0",
+  "bugs": {
+    "url": "https://github.com/kics/maus/issues"
+  },
+  "homepage": "https://github.com/TsukimiShion/maus",
+  "devDependencies": {
+    "chai": "^1.9.2",
+    "grunt": "^0.4.5",
+    "grunt-bower-task": "^0.4.0",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-uglify": "^0.6.0",
+    "grunt-contrib-yuidoc": "^0.5.2",
+    "grunt-mocha": "^0.4.11"
+  },
+  "dependencies": {
+    "underscore": "^1.7.0",
+    "jquery": "^2.1.1"
+  }
+}
