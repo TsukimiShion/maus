@@ -1,0 +1,828 @@
+{
+    "project": {
+        "name": "maus",
+        "description": "The jQuery extension library (not jQuery plugin).",
+        "version": "1.0.0",
+        "url": "https://github.com/TsukimiShion/maus"
+    },
+    "files": {
+        "src/maus.js": {
+            "name": "src/maus.js",
+            "modules": {},
+            "classes": {
+                "maus": 1,
+                "maus.J": 1,
+                "maus.Form": 1,
+                "maus.Text": 1,
+                "maus.Select": 1,
+                "maus.Radio": 1,
+                "maus.CheckBox": 1,
+                "maus.BoolCheckBox": 1
+            },
+            "fors": {
+                "maus": 1
+            },
+            "namespaces": {
+                "maus": 1
+            }
+        }
+    },
+    "modules": {},
+    "classes": {
+        "maus": {
+            "name": "maus",
+            "shortname": "maus",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/maus.js",
+            "line": 3,
+            "static": 1
+        },
+        "maus.J": {
+            "name": "maus.J",
+            "shortname": "maus.J",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "maus",
+            "file": "src/maus.js",
+            "line": 11,
+            "description": "jQuery Wrapper Class.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "selector",
+                    "description": "This argument is passed to $().",
+                    "type": "String|Element|Array of Element|jQuery"
+                }
+            ],
+            "example": [
+                "\n    // ex1\n    var body = new maus.J(\"body\");\n    body.css(\"background-color\", \"red\"); // $(\"body\").css(\"background-color\", \"red\");"
+            ]
+        },
+        "maus.Form": {
+            "name": "maus.Form",
+            "shortname": "maus.Form",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "maus",
+            "file": "src/maus.js",
+            "line": 140,
+            "description": "The Base Class of Text, CheckBox, etc.\nYou cannot access this class.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "selector",
+                    "description": "",
+                    "type": "String|Element|jQuery"
+                },
+                {
+                    "name": "live",
+                    "description": "",
+                    "type": "Undefined|false|selector",
+                    "optional": true,
+                    "optdefault": "undefined"
+                },
+                {
+                    "name": "def",
+                    "description": "The default value.",
+                    "type": "Undefined|String|Array of String",
+                    "optional": true,
+                    "optdefault": "undefined"
+                }
+            ]
+        },
+        "maus.Text": {
+            "name": "maus.Text",
+            "shortname": "maus.Text",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "maus",
+            "file": "src/maus.js",
+            "line": 269,
+            "description": "This class helps to operate input:text or textarea.",
+            "is_constructor": 1,
+            "extends": "maus.Form",
+            "params": [
+                {
+                    "name": "selector",
+                    "description": "",
+                    "type": "String|Element|jQuery"
+                },
+                {
+                    "name": "live",
+                    "description": "",
+                    "optional": true
+                },
+                {
+                    "name": "def",
+                    "description": "The default value.",
+                    "optional": true
+                }
+            ],
+            "example": [
+                "\n    var text = new maus.Text(\":text\");"
+            ]
+        },
+        "maus.Select": {
+            "name": "maus.Select",
+            "shortname": "maus.Select",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "maus",
+            "file": "src/maus.js",
+            "line": 353,
+            "description": "This class helps to operate select.",
+            "is_constructor": 1,
+            "extends": "maus.Form",
+            "params": [
+                {
+                    "name": "selector",
+                    "description": "",
+                    "type": "String|Element|jQuery"
+                },
+                {
+                    "name": "live",
+                    "description": "",
+                    "optional": true
+                },
+                {
+                    "name": "def",
+                    "description": "The default value.",
+                    "optional": true
+                },
+                {
+                    "name": "multiple",
+                    "description": "The value of select's multiple attribute.",
+                    "type": "Boolean",
+                    "optional": true,
+                    "optdefault": "false"
+                }
+            ],
+            "example": [
+                "\n    var select = new maus.Select(\"select\");\n    var multi_select = new maus.Select(\"select\", undefined, undefined, true); // multiple select"
+            ]
+        },
+        "maus.Radio": {
+            "name": "maus.Radio",
+            "shortname": "maus.Radio",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "maus",
+            "file": "src/maus.js",
+            "line": 460,
+            "description": "This class helps to operate input:radio.",
+            "is_constructor": 1,
+            "extends": "maus.Form",
+            "params": [
+                {
+                    "name": "selector",
+                    "description": "",
+                    "type": "String|Element|jQuery"
+                },
+                {
+                    "name": "live",
+                    "description": "",
+                    "optional": true
+                },
+                {
+                    "name": "def",
+                    "description": "The default value.",
+                    "optional": true
+                }
+            ]
+        },
+        "maus.CheckBox": {
+            "name": "maus.CheckBox",
+            "shortname": "maus.CheckBox",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "maus",
+            "file": "src/maus.js",
+            "line": 541,
+            "description": "This class helps to operate input:checkbox.",
+            "is_constructor": 1,
+            "extends": "maus.Form",
+            "params": [
+                {
+                    "name": "selector",
+                    "description": "",
+                    "type": "String|Element|jQuery"
+                },
+                {
+                    "name": "live",
+                    "description": "",
+                    "optional": true
+                },
+                {
+                    "name": "def",
+                    "description": "The default value.",
+                    "optional": true
+                }
+            ]
+        },
+        "maus.BoolCheckBox": {
+            "name": "maus.BoolCheckBox",
+            "shortname": "maus.BoolCheckBox",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "maus",
+            "file": "src/maus.js",
+            "line": 640,
+            "description": "This class helps to operate input:checkbox.\nIf you use this class, the following conditions should be satisfied.\n\n- ``` $(selector).size() ``` is 1.\n- You want to check Whether this checkbox is checked.\n- You don't want to check the value of the checked checkbox.",
+            "is_constructor": 1,
+            "extends": "maus.Form",
+            "params": [
+                {
+                    "name": "selector",
+                    "description": "",
+                    "type": "String|Element|jQuery"
+                },
+                {
+                    "name": "live",
+                    "description": "",
+                    "optional": true
+                },
+                {
+                    "name": "def",
+                    "description": "The default value.",
+                    "optional": true
+                }
+            ]
+        }
+    },
+    "classitems": [
+        {
+            "file": "src/maus.js",
+            "line": 26,
+            "description": "Get the jQuery object.",
+            "itemtype": "method",
+            "name": "jq",
+            "return": {
+                "description": "The jQuery object.",
+                "type": "JQuery"
+            },
+            "example": [
+                "\n    // ex1\n    var body = new maus.J(\"body\");\n    body.jq(); // $(\"body\")"
+            ],
+            "class": "maus.J",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 47,
+            "description": "The short cut method of jQuery.prop(\"checked\", flag).",
+            "itemtype": "method",
+            "name": "checked",
+            "params": [
+                {
+                    "name": "flag",
+                    "description": "",
+                    "type": "Boolean",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "The jQuery object.",
+                "type": "JQuery"
+            },
+            "example": [
+                "\n    // ex1\n    var checkboxes = new maus.J(\":checkbox\");\n    checkboxes.checked(true); // $(\":checkbox\").prop(\"checked\", true);\n    checkboxes.checked(); // $(\":checkbox\").prop(\"checked\");"
+            ],
+            "class": "maus.J",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 59,
+            "description": "The short cut method of jQuery.prop(\"disabled\", flag).",
+            "itemtype": "method",
+            "name": "disabled",
+            "params": [
+                {
+                    "name": "flag",
+                    "description": "",
+                    "type": "Boolean",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "The jQuery object.",
+                "type": "JQuery"
+            },
+            "example": [
+                "\n    // ex1\n    var button = new maus.J(\":button\");\n    button.disabled(true); // $(\":button\").prop(\"disabled\", true);\n    button.disabled(); // $(\":button\").prop(\"disabled\");"
+            ],
+            "class": "maus.J",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 80,
+            "description": "The short cut method of jQuery.css(\"display\", val).",
+            "itemtype": "method",
+            "name": "display",
+            "params": [
+                {
+                    "name": "val",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The jQuery object.",
+                "type": "JQuery"
+            },
+            "example": [
+                "\n    // ex1\n    var button = new maus.J(\":button\");\n    button.display(\"none\"); // $(\":button\").css(\"display\", \"none\");"
+            ],
+            "class": "maus.J",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 92,
+            "description": "The short cut method of jQuery.css(\"display\", *).\nNote: inline-block is supported by only some browsers.",
+            "itemtype": "method",
+            "name": "display_*",
+            "return": {
+                "description": "The jQuery object.",
+                "type": "JQuery"
+            },
+            "example": [
+                "\n    // ex1\n    var button = new maus.J(\":button\");\n    button.display_none(); // $(\":button\").css(\"display\", \"none\");\n    button.display_inline(); // $(\":button\").css(\"display\", \"none\");\n    button.display_list_item(); // $(\":button\").css(\"display\", \"list-item\");"
+            ],
+            "class": "maus.J",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 117,
+            "description": "The function to make J instances.",
+            "itemtype": "method",
+            "name": "controls",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "example": [
+                "\n    // ex1\n    var controls = maus.controls({\n        body: \"body\",\n        container: \"#container\",\n    });\n    controls.body.css(\"background-color\", \"red\"); // $(\"body\").css(\"background-color\", \"red\");\n    controls.container.css(\"background-color\", \"white\"); // $(\"#container\").css(\"background-color\", \"white\");"
+            ],
+            "class": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 152,
+            "description": "If live is undefined, you can't use the **vchange.fm** event and on_vchange and off_vchange method.",
+            "itemtype": "attribute",
+            "name": "live",
+            "type": "{undefined|false|selector}",
+            "writeonce": "",
+            "default": "undefined",
+            "class": "maus.Form",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 162,
+            "description": "Change the value to the default value.",
+            "itemtype": "method",
+            "name": "def",
+            "return": {
+                "description": "this"
+            },
+            "example": [
+                "\n    var text = new maus.Text(\":text\");\n    console.log(text.get()); // \"\"\n    text.setDef(\"hello\");\n    console.log(text.get()); // \"\"\n    text.def();\n    console.log(text.get()); // \"hello\""
+            ],
+            "class": "maus.Form",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 177,
+            "description": "Return the default value.",
+            "itemtype": "method",
+            "name": "getDef",
+            "return": {
+                "description": "",
+                "type": "String|Array of String"
+            },
+            "example": [
+                "\n    var text = new maus.Text(\":text\");\n    console.log(text.getDef()); // undefined\n    text.setDef(\"hello\");\n    console.log(text.getDef()); // \"hello\""
+            ],
+            "class": "maus.Form",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 190,
+            "description": "Set the default value.",
+            "itemtype": "method",
+            "name": "setDef",
+            "params": [
+                {
+                    "name": "val",
+                    "description": "The default value.",
+                    "type": "String|Array of String"
+                }
+            ],
+            "return": {
+                "description": "this"
+            },
+            "example": [
+                "\n    var text = new maus.Text(\":text\");\n    console.log(text.getDef()); // undefined\n    text.setDef(\"hello\");\n    console.log(text.getDef()); // \"hello\""
+            ],
+            "class": "maus.Form",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 205,
+            "description": "Attach the event handler function for the event to the selected elements.\nThis method is similar to ``` jQuery.on() ``` .\nIf live is undefined, this method does nothing.\nIf live is false, this method is equivalent to ``` $(selector).on(event, func) ``` .\nOtherwise, this method is equivalent to ``` $(live).on(event, selector, func) ``` .",
+            "itemtype": "method",
+            "name": "lon",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "func",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "this"
+            },
+            "example": [
+                "\n    var text = new maus.Text(\":text\", false);\n    text.lon(\"vchange.fm\", function(e, val){\n        // Execute whenever the value of textbox changes.\n        // val is the value of textbox.\n        console.log(val);\n    });"
+            ],
+            "class": "maus.Form",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 233,
+            "description": "Attach an event handler function for **vchange.fm** event.",
+            "itemtype": "method",
+            "name": "on_vchange",
+            "return": {
+                "description": "this"
+            },
+            "example": [
+                "\n    var text = new maus.Text(\":text\", false);\n    text.off_vchange();\n    text.on_vchange();"
+            ],
+            "class": "maus.Form",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 243,
+            "description": "Remove an event handler function for **vchange.fm** event.",
+            "itemtype": "method",
+            "name": "off_vchange",
+            "return": {
+                "description": "this"
+            },
+            "example": [
+                "\n    var text = new maus.Text(\":text\", false);\n    text.off_vchange();"
+            ],
+            "class": "maus.Form",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 254,
+            "description": "If live is not undefined, this event occurs when the value of form changes.\nIf you don't want this event to occur, call this.off_vchange().\nAfter call this.off_vchange(), if you want this event to occur again, call this.on_vchange().",
+            "itemtype": "event",
+            "name": "vchange.fm",
+            "example": [
+                "\n    var text = new maus.Text(\":text\", false);\n    text.lon(\"vchange.fm\", function(e, val){\n        // Execute whenever the value of textbox changes.\n        // val is the value of textbox.\n        console.log(val);\n    });"
+            ],
+            "class": "maus.Form",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 284,
+            "description": "Return the value.",
+            "itemtype": "method",
+            "name": "get",
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "example": [
+                "\n    var text = new maus.Text(\"textarea\");\n    text.set(\"hello\");\n    console.log(text.get()); // \"hello\""
+            ],
+            "class": "maus.Text",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 296,
+            "description": "Set the value.",
+            "itemtype": "method",
+            "name": "set",
+            "params": [
+                {
+                    "name": "val",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "this"
+            },
+            "example": [
+                "\n    var text = new maus.Text(\"textarea\");\n    text.set(\"hello\");\n    console.log(text.get()); // \"hello\""
+            ],
+            "class": "maus.Text",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 310,
+            "description": "Clear the value.",
+            "itemtype": "method",
+            "name": "clear",
+            "return": {
+                "description": "this"
+            },
+            "example": [
+                "\n    var text = new maus.Text(\"textarea\");\n    text.clear();\n    console.log(text.get()); // \"\""
+            ],
+            "class": "maus.Text",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 370,
+            "description": "Return the value.",
+            "itemtype": "method",
+            "name": "get",
+            "return": {
+                "description": "",
+                "type": "String|Array of String|null"
+            },
+            "example": [
+                "\n    // ex1: single\n    var select = new maus.Select(\"select\");\n    console.log(select.get()); // String or null",
+                "\n    // ex2: multiple\n    var select = new maus.Select(\"select\", undefined, undefined, multiple);\n    select.set(\"hello\");\n    console.log(select.get()); // [\"hello\"]\n    select.clear();\n    console.log(select.get()); // null"
+            ],
+            "class": "maus.Select",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 389,
+            "description": "Set the value.",
+            "itemtype": "method",
+            "name": "set",
+            "params": [
+                {
+                    "name": "val",
+                    "description": "",
+                    "type": "String|Array of String"
+                }
+            ],
+            "return": {
+                "description": "this"
+            },
+            "example": [
+                "\n    // ex1: single\n    var select = new maus.Select(\"select\");\n    select.set(\"hello\");\n    console.log(select.get()); // \"hello\"",
+                "\n    // ex2: multiple\n    var select = new maus.Select(\"select\", undefined, undefined, multiple);\n    select.set(\"hello\");\n    console.log(select.get()); // [\"hello\"]\n    select.set([\"bad\", \"good\"]);\n    console.log(select.get()); // [\"bad\", \"good\"]"
+            ],
+            "class": "maus.Select",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 411,
+            "description": "Clear the value.",
+            "itemtype": "method",
+            "name": "clear",
+            "return": {
+                "description": "this"
+            },
+            "example": [
+                "\n    // ex1 single\n    var select = new maus.Select(\"select\");\n    select.clear();\n    console.log(select.get()); // null",
+                "\n    // ex2 single\n    var select = new maus.Select(\"select\", undefined, undefined, multiple);\n    select.clear();\n    console.log(select.get()); // null"
+            ],
+            "class": "maus.Select",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 475,
+            "description": "Return the value.",
+            "itemtype": "method",
+            "name": "get",
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "example": [
+                "\n    var radio = new maus.Radio(\":radio\");\n    radio.set(\"good\");\n    console.log(radio.get()); // \"good\""
+            ],
+            "class": "maus.Radio",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 487,
+            "description": "Set the value.",
+            "itemtype": "method",
+            "name": "set",
+            "params": [
+                {
+                    "name": "val",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "this"
+            },
+            "example": [
+                "\n    var radio = new maus.Radio(\":radio\");\n    radio.set(\"good\");\n    console.log(radio.get()); // \"good\""
+            ],
+            "class": "maus.Radio",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 501,
+            "description": "Clear the value.",
+            "itemtype": "method",
+            "name": "clear",
+            "return": {
+                "description": "this"
+            },
+            "example": [
+                "\n    var radio = new maus.Radio(\":radio\");\n    radio.clear();\n    console.log(radio.get()); // null"
+            ],
+            "class": "maus.Radio",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 556,
+            "description": "Return the value.",
+            "itemtype": "method",
+            "name": "get",
+            "return": {
+                "description": "",
+                "type": "Array of String"
+            },
+            "example": [
+                "\n    var checkbox = new maus.CheckBox(\":checkbox\");\n    console.log(checkbox.get()); // []\n    checkbox.set(\"good\");\n    console.log(checkbox.get()); // [\"good\"]"
+            ],
+            "class": "maus.CheckBox",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 573,
+            "description": "Clear the value.",
+            "itemtype": "method",
+            "name": "clear",
+            "return": {
+                "description": "this"
+            },
+            "example": [
+                "\n    var checkbox = new maus.CheckBox(\":checkbox\");\n    checkbox.clear();\n    console.log(checkbox.get()); // []"
+            ],
+            "class": "maus.CheckBox",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 586,
+            "description": "Set the value.",
+            "itemtype": "method",
+            "name": "set",
+            "params": [
+                {
+                    "name": "val",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "this"
+            },
+            "example": [
+                "\n    var checkbox = new maus.CheckBox(\":checkbox\");\n    checkbox.set(\"hello\");\n    console.log(checkbox.get()); // [\"hello\"]\n    checkbox.set([\"good\", \"bad\"]);\n    console.log(checkbox.get()); // [\"good\", \"bad\"]"
+            ],
+            "class": "maus.CheckBox",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 659,
+            "description": "Return whether the checkbox is checked.",
+            "itemtype": "method",
+            "name": "get",
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "example": [
+                "\n    var checkbox = new maus.BoolCheckBox(\":checkbox\");\n    checkbox.clear();\n    console.log(checkbox.get()); // false\n    checkbox.set(true);\n    console.log(checkbox.get()); // true"
+            ],
+            "class": "maus.BoolCheckBox",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 673,
+            "description": "Clear the value.",
+            "itemtype": "method",
+            "name": "clear",
+            "return": {
+                "description": "this"
+            },
+            "example": [
+                "\n    var checkbox = new maus.BoolCheckBox(\":checkbox\");\n    checkbox.clear();\n    console.log(checkbox.get()); // false"
+            ],
+            "class": "maus.BoolCheckBox",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 686,
+            "description": "Set the value.",
+            "itemtype": "method",
+            "name": "set",
+            "params": [
+                {
+                    "name": "val",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "this"
+            },
+            "example": [
+                "\n    var checkbox = new maus.BoolCheckBox(\":checkbox\");\n    checkbox.set(true);\n    console.log(checkbox.get()); // true\n    checkbox.set(false);\n    console.log(checkbox.get()); // false"
+            ],
+            "class": "maus.BoolCheckBox",
+            "namespace": "maus"
+        },
+        {
+            "file": "src/maus.js",
+            "line": 730,
+            "description": "This method helps to make instances of the subclass of Form.",
+            "itemtype": "method",
+            "name": "form",
+            "params": [
+                {
+                    "name": "params",
+                    "description": "\nThe each value of **params**'s property must be an Array object [**type**, **selector**, **live**, **def**, **multiple**].\n**type** and **selector** require, and others are optional.\ntype must be one of the following value.\n\n- \"text\": create a maus.Text object.\n- \"select\": create a maus.Select object.\n- \"radio\": create a maus.Radio object.\n- \"checkbox\": create a maus.CheckBox object.\n- \"bcheckbox\", \"boolcheckbox\": create a maus.BoolCheckBox object.\n\nThe meaning of **selector**, **live**, **def**, **multiple** is equivalent to maus.Form .",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "Object"
+            },
+            "example": [
+                "\n    var form = maus.form({\n        name: [\"text\", \":text[name='name']\", undefined, \"John\"],\n        sex: [\"checkbox\", \":checkbox[name='sex']\", undefined],\n    });\n    form.set({ name: \"John\", sex: \"male\" });\n    console.log(form.name.get()); // \"John\"\n    console.log(form.sex.get()); // \"male\"\n    form.sex.set(\"female\");\n    console.log(form.get()); // { name: \"John\", sex: \"female\" }"
+            ],
+            "class": "maus"
+        }
+    ],
+    "warnings": []
+}

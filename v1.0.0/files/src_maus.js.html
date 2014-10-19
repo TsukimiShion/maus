@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>src/maus.js - maus</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../assets/css/logo.png" title="maus"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/maus.html">maus</a></li>
+            
+                <li><a href="../classes/maus.BoolCheckBox.html">maus.BoolCheckBox</a></li>
+            
+                <li><a href="../classes/maus.CheckBox.html">maus.CheckBox</a></li>
+            
+                <li><a href="../classes/maus.Form.html">maus.Form</a></li>
+            
+                <li><a href="../classes/maus.J.html">maus.J</a></li>
+            
+                <li><a href="../classes/maus.Radio.html">maus.Radio</a></li>
+            
+                <li><a href="../classes/maus.Select.html">maus.Select</a></li>
+            
+                <li><a href="../classes/maus.Text.html">maus.Text</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: src/maus.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+window.maus = new function(){
+    &quot;use strict&quot;;
+    /**
+     * @class maus
+     * @static
+     */
+
+    var maus = this;
+
+    this.J = function(selector){
+        /**
+         * jQuery Wrapper Class.
+         *
+         * @class J
+         * @namespace maus
+         * @constructor
+         * @param {String|Element|Array of Element|jQuery} selector This argument is passed to $().
+         * @example
+         *     // ex1
+         *     var body = new maus.J(&quot;body&quot;);
+         *     body.css(&quot;background-color&quot;, &quot;red&quot;); // $(&quot;body&quot;).css(&quot;background-color&quot;, &quot;red&quot;);
+         */
+
+        var self = this;
+        this.jq = function(){
+            /**
+             * Get the jQuery object.
+             * @method jq
+             * @return {jQuery} The jQuery object.
+             * @example
+             *     // ex1
+             *     var body = new maus.J(&quot;body&quot;);
+             *     body.jq(); // $(&quot;body&quot;)
+             */
+            return $(selector);
+        };
+        function _call(thisArg, key){
+            function call2(){
+                var self = thisArg.jq();
+                return self[key].apply(self, arguments);
+            }
+            return call2;
+        }
+        Object.keys(Object.getPrototypeOf(this.jq())).forEach(function(key){
+            self[key] = _call(self, key);
+        });
+        /**
+         * The short cut method of jQuery.prop(&quot;checked&quot;, flag).
+         * @method checked
+         * @param {Boolean} [flag]
+         * @return {jQuery} The jQuery object.
+         * @example
+         *     // ex1
+         *     var checkboxes = new maus.J(&quot;:checkbox&quot;);
+         *     checkboxes.checked(true); // $(&quot;:checkbox&quot;).prop(&quot;checked&quot;, true);
+         *     checkboxes.checked(); // $(&quot;:checkbox&quot;).prop(&quot;checked&quot;);
+         */
+
+        /**
+         * The short cut method of jQuery.prop(&quot;disabled&quot;, flag).
+         * @method disabled
+         * @param {Boolean} [flag]
+         * @return {jQuery} The jQuery object.
+         * @example
+         *     // ex1
+         *     var button = new maus.J(&quot;:button&quot;);
+         *     button.disabled(true); // $(&quot;:button&quot;).prop(&quot;disabled&quot;, true);
+         *     button.disabled(); // $(&quot;:button&quot;).prop(&quot;disabled&quot;);
+         */
+        [&quot;checked&quot;, &quot;disabled&quot;].forEach(function(key){
+            self[key] = function(value){
+                if (value === undefined){
+                    return self.prop(key);
+                } else {
+                    return self.prop(key, value);
+                }
+            };
+        });
+        this.display = function(val){
+            /**
+             * The short cut method of jQuery.css(&quot;display&quot;, val).
+             * @method display
+             * @param {String} val
+             * @return {jQuery} The jQuery object.
+             * @example
+             *     // ex1
+             *     var button = new maus.J(&quot;:button&quot;);
+             *     button.display(&quot;none&quot;); // $(&quot;:button&quot;).css(&quot;display&quot;, &quot;none&quot;);
+             */
+            return this.css(&quot;display&quot;, val);
+        };
+        /**
+         * The short cut method of jQuery.css(&quot;display&quot;, *).
+         * Note: inline-block is supported by only some browsers.
+         *
+         * @method display_*
+         * @return {jQuery} The jQuery object.
+         * @example
+         *     // ex1
+         *     var button = new maus.J(&quot;:button&quot;);
+         *     button.display_none(); // $(&quot;:button&quot;).css(&quot;display&quot;, &quot;none&quot;);
+         *     button.display_inline(); // $(&quot;:button&quot;).css(&quot;display&quot;, &quot;none&quot;);
+         *     button.display_list_item(); // $(&quot;:button&quot;).css(&quot;display&quot;, &quot;list-item&quot;);
+         */
+        [&quot;inline&quot;, &quot;block&quot;, &quot;list-item&quot;, &quot;run-in&quot;, &quot;inline-block&quot;, &quot;table&quot;,
+        &quot;inline-table&quot;, &quot;table-row-group&quot;, &quot;table-header-group&quot;,
+        &quot;table-footer-group&quot;, &quot;table-row&quot;, &quot;table-column-group&quot;,
+        &quot;table-column&quot;, &quot;table-cell&quot;, &quot;table-caption&quot;, &quot;none&quot;, &quot;inherit&quot;]
+        .forEach(function(key){
+            self[&quot;display_&quot; + key.replace(&quot;-&quot;, &quot;_&quot;)] = function(){
+                return self.display(key);
+            };
+        });
+    };
+
+    this.controls = function(obj){
+        /**
+         * The function to make J instances.
+         * @method controls
+         * @param {Object} obj
+         * @return {Object}
+         * @for maus
+         * @example
+         *     // ex1
+         *     var controls = maus.controls({
+         *         body: &quot;body&quot;,
+         *         container: &quot;#container&quot;,
+         *     });
+         *     controls.body.css(&quot;background-color&quot;, &quot;red&quot;); // $(&quot;body&quot;).css(&quot;background-color&quot;, &quot;red&quot;);
+         *     controls.container.css(&quot;background-color&quot;, &quot;white&quot;); // $(&quot;#container&quot;).css(&quot;background-color&quot;, &quot;white&quot;);
+         */
+        var A = {};
+        for (var key in obj){
+            A[key] = new this.J(obj[key]);
+        }
+        return A;
+    };
+
+    function Form(selector, live, def){
+        /**
+         * The Base Class of Text, CheckBox, etc.
+         * You cannot access this class.
+         *
+         * @class Form
+         * @constructor
+         * @namespace maus
+         * @param {String|Element|jQuery} selector
+         * @param {undefined|false|selector} [live=undefined]
+         * @param {undefined|String|Array of String} [def=undefined] The default value.
+         */
+
+        /**
+         * If live is undefined, you can&#x27;t use the **vchange.fm** event and on_vchange and off_vchange method.
+         * @attribute live
+         * @type {undefined|false|selector}
+         * @writeOnce
+         * @default undefined
+         */
+        maus.J.call(this, selector);
+        this._default = def;
+        this.def = function(){
+            /**
+             * Change the value to the default value.
+             * @method def
+             * @return this
+             * @example
+             *     var text = new maus.Text(&quot;:text&quot;);
+             *     console.log(text.get()); // &quot;&quot;
+             *     text.setDef(&quot;hello&quot;);
+             *     console.log(text.get()); // &quot;&quot;
+             *     text.def();
+             *     console.log(text.get()); // &quot;hello&quot;
+             */
+            return this.set(this._default);
+        };
+        this.getDef = function(){
+            /**
+             * Return the default value.
+             * @method getDef
+             * @return {String|Array of String}
+             * @example
+             *     var text = new maus.Text(&quot;:text&quot;);
+             *     console.log(text.getDef()); // undefined
+             *     text.setDef(&quot;hello&quot;);
+             *     console.log(text.getDef()); // &quot;hello&quot;
+             */
+            return this._default;
+        };
+        this.setDef = function(val){
+            /**
+             * Set the default value.
+             * @method setDef
+             * @param {String|Array of String} val The default value.
+             * @return this
+             * @example
+             *     var text = new maus.Text(&quot;:text&quot;);
+             *     console.log(text.getDef()); // undefined
+             *     text.setDef(&quot;hello&quot;);
+             *     console.log(text.getDef()); // &quot;hello&quot;
+             */
+            this._default = val;
+            return this;
+        };
+        this.lon = function(event, func){
+            /**
+             * Attach the event handler function for the event to the selected elements.
+             * This method is similar to &#x60;&#x60;&#x60; jQuery.on() &#x60;&#x60;&#x60; .
+             * If live is undefined, this method does nothing.
+             * If live is false, this method is equivalent to &#x60;&#x60;&#x60; $(selector).on(event, func) &#x60;&#x60;&#x60; .
+             * Otherwise, this method is equivalent to &#x60;&#x60;&#x60; $(live).on(event, selector, func) &#x60;&#x60;&#x60; .
+             * @method lon
+             * @param {String} event 
+             * @param {Function} func 
+             * @return this
+             * @example
+             *     var text = new maus.Text(&quot;:text&quot;, false);
+             *     text.lon(&quot;vchange.fm&quot;, function(e, val){
+             *         // Execute whenever the value of textbox changes.
+             *         // val is the value of textbox.
+             *         console.log(val);
+             *     });
+             */
+            if (live !== undefined){
+                if (live){
+                    $(live).on(event, selector, func);
+                } else {
+                    this.on(event, func);
+                }
+            }
+            return this;
+        };
+
+        /**
+         * Attach an event handler function for **vchange.fm** event.
+         * @method on_vchange
+         * @return this
+         * @example
+         *     var text = new maus.Text(&quot;:text&quot;, false);
+         *     text.off_vchange();
+         *     text.on_vchange();
+         */
+
+        /**
+         * Remove an event handler function for **vchange.fm** event.
+         * @method off_vchange
+         * @return this
+         * @example
+         *     var text = new maus.Text(&quot;:text&quot;, false);
+         *     text.off_vchange();
+         */
+    }
+    Form.prototype = new maus.J;
+
+    /**
+     * If live is not undefined, this event occurs when the value of form changes.
+     * If you don&#x27;t want this event to occur, call this.off_vchange().
+     * After call this.off_vchange(), if you want this event to occur again, call this.on_vchange().
+     * @event vchange.fm
+     * @example
+     *     var text = new maus.Text(&quot;:text&quot;, false);
+     *     text.lon(&quot;vchange.fm&quot;, function(e, val){
+     *         // Execute whenever the value of textbox changes.
+     *         // val is the value of textbox.
+     *         console.log(val);
+     *     });
+     */
+
+    this.Text = function(selector, live, def){
+        /**
+         * This class helps to operate input:text or textarea.
+         * @class Text
+         * @constructor
+         * @extends maus.Form
+         * @namespace maus
+         * @param {String|Element|jQuery} selector
+         * @param [live]
+         * @param [def] The default value.
+         * @example
+         *     var text = new maus.Text(&quot;:text&quot;);
+         */
+        Form.call(this, selector, live, def);
+        var self = this;
+        this.get = function(){
+            /**
+             * Return the value.
+             * @method get
+             * @return {String}
+             * @example
+             *     var text = new maus.Text(&quot;textarea&quot;);
+             *     text.set(&quot;hello&quot;);
+             *     console.log(text.get()); // &quot;hello&quot;
+             */
+            return this.val();
+        };
+        this.set = function(val){
+            /**
+             * Set the value.
+             * @method set
+             * @param {String} val
+             * @return this
+             * @example
+             *     var text = new maus.Text(&quot;textarea&quot;);
+             *     text.set(&quot;hello&quot;);
+             *     console.log(text.get()); // &quot;hello&quot;
+             */
+            this.val(val);
+            return this;
+        };
+        this.clear = function(){
+            /**
+             * Clear the value.
+             * @method clear
+             * @return this
+             * @example
+             *     var text = new maus.Text(&quot;textarea&quot;);
+             *     text.clear();
+             *     console.log(text.get()); // &quot;&quot;
+             */
+            return this.set(&quot;&quot;);
+        };
+        function _vchange(e){
+            var val = self.get();
+            if (self._val !== val){
+                self._val = val;
+                $(this).trigger(&quot;vchange.fm&quot;, val);
+            }
+        }
+        this.on_vchange = function(){
+            if (live !== undefined){
+                if (live){
+                    $(live).on(&quot;keyup&quot;, selector, _vchange);
+                } else {
+                    this.on(&quot;keyup&quot;, _vchange);
+                }
+            }
+            return this;
+        };
+        this.off_vchange = function(){
+            if (live !== undefined){
+                if (live){
+                    $(live).off(&quot;keyup&quot;, selector, _vchange);
+                } else {
+                    this.off(&quot;keyup&quot;, _vchange);
+                }
+            }
+            return this;
+        };
+        this.on_vchange();
+    };
+    this.Text.prototype = new Form;
+
+    this.Select = function(selector, live, def, multiple){
+        /**
+         * This class helps to operate select.
+         * @class Select
+         * @constructor
+         * @extends maus.Form
+         * @namespace maus
+         * @param {String|Element|jQuery} selector
+         * @param [live]
+         * @param [def] The default value.
+         * @param {boolean} [multiple=false] The value of select&#x27;s multiple attribute.
+         * @example
+         *     var select = new maus.Select(&quot;select&quot;);
+         *     var multi_select = new maus.Select(&quot;select&quot;, undefined, undefined, true); // multiple select
+         */
+        Form.call(this, selector, live, def);
+        var self = this;
+        this.get = function(){
+            /**
+             * Return the value.
+             * @method get
+             * @return {String|Array of String|null}
+             * @example
+             *     // ex1: single
+             *     var select = new maus.Select(&quot;select&quot;);
+             *     console.log(select.get()); // String or null
+             * @example
+             *     // ex2: multiple
+             *     var select = new maus.Select(&quot;select&quot;, undefined, undefined, multiple);
+             *     select.set(&quot;hello&quot;);
+             *     console.log(select.get()); // [&quot;hello&quot;]
+             *     select.clear();
+             *     console.log(select.get()); // null
+             */
+            return this.val();
+        };
+        this.set = function(val){
+            /**
+             * Set the value.
+             * @method set
+             * @param {String|Array of String} val
+             * @return this
+             * @example
+             *     // ex1: single
+             *     var select = new maus.Select(&quot;select&quot;);
+             *     select.set(&quot;hello&quot;);
+             *     console.log(select.get()); // &quot;hello&quot;
+             * @example
+             *     // ex2: multiple
+             *     var select = new maus.Select(&quot;select&quot;, undefined, undefined, multiple);
+             *     select.set(&quot;hello&quot;);
+             *     console.log(select.get()); // [&quot;hello&quot;]
+             *     select.set([&quot;bad&quot;, &quot;good&quot;]);
+             *     console.log(select.get()); // [&quot;bad&quot;, &quot;good&quot;]
+             */
+            this.val(val);
+            return this;
+        };
+        this.clear = function(){
+            /**
+             * Clear the value.
+             * @method clear
+             * @return this
+             * @example
+             *     // ex1 single
+             *     var select = new maus.Select(&quot;select&quot;);
+             *     select.clear();
+             *     console.log(select.get()); // null
+             * @example
+             *     // ex2 single
+             *     var select = new maus.Select(&quot;select&quot;, undefined, undefined, multiple);
+             *     select.clear();
+             *     console.log(select.get()); // null
+             */
+            return this.set([]);
+        };
+        function _vchange(e){
+            if (multiple){
+                $(this).trigger(&quot;vchange.fm&quot;, [self.get()]);
+            } else {
+                $(this).trigger(&quot;vchange.fm&quot;, self.get());
+            }
+        }
+        this.on_vchange = function(){
+            if (live !== undefined){
+                if (live){
+                    $(live).on(&quot;change&quot;, selector, _vchange);
+                } else {
+                    this.on(&quot;change&quot;, _vchange);
+                }
+            }
+            return this;
+        };
+        this.off_vchange = function(){
+            if (live !== undefined){
+                if (live){
+                    $(live).off(&quot;change&quot;, selector, _vchange);
+                } else {
+                    this.off(&quot;change&quot;, _vchange);
+                }
+            }
+            return this;
+        };
+        this.on_vchange();
+    };
+    this.Select.prototype = new Form;
+    
+    this.Radio = function(selector, live, def){
+        /**
+         * This class helps to operate input:radio.
+         * @class Radio
+         * @constructor
+         * @extends maus.Form
+         * @namespace maus
+         * @param {String|Element|jQuery} selector
+         * @param [live]
+         * @param [def] The default value.
+         */
+        Form.call(this, selector, live, def);
+        var self = this;
+        var checked_selector = _.template(selector + &quot;[value=&#x27;&lt;%= value %&gt;&#x27;]&quot;);
+        var checked = new maus.J(selector + &quot;:checked&quot;);
+        this.get = function(){
+            /**
+             * Return the value.
+             * @method get
+             * @return {String}
+             * @example
+             *     var radio = new maus.Radio(&quot;:radio&quot;);
+             *     radio.set(&quot;good&quot;);
+             *     console.log(radio.get()); // &quot;good&quot;
+             */
+            return checked.val();
+        };
+        this.set = function(val){
+            /**
+             * Set the value.
+             * @method set
+             * @param {String} val
+             * @return this
+             * @example
+             *     var radio = new maus.Radio(&quot;:radio&quot;);
+             *     radio.set(&quot;good&quot;);
+             *     console.log(radio.get()); // &quot;good&quot;
+             */
+            $(checked_selector({value: val})).prop(&quot;checked&quot;, true);
+            return this;
+        };
+        this.clear = function(){
+            /**
+             * Clear the value.
+             * @method clear
+             * @return this
+             * @example
+             *     var radio = new maus.Radio(&quot;:radio&quot;);
+             *     radio.clear();
+             *     console.log(radio.get()); // null
+             */
+            checked.checked(false);
+            return this;
+        };
+        function _vchange(e){
+            $(this).trigger(&quot;vchange.fm&quot;, self.get());
+        }
+        this.on_vchange = function(){
+            if (live !== undefined){
+                if (live){
+                    $(live).on(&quot;change&quot;, selector, _vchange);
+                } else {
+                    this.on(&quot;change&quot;, _vchange);
+                }
+            }
+            return this;
+        };
+        this.off_vchange = function(){
+            if (live !== undefined){
+                if (live){
+                    $(live).off(&quot;change&quot;, selector, _vchange);
+                } else {
+                    this.off(&quot;change&quot;, _vchange);
+                }
+            }
+            return this;
+        };
+        this.on_vchange();
+    };
+    this.Radio.prototype = new Form;
+
+    this.CheckBox = function(selector, live, def){
+        /**
+         * This class helps to operate input:checkbox.
+         * @class CheckBox
+         * @constructor
+         * @extends maus.Form
+         * @namespace maus
+         * @param {String|Element|jQuery} selector
+         * @param [live]
+         * @param [def] The default value.
+         */
+        Form.call(this, selector, live, def);
+        var self = this;
+        var checked_selector = _.template(selector + &quot;[value=&#x27;&lt;%= value %&gt;&#x27;]&quot;);
+        var checked = new maus.J(selector + &quot;:checked&quot;);
+        this.get = function(flag){
+            /**
+             * Return the value.
+             * @method get
+             * @return {Array of String}
+             * @example
+             *     var checkbox = new maus.CheckBox(&quot;:checkbox&quot;);
+             *     console.log(checkbox.get()); // []
+             *     checkbox.set(&quot;good&quot;);
+             *     console.log(checkbox.get()); // [&quot;good&quot;]
+             */
+            var vals = [];
+            checked.each(function(){
+                vals.push($(this).val());
+            });
+            return vals;
+        };
+        this.clear = function(){
+            /**
+             * Clear the value.
+             * @method clear
+             * @return this
+             * @example
+             *     var checkbox = new maus.CheckBox(&quot;:checkbox&quot;);
+             *     checkbox.clear();
+             *     console.log(checkbox.get()); // []
+             */
+            checked.checked(false);
+            return this;
+        };
+        this.set = function(vals){
+            /**
+             * Set the value.
+             * @method set
+             * @param {String} val
+             * @return this
+             * @example
+             *     var checkbox = new maus.CheckBox(&quot;:checkbox&quot;);
+             *     checkbox.set(&quot;hello&quot;);
+             *     console.log(checkbox.get()); // [&quot;hello&quot;]
+             *     checkbox.set([&quot;good&quot;, &quot;bad&quot;]);
+             *     console.log(checkbox.get()); // [&quot;good&quot;, &quot;bad&quot;]
+             */
+            this.clear();
+            if (vals instanceof Array){
+                vals.forEach(function(val){
+                    $(checked_selector({value: val})).prop(&quot;checked&quot;, true);
+                });
+            } else {
+                for (var i=0; i&lt;arguments.length; i++){
+                    var val = arguments[i];
+                    $(checked_selector({value: val})).prop(&quot;checked&quot;, true);
+                }
+            }
+            return this;
+        };
+        function _vchange(e){
+            $(this).trigger(&quot;vchange.fm&quot;, [self.get()]);
+        }
+        this.on_vchange = function(){
+            if (live !== undefined){
+                if (live){
+                    $(live).on(&quot;change&quot;, selector, _vchange);
+                } else {
+                    this.on(&quot;change&quot;, _vchange);
+                }
+            }
+            return this;
+        };
+
+        this.off_vchange = function(){
+            if (live !== undefined){
+                if (live){
+                    $(live).off(&quot;change&quot;, selector, _vchange);
+                } else {
+                    this.off(&quot;change&quot;, _vchange);
+                }
+            }
+            return this;
+        };
+        this.on_vchange();
+    };
+    this.CheckBox.prototype = new Form;
+
+    this.BoolCheckBox = function(selector, live, def){
+        /**
+         * This class helps to operate input:checkbox.
+         * If you use this class, the following conditions should be satisfied.
+         *
+         * - &#x60;&#x60;&#x60; $(selector).size() &#x60;&#x60;&#x60; is 1.
+         * - You want to check Whether this checkbox is checked.
+         * - You don&#x27;t want to check the value of the checked checkbox.
+         *
+         * @class BoolCheckBox
+         * @constructor
+         * @extends maus.Form
+         * @namespace maus
+         * @param {String|Element|jQuery} selector
+         * @param [live]
+         * @param [def] The default value.
+         */
+        Form.call(this, selector, live, def);
+        var self = this;
+        this.get = function(){
+            /**
+             * Return whether the checkbox is checked.
+             * @method get
+             * @return {boolean}
+             * @example
+             *     var checkbox = new maus.BoolCheckBox(&quot;:checkbox&quot;);
+             *     checkbox.clear();
+             *     console.log(checkbox.get()); // false
+             *     checkbox.set(true);
+             *     console.log(checkbox.get()); // true
+             */
+            return this.checked();
+        };
+        this.clear = function(){
+            /**
+             * Clear the value.
+             * @method clear
+             * @return this
+             * @example
+             *     var checkbox = new maus.BoolCheckBox(&quot;:checkbox&quot;);
+             *     checkbox.clear();
+             *     console.log(checkbox.get()); // false
+             */
+            this.checked(false);
+            return this;
+        };
+        this.set = function(val){
+            /**
+             * Set the value.
+             * @method set
+             * @param {String} val
+             * @return this
+             * @example
+             *     var checkbox = new maus.BoolCheckBox(&quot;:checkbox&quot;);
+             *     checkbox.set(true);
+             *     console.log(checkbox.get()); // true
+             *     checkbox.set(false);
+             *     console.log(checkbox.get()); // false
+             */
+            this.checked(val);
+            return this;
+        };
+        function _vchange(e){
+            $(this).trigger(&quot;vchange.fm&quot;, self.get());
+        }
+        this.on_vchange = function(){
+            if (live !== undefined){
+                if (live){
+                    $(live).on(&quot;change&quot;, selector, _vchange);
+                } else {
+                    this.on(&quot;change&quot;, _vchange);
+                }
+            }
+            return this;
+        };
+
+        this.off_vchange = function(){
+            if (live !== undefined){
+                if (live){
+                    $(live).off(&quot;change&quot;, selector, _vchange);
+                } else {
+                    this.off(&quot;change&quot;, _vchange);
+                }
+            }
+            return this;
+        };
+        this.on_vchange();
+    };
+    this.BoolCheckBox.prototype = new Form;
+
+    this.form = function(params){
+        /**
+         * This method helps to make instances of the subclass of Form.
+         * @method form
+         * @for maus
+         * @param {Object} params 
+         * The each value of **params**&#x27;s property must be an Array object [**type**, **selector**, **live**, **def**, **multiple**].
+         * **type** and **selector** require, and others are optional.
+         * type must be one of the following value.
+         * 
+         * - &quot;text&quot;: create a maus.Text object.
+         * - &quot;select&quot;: create a maus.Select object.
+         * - &quot;radio&quot;: create a maus.Radio object.
+         * - &quot;checkbox&quot;: create a maus.CheckBox object.
+         * - &quot;bcheckbox&quot;, &quot;boolcheckbox&quot;: create a maus.BoolCheckBox object.
+         *
+         * The meaning of **selector**, **live**, **def**, **multiple** is equivalent to maus.Form .
+         * 
+         * @return Object
+         * @example
+         *     var form = maus.form({
+         *         name: [&quot;text&quot;, &quot;:text[name=&#x27;name&#x27;]&quot;, undefined, &quot;John&quot;],
+         *         sex: [&quot;checkbox&quot;, &quot;:checkbox[name=&#x27;sex&#x27;]&quot;, undefined],
+         *     });
+         *     form.set({ name: &quot;John&quot;, sex: &quot;male&quot; });
+         *     console.log(form.name.get()); // &quot;John&quot;
+         *     console.log(form.sex.get()); // &quot;male&quot;
+         *     form.sex.set(&quot;female&quot;);
+         *     console.log(form.get()); // { name: &quot;John&quot;, sex: &quot;female&quot; }
+         */
+
+        /* {name: {&quot;type&quot;: type, &quot;selector&quot;: selector, &quot;multiple&quot;: boolean, &quot;def&quot;: def, &quot;live&quot;: live}
+         * {name: [type, selector, live, def, multiple] 
+         *
+         */
+        var ret = {};
+        var types = {
+            &quot;text&quot;: maus.Text,
+            &quot;select&quot;: maus.Select,
+            &quot;radio&quot;: maus.Radio,
+            &quot;checkbox&quot;: maus.CheckBox,
+            &quot;bcheckbox&quot;: maus.BoolCheckBox,
+            &quot;boolcheckbox&quot;: maus.BoolCheckBox,
+        };
+        var type, C, selector, multiple, def, live;
+        for (var name in params){
+            var a = params[name];
+            if (a instanceof Array){
+                type = a[0];
+                C = types[type];
+                selector = a[1];
+                live = a[2];
+                def = a[3];
+                multiple = a[4];
+            } else {
+                type = a.type;
+                C = types[type];
+                selector = a.selector;
+                def = a.def;
+                live = a.live;
+                multiple = a.multiple;
+            }
+            ret[name] = new C(selector, live, def, multiple);
+        }
+
+        if (!(&quot;get&quot; in params)){
+            ret.get = function(names){
+                var items = {};
+                var name;
+                if (names === undefined){
+                    for (name in params){
+                        items[name] = ret[name].get();
+                    }
+                } else if (names instanceof Array){
+                    names.forEach(function(name){
+                        items[name] = ret[name].get();
+                    });
+                } else {
+                    for (var index=0; index &lt; arguments.length; index++){
+                        name = arguments[index];
+                        items[name] = ret[name].get();
+                    }
+                }
+                return items;
+            };
+        }
+
+        if (!(&quot;set&quot; in params)){
+            ret.set = function(items){
+                _.each(items, function(val, key){
+                    ret[key].set(val);
+                });
+                return ret;
+            };
+        }
+
+        if (!(&quot;clear&quot; in params)){
+            ret.clear = function(names){
+                var name;
+                if (names === undefined){
+                    for (name in params){
+                        ret[name].clear();
+                    }
+                } else if (names instanceof Array){
+                    names.forEach(function(name){
+                        ret[name].clear();
+                    });
+                } else {
+                    for (var index=0; index &lt; arguments.length; index++){
+                        ret[arguments[index]].clear();
+                    }
+                }
+                return ret;
+            };
+        }
+
+        if (!(&quot;def&quot; in params)){
+            ret.def = function(names){
+                var name;
+                if (names === undefined){
+                    for (name in params){
+                        ret[name].def();
+                    }
+                } else if (names instanceof Array){
+                    names.forEach(function(name){
+                        ret[name].def();
+                    });
+                } else {
+                    for (var index=0; index &lt; arguments.length; index++){
+                        ret[arguments[index]].def();
+                    }
+                }
+                return ret;
+            };
+        }
+
+        if (!(&quot;getDef&quot; in params)){
+            ret.getDef = function(names){
+                var items = {};
+                var name;
+                if (names === undefined){
+                    for (name in params){
+                        items[name] = ret[name].getDef();
+                    }
+                } else if (names instanceof Array){
+                    names.forEach(function(name){
+                        items[name] = ret[name].getDef();
+                    });
+                } else {
+                    for (var index=0; index &lt; arguments.length; index++){
+                        name = arguments[index];
+                        items[name] = ret[name].getDef();
+                    }
+                }
+                return items;
+            };
+        }
+
+        if (!(&quot;setDef&quot; in params)){
+            ret.setDef = function(items){
+                _.each(items, function(val, key){
+                    ret[key].setDef(val);
+                });
+                return ret;
+            };
+        }
+
+        if (!(&quot;on_vchange&quot; in params)){
+            ret.on_vchange = function(names){
+                var name;
+                if (names === undefined){
+                    for (name in params){
+                        ret[name].on_vchange();
+                    }
+                } else if (names instanceof Array){
+                    names.forEach(function(name){
+                        ret[name].on_vchange();
+                    });
+                } else {
+                    for (var index=0; index &lt; arguments.length; index++){
+                        ret[arguments[index]].on_vchange();
+                    }
+                }
+                return ret;
+            };
+        }
+
+        if (!(&quot;off_vchange&quot; in params)){
+            ret.off_vchange = function(names){
+                var name;
+                if (names === undefined){
+                    for (name in params){
+                        ret[name].off_vchange();
+                    }
+                } else if (names instanceof Array){
+                    names.forEach(function(name){
+                        ret[name].off_vchange();
+                    });
+                } else {
+                    for (var index=0; index &lt; arguments.length; index++){
+                        ret[arguments[index]].off_vchange();
+                    }
+                }
+                return ret;
+            };
+        }
+        return ret;
+    };
+};
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>
