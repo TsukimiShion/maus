@@ -788,6 +788,164 @@ window.maus = new function(){
             return new types[type](selector, live, def, multiple);
         }
 
+        function forms(params){
+            var ret = {};
+            var types = {
+                "text": maus.Text,
+                "select": maus.Select,
+                "radio": maus.Radio,
+                "checkbox": maus.CheckBox,
+                "bcheckbox": maus.BoolCheckBox,
+                "boolcheckbox": maus.BoolCheckBox,
+            };
+            _.each(params, function(vals, key){
+                ret[key] = new types[vals[0]](vals[1], vals[2], vals[3], vals[4]);
+            });
+
+            if (!("get" in params)){
+                ret.get = function(names){
+                    var items = {};
+                    var name;
+                    if (names === undefined){
+                        for (name in params){
+                            items[name] = ret[name].get();
+                        }
+                    } else if (names instanceof Array){
+                        names.forEach(function(name){
+                            items[name] = ret[name].get();
+                        });
+                    } else {
+                        for (var index=0; index < arguments.length; index++){
+                            name = arguments[index];
+                            items[name] = ret[name].get();
+                        }
+                    }
+                    return items;
+                };
+            }
+
+            if (!("set" in params)){
+                ret.set = function(items){
+                    _.each(items, function(val, key){
+                        ret[key].set(val);
+                    });
+                    return ret;
+                };
+            }
+
+            if (!("clear" in params)){
+                ret.clear = function(names){
+                    var name;
+                    if (names === undefined){
+                        for (name in params){
+                            ret[name].clear();
+                        }
+                    } else if (names instanceof Array){
+                        names.forEach(function(name){
+                            ret[name].clear();
+                        });
+                    } else {
+                        for (var index=0; index < arguments.length; index++){
+                            ret[arguments[index]].clear();
+                        }
+                    }
+                    return ret;
+                };
+            }
+
+            if (!("def" in params)){
+                ret.def = function(names){
+                    var name;
+                    if (names === undefined){
+                        for (name in params){
+                            ret[name].def();
+                        }
+                    } else if (names instanceof Array){
+                        names.forEach(function(name){
+                            ret[name].def();
+                        });
+                    } else {
+                        for (var index=0; index < arguments.length; index++){
+                            ret[arguments[index]].def();
+                        }
+                    }
+                    return ret;
+                };
+            }
+
+            if (!("getDef" in params)){
+                ret.getDef = function(names){
+                    var items = {};
+                    var name;
+                    if (names === undefined){
+                        for (name in params){
+                            items[name] = ret[name].getDef();
+                        }
+                    } else if (names instanceof Array){
+                        names.forEach(function(name){
+                            items[name] = ret[name].getDef();
+                        });
+                    } else {
+                        for (var index=0; index < arguments.length; index++){
+                            name = arguments[index];
+                            items[name] = ret[name].getDef();
+                        }
+                    }
+                    return items;
+                };
+            }
+
+            if (!("setDef" in params)){
+                ret.setDef = function(items){
+                    _.each(items, function(val, key){
+                        ret[key].setDef(val);
+                    });
+                    return ret;
+                };
+            }
+
+            if (!("on_vchange" in params)){
+                ret.on_vchange = function(names){
+                    var name;
+                    if (names === undefined){
+                        for (name in params){
+                            ret[name].on_vchange();
+                        }
+                    } else if (names instanceof Array){
+                        names.forEach(function(name){
+                            ret[name].on_vchange();
+                        });
+                    } else {
+                        for (var index=0; index < arguments.length; index++){
+                            ret[arguments[index]].on_vchange();
+                        }
+                    }
+                    return ret;
+                };
+            }
+
+            if (!("off_vchange" in params)){
+                ret.off_vchange = function(names){
+                    var name;
+                    if (names === undefined){
+                        for (name in params){
+                            ret[name].off_vchange();
+                        }
+                    } else if (names instanceof Array){
+                        names.forEach(function(name){
+                            ret[name].off_vchange();
+                        });
+                    } else {
+                        for (var index=0; index < arguments.length; index++){
+                            ret[arguments[index]].off_vchange();
+                        }
+                    }
+                    return ret;
+                };
+            }
+            return ret;
+        }
+
         if (_.isString(obj)){
             return new maus.J(obj);
         } else if (obj instanceof Array){
@@ -796,7 +954,7 @@ window.maus = new function(){
             if (_.every(obj, function(val, key){
                 return val instanceof Array;
             })){
-                return maus.form(obj);
+                return forms(obj);
             } else {
                 var item = {};
                 _.each(obj, function(val, key){
@@ -805,214 +963,5 @@ window.maus = new function(){
                 return item;
             }
         }
-    };
-
-    this.form = function(params){
-        /**
-         * This method helps to make instances of the subclass of Form.
-         * @method form
-         * @for maus
-         * @param {Object} params 
-         * The each value of **params**'s property must be an Array object [**type**, **selector**, **live**, **def**, **multiple**].
-         * **type** and **selector** require, and others are optional.
-         * type must be one of the following value.
-         * 
-         * - "text": create a maus.Text object.
-         * - "select": create a maus.Select object.
-         * - "radio": create a maus.Radio object.
-         * - "checkbox": create a maus.CheckBox object.
-         * - "bcheckbox", "boolcheckbox": create a maus.BoolCheckBox object.
-         *
-         * The meaning of **selector**, **live**, **def**, **multiple** is equivalent to maus.Form .
-         * 
-         * @return Object
-         * @example
-         *     var form = maus.form({
-         *         name: ["text", ":text[name='name']", undefined, "John"],
-         *         sex: ["checkbox", ":checkbox[name='sex']", undefined],
-         *     });
-         *     form.set({ name: "John", sex: "male" });
-         *     console.log(form.name.get()); // "John"
-         *     console.log(form.sex.get()); // "male"
-         *     form.sex.set("female");
-         *     console.log(form.get()); // { name: "John", sex: "female" }
-         */
-
-        /* {name: {"type": type, "selector": selector, "multiple": boolean, "def": def, "live": live}
-         * {name: [type, selector, live, def, multiple] 
-         *
-         */
-        var ret = {};
-        var types = {
-            "text": maus.Text,
-            "select": maus.Select,
-            "radio": maus.Radio,
-            "checkbox": maus.CheckBox,
-            "bcheckbox": maus.BoolCheckBox,
-            "boolcheckbox": maus.BoolCheckBox,
-        };
-        var type, C, selector, multiple, def, live;
-        for (var name in params){
-            var a = params[name];
-            if (a instanceof Array){
-                type = a[0];
-                C = types[type];
-                selector = a[1];
-                live = a[2];
-                def = a[3];
-                multiple = a[4];
-            } else {
-                type = a.type;
-                C = types[type];
-                selector = a.selector;
-                def = a.def;
-                live = a.live;
-                multiple = a.multiple;
-            }
-            ret[name] = new C(selector, live, def, multiple);
-        }
-
-        if (!("get" in params)){
-            ret.get = function(names){
-                var items = {};
-                var name;
-                if (names === undefined){
-                    for (name in params){
-                        items[name] = ret[name].get();
-                    }
-                } else if (names instanceof Array){
-                    names.forEach(function(name){
-                        items[name] = ret[name].get();
-                    });
-                } else {
-                    for (var index=0; index < arguments.length; index++){
-                        name = arguments[index];
-                        items[name] = ret[name].get();
-                    }
-                }
-                return items;
-            };
-        }
-
-        if (!("set" in params)){
-            ret.set = function(items){
-                _.each(items, function(val, key){
-                    ret[key].set(val);
-                });
-                return ret;
-            };
-        }
-
-        if (!("clear" in params)){
-            ret.clear = function(names){
-                var name;
-                if (names === undefined){
-                    for (name in params){
-                        ret[name].clear();
-                    }
-                } else if (names instanceof Array){
-                    names.forEach(function(name){
-                        ret[name].clear();
-                    });
-                } else {
-                    for (var index=0; index < arguments.length; index++){
-                        ret[arguments[index]].clear();
-                    }
-                }
-                return ret;
-            };
-        }
-
-        if (!("def" in params)){
-            ret.def = function(names){
-                var name;
-                if (names === undefined){
-                    for (name in params){
-                        ret[name].def();
-                    }
-                } else if (names instanceof Array){
-                    names.forEach(function(name){
-                        ret[name].def();
-                    });
-                } else {
-                    for (var index=0; index < arguments.length; index++){
-                        ret[arguments[index]].def();
-                    }
-                }
-                return ret;
-            };
-        }
-
-        if (!("getDef" in params)){
-            ret.getDef = function(names){
-                var items = {};
-                var name;
-                if (names === undefined){
-                    for (name in params){
-                        items[name] = ret[name].getDef();
-                    }
-                } else if (names instanceof Array){
-                    names.forEach(function(name){
-                        items[name] = ret[name].getDef();
-                    });
-                } else {
-                    for (var index=0; index < arguments.length; index++){
-                        name = arguments[index];
-                        items[name] = ret[name].getDef();
-                    }
-                }
-                return items;
-            };
-        }
-
-        if (!("setDef" in params)){
-            ret.setDef = function(items){
-                _.each(items, function(val, key){
-                    ret[key].setDef(val);
-                });
-                return ret;
-            };
-        }
-
-        if (!("on_vchange" in params)){
-            ret.on_vchange = function(names){
-                var name;
-                if (names === undefined){
-                    for (name in params){
-                        ret[name].on_vchange();
-                    }
-                } else if (names instanceof Array){
-                    names.forEach(function(name){
-                        ret[name].on_vchange();
-                    });
-                } else {
-                    for (var index=0; index < arguments.length; index++){
-                        ret[arguments[index]].on_vchange();
-                    }
-                }
-                return ret;
-            };
-        }
-
-        if (!("off_vchange" in params)){
-            ret.off_vchange = function(names){
-                var name;
-                if (names === undefined){
-                    for (name in params){
-                        ret[name].off_vchange();
-                    }
-                } else if (names instanceof Array){
-                    names.forEach(function(name){
-                        ret[name].off_vchange();
-                    });
-                } else {
-                    for (var index=0; index < arguments.length; index++){
-                        ret[arguments[index]].off_vchange();
-                    }
-                }
-                return ret;
-            };
-        }
-        return ret;
     };
 };
