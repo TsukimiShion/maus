@@ -113,29 +113,6 @@ window.maus = new function(){
         });
     };
 
-    this.controls = function(obj){
-        /**
-         * The function to make J instances.
-         * @method controls
-         * @param {Object} obj
-         * @return {Object}
-         * @for maus
-         * @example
-         *     // ex1
-         *     var controls = maus.controls({
-         *         body: "body",
-         *         container: "#container",
-         *     });
-         *     controls.body.css("background-color", "red"); // $("body").css("background-color", "red");
-         *     controls.container.css("background-color", "white"); // $("#container").css("background-color", "white");
-         */
-        var A = {};
-        for (var key in obj){
-            A[key] = new this.J(obj[key]);
-        }
-        return A;
-    };
-
     function Form(selector, live, def){
         /**
          * The Base Class of Text, CheckBox, etc.
@@ -156,8 +133,10 @@ window.maus = new function(){
          * @writeOnce
          * @default undefined
          */
+        
+        var _default;
+
         maus.J.call(this, selector);
-        this._default = def;
         this.def = function(){
             /**
              * Change the value to the default value.
@@ -171,36 +150,40 @@ window.maus = new function(){
              *     text.def();
              *     console.log(text.get()); // "hello"
              */
-            return this.set(this._default);
+            // return this.set(this._default);
+            return this.set(_default);
         };
         this.getDef = function(){
             /**
              * Return the default value.
              * @method getDef
-             * @return {String|Array of String}
+             * @return {String|Array of String|null}
              * @example
              *     var text = new maus.Text(":text");
-             *     console.log(text.getDef()); // undefined
+             *     console.log(text.getDef()); // ""
              *     text.setDef("hello");
              *     console.log(text.getDef()); // "hello"
              */
-            return this._default;
+            // return this._default;
+            return _default;
         };
         this.setDef = function(val){
             /**
              * Set the default value.
              * @method setDef
-             * @param {String|Array of String} val The default value.
+             * @param {String|Array of String|null} val The default value.
              * @return this
              * @example
              *     var text = new maus.Text(":text");
-             *     console.log(text.getDef()); // undefined
+             *     console.log(text.getDef()); // ""
              *     text.setDef("hello");
              *     console.log(text.getDef()); // "hello"
              */
-            this._default = val;
+            // this._default = val;
+            _default = val;
             return this;
         };
+        this.setDef(def);
         this.lon = function(event, func){
             /**
              * Attach the event handler function for the event to the selected elements.
@@ -274,12 +257,12 @@ window.maus = new function(){
          * @namespace maus
          * @param {String|Element|jQuery} selector
          * @param [live]
-         * @param [def] The default value.
+         * @param [def=""] The default value.
          * @example
          *     var text = new maus.Text(":text");
          */
-        Form.call(this, selector, live, def);
         var self = this;
+        Form.call(this, selector, live, def === undefined ? "" : def);
         this.get = function(){
             /**
              * Return the value.
@@ -296,12 +279,15 @@ window.maus = new function(){
             /**
              * Set the value.
              * @method set
-             * @param {String} val
+             * @param {String|null} val
              * @return this
              * @example
              *     var text = new maus.Text("textarea");
              *     text.set("hello");
              *     console.log(text.get()); // "hello"
+             *     text.set(null);
+             *     console.log(text.get()); // ""
+             *     text.set("hello");
              */
             this.val(val);
             return this;
@@ -358,13 +344,13 @@ window.maus = new function(){
          * @namespace maus
          * @param {String|Element|jQuery} selector
          * @param [live]
-         * @param [def] The default value.
+         * @param [def=null] The default value.
          * @param {boolean} [multiple=false] The value of select's multiple attribute.
          * @example
          *     var select = new maus.Select("select");
          *     var multi_select = new maus.Select("select", undefined, undefined, true); // multiple select
          */
-        Form.call(this, selector, live, def);
+        Form.call(this, selector, live, def === undefined ? null : def);
         var self = this;
         this.get = function(){
             /**
@@ -389,13 +375,16 @@ window.maus = new function(){
             /**
              * Set the value.
              * @method set
-             * @param {String|Array of String} val
+             * @param {String|Array of String|null} val
              * @return this
              * @example
              *     // ex1: single
              *     var select = new maus.Select("select");
              *     select.set("hello");
              *     console.log(select.get()); // "hello"
+             *     select.set(null);
+             *     console.log(select.get()); // null
+             *
              * @example
              *     // ex2: multiple
              *     var select = new maus.Select("select", undefined, undefined, multiple);
@@ -403,6 +392,11 @@ window.maus = new function(){
              *     console.log(select.get()); // ["hello"]
              *     select.set(["bad", "good"]);
              *     console.log(select.get()); // ["bad", "good"]
+             *     select.set(null);
+             *     console.log(select.get()); // null
+             *     select.set(["bad", "good"]);
+             *     select.set([]);
+             *     console.log(select.get()); // []
              */
             this.val(val);
             return this;
@@ -465,9 +459,9 @@ window.maus = new function(){
          * @namespace maus
          * @param {String|Element|jQuery} selector
          * @param [live]
-         * @param [def] The default value.
+         * @param [def=null] The default value.If def == null, it means no item is checked.
          */
-        Form.call(this, selector, live, def);
+        Form.call(this, selector, live, def === undefined ? null : def);
         var self = this;
         var checked_selector = _.template(selector + "[value='<%= value %>']");
         var checked = new maus.J(selector + ":checked");
@@ -475,27 +469,35 @@ window.maus = new function(){
             /**
              * Return the value.
              * @method get
-             * @return {String}
+             * @return {String|null}
              * @example
              *     var radio = new maus.Radio(":radio");
              *     radio.set("good");
              *     console.log(radio.get()); // "good"
              */
-            return checked.val();
+            var val = checked.val();
+            return val === undefined ? null : val;
         };
         this.set = function(val){
             /**
              * Set the value.
              * @method set
-             * @param {String} val
+             * @param {String|null} val
              * @return this
              * @example
              *     var radio = new maus.Radio(":radio");
              *     radio.set("good");
              *     console.log(radio.get()); // "good"
+             *     radio.set(null);
+             *     console.log(radio.get()); // null
              */
-            $(checked_selector({value: val})).prop("checked", true);
-            return this;
+            if (val == null){
+                this.clear();
+                return this;
+            } else {
+                $(checked_selector({value: val})).prop("checked", true);
+                return this;
+            }
         };
         this.clear = function(){
             /**
@@ -546,13 +548,13 @@ window.maus = new function(){
          * @namespace maus
          * @param {String|Element|jQuery} selector
          * @param [live]
-         * @param [def] The default value.
+         * @param [def=[]] The default value. I def is [], it means no item is checked.
          */
-        Form.call(this, selector, live, def);
+        Form.call(this, selector, live, def === undefined ? [] : def);
         var self = this;
         var checked_selector = _.template(selector + "[value='<%= value %>']");
         var checked = new maus.J(selector + ":checked");
-        this.get = function(flag){
+        this.get = function(){
             /**
              * Return the value.
              * @method get
@@ -586,7 +588,7 @@ window.maus = new function(){
             /**
              * Set the value.
              * @method set
-             * @param {String} val
+             * @param {String|Array of String|null} val
              * @return this
              * @example
              *     var checkbox = new maus.CheckBox(":checkbox");
@@ -594,17 +596,18 @@ window.maus = new function(){
              *     console.log(checkbox.get()); // ["hello"]
              *     checkbox.set(["good", "bad"]);
              *     console.log(checkbox.get()); // ["good", "bad"]
+             *     checkbox.set(null);
+             *     console.log(checkbox.get()); // []
              */
             this.clear();
             if (vals instanceof Array){
                 vals.forEach(function(val){
                     $(checked_selector({value: val})).prop("checked", true);
                 });
-            } else {
-                for (var i=0; i<arguments.length; i++){
-                    var val = arguments[i];
-                    $(checked_selector({value: val})).prop("checked", true);
-                }
+            } else if (_.isString(vals)){
+                $(checked_selector({value: vals})).prop("checked", true);
+            } else if (vals === null){
+                this.clear();
             }
             return this;
         };
@@ -651,9 +654,9 @@ window.maus = new function(){
          * @namespace maus
          * @param {String|Element|jQuery} selector
          * @param [live]
-         * @param [def] The default value.
+         * @param [def=false] The default value.
          */
-        Form.call(this, selector, live, def);
+        Form.call(this, selector, live, def === undefined ? false : def);
         var self = this;
         this.get = function(){
             /**
@@ -686,7 +689,7 @@ window.maus = new function(){
             /**
              * Set the value.
              * @method set
-             * @param {String} val
+             * @param {bool|null} val
              * @return this
              * @example
              *     var checkbox = new maus.BoolCheckBox(":checkbox");
@@ -695,7 +698,7 @@ window.maus = new function(){
              *     checkbox.set(false);
              *     console.log(checkbox.get()); // false
              */
-            this.checked(val);
+            this.checked(Boolean(val));
             return this;
         };
         function _vchange(e){
@@ -725,6 +728,84 @@ window.maus = new function(){
         this.on_vchange();
     };
     this.BoolCheckBox.prototype = new Form;
+
+    this.controls = function(obj){
+        /**
+         * The function to make maus.J instances.
+         * @method controls
+         * @param {Object|String|Array} obj
+         * @return {Object|maus.J|maus.Text|maus.Radio|maus.Select|maus.BoolCheckBox|maus.CheckBox}
+         * @for maus
+         * @example
+         *     // ex1
+         *     var controls = maus.controls({
+         *         body: "body",
+         *         container: "#container",
+         *     });
+         *     controls.body.css("background-color", "red"); // $("body").css("background-color", "red");
+         *     controls.container.css("background-color", "white"); // $("#container").css("background-color", "white");
+         * @example
+         *     // ex2
+         *     var body = maus.controls("body"); // new maus.J("body");
+         *     var text = maus.controls(["text", ":text"]); // new maus.Text(":text");
+         * @example
+         *     // ex3
+         *     var controls = maus.controls({
+         *         body: "body",
+         *         form: {
+         *             name: ["text", ":text[name='name']"],
+         *             sex: ["radio", ":radio[name='sex']"],
+         *             submit: ":submit",
+         *         },
+         *     });
+         *     controls.form.name.set("John");
+         * @example
+         *     // ex4
+         *     var controls = maus.controls({
+         *         body: "body",
+         *         form: {
+         *             name: ["text", ":text[name='name']"],
+         *             sex: ["radio", ":radio[name='sex']"],
+         *         },
+         *     });
+         *     controls.form.set({name: "John", sex: "male"});
+         */
+
+        function form(arr){
+            var type = arr[0];
+            var selector = arr[1];
+            var live = arr[2];
+            var def = arr[3];
+            var multiple = arr[4];
+            var types = {
+                "text": maus.Text,
+                "select": maus.Select,
+                "radio": maus.Radio,
+                "checkbox": maus.CheckBox,
+                "bcheckbox": maus.BoolCheckBox,
+                "boolcheckbox": maus.BoolCheckBox,
+            };
+            return new types[type](selector, live, def, multiple);
+        }
+
+        if (_.isString(obj)){
+            return new maus.J(obj);
+        } else if (obj instanceof Array){
+            return form(obj);
+        } else {
+            if (_.every(obj, function(val, key){
+                return val instanceof Array;
+            })){
+                return maus.form(obj);
+            } else {
+                var item = {};
+                _.each(obj, function(val, key){
+                    item[key] = maus.controls(val);
+                });
+                return item;
+            }
+        }
+    };
 
     this.form = function(params){
         /**

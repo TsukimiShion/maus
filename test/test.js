@@ -96,6 +96,33 @@ $(function(){
             chai.assert.ok(_.isEqual(controls.text.jq(), $(":text")), "OK");
             chai.assert.ok(_.isEqual(controls.checkbox.jq(), $("#checked-target")), "OK");
         });
+        test("selector", function(){
+            var controls = maus.controls(":text");
+            chai.assert.ok(_.isEqual(controls.jq(), $(":text")), "OK");
+        });
+        test("Array", function(){
+            var text = maus.controls(["text", ":text"]);
+            var val = "hello";
+            text.set(val);
+            chai.assert.equal(val, $(":text").val(), "OK");
+            text.clear();
+            chai.assert.equal("", $(":text").val(), "OK");
+        });
+        test("complex", function(){
+            var controls = maus.controls({
+                body: "body",
+                form: {
+                    name: ["text", ":text"],
+                    sex: ["radio", ":radio[name='sex']"]
+                }
+            });
+            controls.form.set({name: "John", sex: "male"});
+            console.log(controls.form.get());
+            chai.assert.ok(_.isEqual({name: "John", sex: "male"}, controls.form.get()), "OK");
+            controls.form.clear();
+            console.log(controls.form.get());
+            chai.assert.ok(_.isEqual({name:"", sex: null}, controls.form.get()), "OK");
+        });
     });
     suite("Text", function(){
         test("normal", function(){
@@ -122,6 +149,7 @@ $(function(){
     suite("Text.setDef, getDef", function(){
         test("normal", function(){
             var text = new maus.Text(":text");
+            chai.assert.equal(text.getDef(), "", "OK");
             var val = "yahoo";
             text.setDef(val);
             chai.assert.equal(text.getDef(), val, "OK");
@@ -133,6 +161,11 @@ $(function(){
             var val = "yahoo";
             text.set(val);
             chai.assert.equal(text.get(), val, "OK");
+            text.set(null);
+            chai.assert.equal(text.get(), "", "OK");
+            text.set(val);
+            text.set(undefined);
+            chai.assert.equal(text.get(), "", "OK");
         });
     });
     suite("Text.clear", function(){
