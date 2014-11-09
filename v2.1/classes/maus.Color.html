@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>maus.Text - maus</title>
+    <title>maus.Color - maus</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -98,7 +98,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>maus.Text Class</h1>
+                        <h1>maus.Color Class</h1>
 <div class="box meta">
     
 
@@ -110,7 +110,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_maus.js.html#l422"><code>src&#x2F;maus.js:422</code></a>
+            Defined in: <a href="../files/src_maus.js.html#l903"><code>src&#x2F;maus.js:903</code></a>
         </div>
     
 
@@ -122,15 +122,15 @@
 
 
 <div class="box intro">
-    <p>This class helps to operate input:text or textarea.</p>
+    <p>This class helps to operate input:color.</p>
 
 </div>
 
 
     <div class="constructor">
         <h2>Constructor</h2>
-        <div id="method_maus.Text" class="method item">
-    <h3 class="name"><code>maus.Text</code></h3>
+        <div id="method_maus.Color" class="method item">
+    <h3 class="name"><code>maus.Color</code></h3>
 
     
         <div class="args">
@@ -150,7 +150,7 @@
             
                 <li class="arg">
                     
-                        <code class="optional">[def=&quot;&quot;]</code>
+                        <code class="optional">[def]</code>
                     
                 </li>
             
@@ -183,7 +183,7 @@
             
         
         
-        <a href="../files/src_maus.js.html#l422"><code>src&#x2F;maus.js:422</code></a>
+        <a href="../files/src_maus.js.html#l903"><code>src&#x2F;maus.js:903</code></a>
         
         </p>
 
@@ -236,7 +236,7 @@
             
                 <li class="param">
                     
-                        <code class="param-name optional">[def=&quot;&quot;]</code>
+                        <code class="param-name optional">[def]</code>
                         <span class="type">Object</span>
                         <span class="flag optional" title="This parameter is optional.">optional</span>
                     
@@ -262,7 +262,7 @@
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>var text = new maus.Text(&quot;:text&quot;);</code></pre>
+                <pre class="code prettyprint"><code>var text = new maus.Color(&quot;[type=&#39;color&#39;]&quot;);</code></pre>
 
             </div>
         </div>
@@ -297,13 +297,6 @@
                     <h3>Methods</h3>
 
                     <ul class="index-list methods extends">
-                        
-                            <li class="index-item method">
-                                <a href="#method_clear">clear</a>
-
-                                
-                                
-                            </li>
                         
                             <li class="index-item method inherited">
                                 <a href="#method_def">def</a>
@@ -402,88 +395,6 @@
         
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
-
-                
-                    <div id="method_clear" class="method item">
-    <h3 class="name"><code>clear</code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type"></span>
-        </span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_maus.js.html#l466"><code>src&#x2F;maus.js:466</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Clear the value.</p>
-
-    </div>
-
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                    <p>this</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <pre class="code prettyprint"><code>var text = new maus.Text(&quot;textarea&quot;);
-text.clear();
-console.log(text.get()); // &quot;&quot;</code></pre>
-
-            </div>
-        </div>
-    
-</div>
 
                 
                     <div id="method_def" class="method item inherited">
@@ -604,7 +515,7 @@ console.log(text.get()); // &quot;hello&quot;</code></pre>
             
         
         
-        <a href="../files/src_maus.js.html#l437"><code>src&#x2F;maus.js:437</code></a>
+        <a href="../files/src_maus.js.html#l919"><code>src&#x2F;maus.js:919</code></a>
         
         </p>
 
@@ -630,6 +541,8 @@ console.log(text.get()); // &quot;hello&quot;</code></pre>
                     
                         <span class="type">String</span>:
                     
+                    <p>the hexadecimal value.</p>
+
                 
             </div>
         </div>
@@ -640,9 +553,9 @@ console.log(text.get()); // &quot;hello&quot;</code></pre>
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>var text = new maus.Text(&quot;textarea&quot;);
-text.set(&quot;hello&quot;);
-console.log(text.get()); // &quot;hello&quot;</code></pre>
+                <pre class="code prettyprint"><code>var color = new maus.Color(&quot;[type=&#39;color&#39;]&quot;);
+color.set(&quot;red&quot;);
+console.log(color.get()); // &quot;#ff0000&quot;</code></pre>
 
             </div>
         </div>
@@ -813,7 +726,7 @@ Otherwise, this method is equivalent to <code>$(live).on(event, selector, func)<
                     
 
                     <div class="param-description">
-                        
+                         
                     </div>
 
                     
@@ -828,7 +741,7 @@ Otherwise, this method is equivalent to <code>$(live).on(event, selector, func)<
                     
 
                     <div class="param-description">
-                        
+                         
                     </div>
 
                     
@@ -1073,7 +986,7 @@ text.on_vchange();</code></pre>
             
         
         
-        <a href="../files/src_maus.js.html#l449"><code>src&#x2F;maus.js:449</code></a>
+        <a href="../files/src_maus.js.html#l931"><code>src&#x2F;maus.js:931</code></a>
         
         </p>
 
@@ -1097,13 +1010,14 @@ text.on_vchange();</code></pre>
                 <li class="param">
                     
                         <code class="param-name">val</code>
-                        <span class="type">String | Null</span>
+                        <span class="type">String</span>
                     
 
                     
 
                     <div class="param-description">
-                         
+                        <p>Either the hexadecimal value or the color keyword. If you use the color keyword, it must be included in <code>maus.colors</code> (case-insensitive).</p>
+
                     </div>
 
                     
@@ -1132,12 +1046,9 @@ text.on_vchange();</code></pre>
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>var text = new maus.Text(&quot;textarea&quot;);
-text.set(&quot;hello&quot;);
-console.log(text.get()); // &quot;hello&quot;
-text.set(null);
-console.log(text.get()); // &quot;&quot;
-text.set(&quot;hello&quot;);</code></pre>
+                <pre class="code prettyprint"><code>var color = new maus.Color(&quot;[type=&#39;color&#39;]&quot;);
+color.set(&quot;red&quot;);
+console.log(color.get()); // &quot;#ff0000&quot;</code></pre>
 
             </div>
         </div>
