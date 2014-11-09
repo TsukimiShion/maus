@@ -7,6 +7,176 @@ window.maus = new function(){
 
     var maus = this;
 
+    this.j = function(selector){
+        /**
+         * The function to make a J instance.
+         *
+         * ``` maus.j(selector) ``` is equal to ``` new maus.J(selector) ``` .
+         *
+         * @method j
+         * @param {String|Element|Array of Element|jQuery} selector This argument is passed to $().
+         * @return {maus.J}
+         * @example
+         *     // ex1
+         *     var body = maus.j("body"); // new maus.J("body")
+         *     body.css("background-color", "red"); // $("body").css("background-color", "red");
+         */
+        return new maus.J(selector);
+    };
+
+    /**
+     * 140 color names are defined in the HTML and CSS color specification (17 standard colors plus 123 more).
+     * The keys of ``` maus.colors ``` are color keywords and the values of them are their hexadecimal values.
+     *
+     * @property colors
+     * @type Object
+     * @example
+     *     console.log(maus.colors.red); // "#ff0000"
+     *     console.log(maus.colors.palegreen); // "#98fb98"
+     */
+    this.colors = {
+        "indigo": "#4b0082",
+        "gold": "#ffd700",
+        "firebrick": "#b22222",
+        "indianred": "#cd5c5c",
+        "yellow": "#ffff00",
+        "darkolivegreen": "#556b2f",
+        "darkseagreen": "#8fbc8f",
+        "mediumvioletred": "#c71585",
+        "mediumorchid": "#ba55d3",
+        "chartreuse": "#7fff00",
+        "mediumslateblue": "#7b68ee",
+        "black": "#000000",
+        "springgreen": "#00ff7f",
+        "crimson": "#dc143c",
+        "lightsalmon": "#ffa07a",
+        "brown": "#a52a2a",
+        "turquoise": "#40e0d0",
+        "olivedrab": "#6b8e23",
+        "cyan": "#00ffff",
+        "silver": "#c0c0c0",
+        "skyblue": "#87ceeb",
+        "gray": "#808080",
+        "darkturquoise": "#00ced1",
+        "goldenrod": "#daa520",
+        "darkgreen": "#006400",
+        "darkviolet": "#9400d3",
+        "darkgray": "#a9a9a9",
+        "lightpink": "#ffb6c1",
+        "teal": "#008080",
+        "darkmagenta": "#8b008b",
+        "lightgoldenrodyellow": "#fafad2",
+        "lavender": "#e6e6fa",
+        "yellowgreen": "#9acd32",
+        "thistle": "#d8bfd8",
+        "violet": "#ee82ee",
+        "navy": "#000080",
+        "orchid": "#da70d6",
+        "blue": "#0000ff",
+        "ghostwhite": "#f8f8ff",
+        "honeydew": "#f0fff0",
+        "cornflowerblue": "#6495ed",
+        "darkblue": "#00008b",
+        "darkkhaki": "#bdb76b",
+        "mediumpurple": "#9370db",
+        "cornsilk": "#fff8dc",
+        "red": "#ff0000",
+        "bisque": "#ffe4c4",
+        "slategray": "#708090",
+        "darkcyan": "#008b8b",
+        "khaki": "#f0e68c",
+        "wheat": "#f5deb3",
+        "deepskyblue": "#00bfff",
+        "darkred": "#8b0000",
+        "steelblue": "#4682b4",
+        "aliceblue": "#f0f8ff",
+        "gainsboro": "#dcdcdc",
+        "mediumturquoise": "#48d1cc",
+        "floralwhite": "#fffaf0",
+        "coral": "#ff7f50",
+        "purple": "#800080",
+        "aqua": "#00ffff",
+        "lightcyan": "#e0ffff",
+        "darksalmon": "#e9967a",
+        "beige": "#f5f5dc",
+        "azure": "#f0ffff",
+        "lightsteelblue": "#b0c4de",
+        "oldlace": "#fdf5e6",
+        "greenyellow": "#adff2f",
+        "royalblue": "#4169e1",
+        "lightseagreen": "#20b2aa",
+        "mistyrose": "#ffe4e1",
+        "sienna": "#a0522d",
+        "lightcoral": "#f08080",
+        "orangered": "#ff4500",
+        "navajowhite": "#ffdead",
+        "lime": "#00ff00",
+        "palegreen": "#98fb98",
+        "burlywood": "#deb887",
+        "seashell": "#fff5ee",
+        "mediumspringgreen": "#00fa9a",
+        "fuchsia": "#ff00ff",
+        "papayawhip": "#ffefd5",
+        "blanchedalmond": "#ffebcd",
+        "peru": "#cd853f",
+        "aquamarine": "#7fffd4",
+        "white": "#ffffff",
+        "darkslategray": "#2f4f4f",
+        "tomato": "#ff6347",
+        "ivory": "#fffff0",
+        "dodgerblue": "#1e90ff",
+        "lemonchiffon": "#fffacd",
+        "chocolate": "#d2691e",
+        "orange": "#ffa500",
+        "forestgreen": "#228b22",
+        "slateblue": "#6a5acd",
+        "olive": "#808000",
+        "mintcream": "#f5fffa",
+        "antiquewhite": "#faebd7",
+        "darkorange": "#ff8c00",
+        "cadetblue": "#5f9ea0",
+        "moccasin": "#ffe4b5",
+        "limegreen": "#32cd32",
+        "saddlebrown": "#8b4513",
+        "darkslateblue": "#483d8b",
+        "lightskyblue": "#87cefa",
+        "deeppink": "#ff1493",
+        "plum": "#dda0dd",
+        "darkgoldenrod": "#b8860b",
+        "maroon": "#800000",
+        "sandybrown": "#f4a460",
+        "magenta": "#ff00ff",
+        "tan": "#d2b48c",
+        "rosybrown": "#bc8f8f",
+        "pink": "#ffc0cb",
+        "lightblue": "#add8e6",
+        "palevioletred": "#db7093",
+        "mediumseagreen": "#3cb371",
+        "dimgray": "#696969",
+        "powderblue": "#b0e0e6",
+        "seagreen": "#2e8b57",
+        "snow": "#fffafa",
+        "mediumblue": "#0000cd",
+        "midnightblue": "#191970",
+        "paleturquoise": "#afeeee",
+        "palegoldenrod": "#eee8aa",
+        "whitesmoke": "#f5f5f5",
+        "darkorchid": "#9932cc",
+        "salmon": "#fa8072",
+        "lightslategray": "#778899",
+        "lawngreen": "#7cfc00",
+        "lightgreen": "#90ee90",
+        "lightgray": "#d3d3d3",
+        "hotpink": "#ff69b4",
+        "lightyellow": "#ffffe0",
+        "lavenderblush": "#fff0f5",
+        "linen": "#faf0e6",
+        "mediumaquamarine": "#66cdaa",
+        "green": "#008000",
+        "blueviolet": "#8a2be2",
+        "peachpuff": "#ffdab9
+    };
+
     this.J = function(selector){
         /**
          * jQuery Wrapper Class.
@@ -725,6 +895,80 @@ window.maus = new function(){
         this.on_vchange();
     };
     this.BoolCheckBox.prototype = new Form;
+
+    this.Color = function(selector, live, def){
+        /**
+         * This class helps to operate input:color.
+         *
+         * @class Color
+         * @constructor
+         * @extends maus.Form
+         * @namespace maus
+         * @param {String|Element|jQuery} selector
+         * @param [live]
+         * @param [def] The default value.
+         * @example
+         *     var text = new maus.Color("[type='color']");
+         */
+        Form.call(this, selector, live, def);
+        var self = this;
+        this.get = function(){
+            /**
+             * Return the value.
+             * @method get
+             * @return {String} the hexadecimal value.
+             * @example
+             *     var color = new maus.Color("[type='color']");
+             *     color.set("red");
+             *     console.log(color.get()); // "#ff0000"
+             */
+            return this.val();
+        };
+        this.set = function(val){
+            /**
+             * Set the value.
+             * @method set
+             * @param {String} val Either the hexadecimal value or the color keyword. If you use the color keyword, it must be included in ``` maus.colors ``` (case-insensitive).
+             * @return this
+             * @example
+             *     var color = new maus.Color("[type='color']");
+             *     color.set("red");
+             *     console.log(color.get()); // "#ff0000"
+             */
+            val = val.toLowerCase();
+            if (val in maus.colors){
+                val = maus.colors[val];
+            }
+            this.val(val);
+            return this;
+        };
+        function _vchange(e){
+            $(this).trigger("vchange.fm", self.get());
+        }
+        this.on_vchange = function(){
+            if (live !== undefined){
+                if (live){
+                    $(live).on("change", selector, _vchange);
+                } else {
+                    this.on("change", _vchange);
+                }
+            }
+            return this;
+        };
+
+        this.off_vchange = function(){
+            if (live !== undefined){
+                if (live){
+                    $(live).off("change", selector, _vchange);
+                } else {
+                    this.off("change", _vchange);
+                }
+            }
+            return this;
+        };
+        this.on_vchange();
+    };
+    this.Color.prototype = new Form;
 
     this.form = function(params){
         /**
