@@ -208,7 +208,7 @@ $(function(){
         test("normal", function(){
             var select = new maus.Select("select[name='name']", undefined, undefined, true);
             chai.assert.equal(select.get(), null, "OK");
-            var val = "kics";
+            var val = "Ace";
             select.set(val);
             chai.assert.ok(_.isEqual(select.get(), [val]), "OK");
             select.clear();
@@ -309,6 +309,26 @@ $(function(){
             target.set(true);
             target.clear();
             chai.assert.notOk(target.get(), "OK");
+        });
+    });
+    suite("Color", function(){
+        var selector = "[name='bg-color']";
+        test("normal", function(){
+            var target = new maus.Color(selector);
+            chai.assert.ok(_.isEqual(target.jq(), $(selector)), "OK");
+        });
+        test("constructor def", function(){
+            var val = true;
+            var target = new maus.Color(selector, null, val);
+            chai.assert.equal(target.getDef(), val, "OK");
+        });
+    });
+    suite("Color.set, get", function(){
+        var selector = "[name='bg-color']";
+        test("normal", function(){
+            var target = new maus.Color(selector);
+            target.set("red");
+            chai.assert.equal(target.get(), maus.colors["red"], "OK");
         });
     });
 
