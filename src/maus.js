@@ -1048,16 +1048,8 @@ window.maus = new function(){
 
         function forms(params){
             var ret = {};
-            var types = {
-                "text": maus.Text,
-                "select": maus.Select,
-                "radio": maus.Radio,
-                "checkbox": maus.CheckBox,
-                "bcheckbox": maus.BoolCheckBox,
-                "boolcheckbox": maus.BoolCheckBox,
-            };
             _.each(params, function(vals, key){
-                ret[key] = new types[vals[0]](vals[1], vals[2], vals[3], vals[4]);
+                ret[key] = form(vals);
             });
 
             if (!("get" in params)){
