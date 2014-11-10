@@ -432,6 +432,7 @@ window.maus = new function(){
          *     var text = new maus.Text(":text");
          */
         var self = this;
+
         Form.call(this, selector, live, def === undefined ? "" : def);
         this.get = function(){
             /**
@@ -475,18 +476,14 @@ window.maus = new function(){
             return this.set("");
         };
         function _vchange(e){
-            var val = self.get();
-            if (self._val !== val){
-                self._val = val;
-                $(this).trigger("vchange.fm", val);
-            }
+            $(this).trigger("vchange.fm", self.get());
         }
         this.on_vchange = function(){
             if (live !== undefined){
                 if (live){
-                    $(live).on("keyup", selector, _vchange);
+                    $(live).on("input", selector, _vchange);
                 } else {
-                    this.on("keyup", _vchange);
+                    this.on("input", _vchange);
                 }
             }
             return this;
@@ -494,9 +491,9 @@ window.maus = new function(){
         this.off_vchange = function(){
             if (live !== undefined){
                 if (live){
-                    $(live).off("keyup", selector, _vchange);
+                    $(live).on("input", selector, _vchange);
                 } else {
-                    this.off("keyup", _vchange);
+                    this.on("input", _vchange);
                 }
             }
             return this;
@@ -999,12 +996,7 @@ window.maus = new function(){
              *     console.log(number.get()); // 3
              */
             var val = this.val();
-            if (val === ""){
-                val = null;
-            } else {
-                val = Number(val);
-            }
-            return val;
+            return val === "" ? null : Number(val);
         };
         this.set = function(val){
             /**
@@ -1035,18 +1027,14 @@ window.maus = new function(){
             return this.set("");
         };
         function _vchange(e){
-            var val = self.get();
-            if (self._val !== val){
-                self._val = val;
-                $(this).trigger("vchange.fm", val);
-            }
+            $(this).trigger("vchange.fm", self.get());
         }
         this.on_vchange = function(){
             if (live !== undefined){
                 if (live){
-                    $(live).on("change keyup", selector, _vchange);
+                    $(live).on("input", selector, _vchange);
                 } else {
-                    this.on("change keyup", _vchange);
+                    this.on("input", _vchange);
                 }
             }
             return this;
@@ -1055,11 +1043,9 @@ window.maus = new function(){
         this.off_vchange = function(){
             if (live !== undefined){
                 if (live){
-                    $(live).off("change", selector, _vchange);
-                    $(live).off("keyup", selector, _vchange);
+                    $(live).off("input", selector, _vchange);
                 } else {
-                    this.off("change", _vchange);
-                    this.off("keyup", _vchange);
+                    this.off("input", _vchange);
                 }
             }
             return this;

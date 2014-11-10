@@ -22,7 +22,11 @@
     </head>
     <body>
         <div id="mocha"></div>
-        <input type="text">
+        <input type="text" list="text">
+        <datalist id="text">
+            <option>foo</option>
+            <option>bar</option>
+        </datalist>
         <input id="checked-target" type="checkbox">
         <textarea cols="30" rows="10"></textarea>
         <label><input type="radio" name="sex" value="male">male</label>
@@ -30,9 +34,9 @@
         <label><input type="checkbox" name="sports" value="soccer">soccer</label>
         <label><input type="checkbox" name="sports" value="baseball">baseball</label>
         <select name="number">
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
+            <option>0</option>
+            <option>1</option>
+            <option>2</option>
         </select>
         <select name="name" multiple>
             <option>John</option>
@@ -40,7 +44,11 @@
             <option>Ace</option>
         </select>
         <label><input type="color" name="bg-color"></label>
-        <label><input type="number" name="age"></label>
+        <label><input type="number" name="age" list="ages"></label>
+        <datalist id="ages">
+            <option>10</option>
+            <option>20</option>
+        </datalist>
         <label><input type="password" name="password"></label>
         <label><input type="file" name="file"></label>
         <div id="display-target"></div>
