@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>maus.CheckBox - maus</title>
+    <title>maus.Number - maus</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -100,7 +100,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>maus.CheckBox Class</h1>
+                        <h1>maus.Number Class</h1>
 <div class="box meta">
     
 
@@ -112,7 +112,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_maus.js.html#l713"><code>src&#x2F;maus.js:713</code></a>
+            Defined in: <a href="../files/src_maus.js.html#l977"><code>src&#x2F;maus.js:977</code></a>
         </div>
     
 
@@ -124,15 +124,15 @@
 
 
 <div class="box intro">
-    <p>This class helps to operate input:checkbox.</p>
+    <p>This class helps to operate input:number.</p>
 
 </div>
 
 
     <div class="constructor">
         <h2>Constructor</h2>
-        <div id="method_maus.CheckBox" class="method item">
-    <h3 class="name"><code>maus.CheckBox</code></h3>
+        <div id="method_maus.Number" class="method item">
+    <h3 class="name"><code>maus.Number</code></h3>
 
     
         <div class="args">
@@ -152,7 +152,7 @@
             
                 <li class="arg">
                     
-                        <code class="optional">[def=[]</code>
+                        <code class="optional">[def=&quot;&quot;]</code>
                     
                 </li>
             
@@ -185,7 +185,7 @@
             
         
         
-        <a href="../files/src_maus.js.html#l713"><code>src&#x2F;maus.js:713</code></a>
+        <a href="../files/src_maus.js.html#l977"><code>src&#x2F;maus.js:977</code></a>
         
         </p>
 
@@ -238,7 +238,7 @@
             
                 <li class="param">
                     
-                        <code class="param-name optional">[def=[]</code>
+                        <code class="param-name optional">[def=&quot;&quot;]</code>
                         <span class="type">Object</span>
                         <span class="flag optional" title="This parameter is optional.">optional</span>
                     
@@ -246,7 +246,7 @@
                     
 
                     <div class="param-description">
-                        <p>The default value. I def is [], it means no item is checked.</p>
+                        <p>The default value.</p>
 
                     </div>
 
@@ -259,6 +259,15 @@
 
     
 
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>var number = new maus.Number(&quot;[type=&#39;number&#39;]&quot;);</code></pre>
+
+            </div>
+        </div>
     
 </div>
 
@@ -433,7 +442,7 @@
             
         
         
-        <a href="../files/src_maus.js.html#l745"><code>src&#x2F;maus.js:745</code></a>
+        <a href="../files/src_maus.js.html#l1026"><code>src&#x2F;maus.js:1026</code></a>
         
         </p>
 
@@ -469,9 +478,9 @@
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>var checkbox = new maus.CheckBox(&quot;:checkbox&quot;);
-checkbox.clear();
-console.log(checkbox.get()); // []</code></pre>
+                <pre class="code prettyprint"><code>var number = new maus.Number(&quot;[type=&#39;number&#39;]&quot;);
+number.clear();
+console.log(number.get()); // null</code></pre>
 
             </div>
         </div>
@@ -570,7 +579,7 @@ console.log(text.get()); // &quot;hello&quot;</code></pre>
 
     
         <span class="returns-inline">
-            <span class="type">Array of String</span>
+            <span class="type">Number</span>
         </span>
     
 
@@ -597,7 +606,7 @@ console.log(text.get()); // &quot;hello&quot;</code></pre>
             
         
         
-        <a href="../files/src_maus.js.html#l728"><code>src&#x2F;maus.js:728</code></a>
+        <a href="../files/src_maus.js.html#l992"><code>src&#x2F;maus.js:992</code></a>
         
         </p>
 
@@ -621,7 +630,7 @@ console.log(text.get()); // &quot;hello&quot;</code></pre>
             <div class="returns-description">
                 
                     
-                        <span class="type">Array of String</span>:
+                        <span class="type">Number</span>:
                     
                 
             </div>
@@ -633,10 +642,9 @@ console.log(text.get()); // &quot;hello&quot;</code></pre>
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>var checkbox = new maus.CheckBox(&quot;:checkbox&quot;);
-console.log(checkbox.get()); // []
-checkbox.set(&quot;good&quot;);
-console.log(checkbox.get()); // [&quot;good&quot;]</code></pre>
+                <pre class="code prettyprint"><code>var number = new maus.Number(&quot;[type=&#39;number&#39;]&quot;);
+number.set(3);
+console.log(number.get()); // 3</code></pre>
 
             </div>
         </div>
@@ -807,7 +815,7 @@ Otherwise, this method is equivalent to <code>$(live).on(event, selector, func)<
                     
 
                     <div class="param-description">
-                         
+                        
                     </div>
 
                     
@@ -822,7 +830,7 @@ Otherwise, this method is equivalent to <code>$(live).on(event, selector, func)<
                     
 
                     <div class="param-description">
-                         
+                        
                     </div>
 
                     
@@ -1067,7 +1075,7 @@ text.on_vchange();</code></pre>
             
         
         
-        <a href="../files/src_maus.js.html#l758"><code>src&#x2F;maus.js:758</code></a>
+        <a href="../files/src_maus.js.html#l1010"><code>src&#x2F;maus.js:1010</code></a>
         
         </p>
 
@@ -1091,7 +1099,7 @@ text.on_vchange();</code></pre>
                 <li class="param">
                     
                         <code class="param-name">val</code>
-                        <span class="type">String | Array of String | Null</span>
+                        <span class="type">Number | Null</span>
                     
 
                     
@@ -1126,13 +1134,11 @@ text.on_vchange();</code></pre>
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>var checkbox = new maus.CheckBox(&quot;:checkbox&quot;);
-checkbox.set(&quot;hello&quot;);
-console.log(checkbox.get()); // [&quot;hello&quot;]
-checkbox.set([&quot;good&quot;, &quot;bad&quot;]);
-console.log(checkbox.get()); // [&quot;good&quot;, &quot;bad&quot;]
-checkbox.set(null);
-console.log(checkbox.get()); // []</code></pre>
+                <pre class="code prettyprint"><code>var number = new maus.Number(&quot;[type=&#39;number&#39;]&quot;);
+number.set(3);
+console.log(number.get()); // 3
+number.set(null);
+console.log(number.get()); // null</code></pre>
 
             </div>
         </div>
