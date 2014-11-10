@@ -1069,6 +1069,102 @@ window.maus = new function(){
     };
     this.Number.prototype = new Form;
 
+    this.File = function(selector, live){
+        /**
+         * This class helps to operate input:file.
+         * > ##### Note: 
+         * Some browsers have a security feature that prevents javascript from knowing your file's local full path.
+         * So maus.File has the following limitations.
+         *
+         * - The def, setDef, getDef methods do nothing.
+         * - The set method is not defined.
+         * - The get method may not return the correct full path. The return value of the get method depends on the browser.
+         *
+         * @class File
+         * @constructor
+         * @extends maus.Form
+         * @namespace maus
+         * @param {String|Element|jQuery} selector
+         * @param [live]
+         * @example
+         *     var file = new maus.File("[type='file']");
+         */
+        Form.call(this, selector, live, null);
+        this.getDef = function(){
+            /**
+             * Do nothing.
+             *
+             * @method getDef
+             */
+        };
+        this.setDef = function(){
+            /**
+             * Do nothing.
+             *
+             * @method setDef
+             */
+        };
+        this.def = function(){
+            /**
+             * Do nothing.
+             *
+             * @method def
+             */
+        };
+        var self = this;
+        this.get = function(){
+            /**
+             * Return the value.
+             * > Note: The return value depends on the browser.
+             *
+             * @method get
+             * @return {String}
+             * @example
+             *     var file = new maus.File("[type='file']");
+             *     // We assume the HTMLImputElement selects the file ~/.vimrc .
+             *     console.log(file.get()); // "C:\fakepath\.vimrc" (This value depends on the browser.)
+             */
+            return this.val();
+        };
+        this.clear = function(){
+            /**
+             * Clear the value.
+             * @method clear
+             * @return this
+             * @example
+             *     var file = new maus.File("[type='file']");
+             *     file.clear();
+             *     console.log(file.get()); // ""
+             */
+            return this.jq().val("");
+        };
+        function _vchange(e){
+            $(this).trigger("vchange.fm", self.get());
+        }
+        this.on_vchange = function(){
+            if (live !== undefined){
+                if (live){
+                    $(live).on("change", selector, _vchange);
+                } else {
+                    this.on("change", _vchange);
+                }
+            }
+            return this;
+        };
+        this.off_vchange = function(){
+            if (live !== undefined){
+                if (live){
+                    $(live).off("change", selector, _vchange);
+                } else {
+                    this.off("change", _vchange);
+                }
+            }
+            return this;
+        };
+        this.on_vchange();
+    };
+    this.File.prototype = new Form;
+
     this.controls = function(obj){
         /**
          * The function to make maus.J instances.
@@ -1082,12 +1178,14 @@ window.maus = new function(){
          * - "checkbox": create a maus.CheckBox object.
          * - "bcheckbox", "boolcheckbox": create a maus.BoolCheckBox object.
          * - "color": create a maus.Color object.
+         * - "number": create a maus.Number object.
+         * - "file": create a maus.File object.
          *
          * The meaning of **selector**, **live**, **def**, **multiple** is equivalent to maus.Form .
          *
          * @method controls
          * @param {Object|String|Array} obj
-         * @return {Object|maus.J|maus.Text|maus.Radio|maus.Select|maus.BoolCheckBox|maus.CheckBox}
+         * @return {Object|maus.J|maus.Text|maus.Radio|maus.Select|maus.BoolCheckBox|maus.CheckBox|maus.Color|maus.Number|maus.File}
          * @for maus
          * @example
          *     // ex1
@@ -1138,6 +1236,8 @@ window.maus = new function(){
                 "bcheckbox": maus.BoolCheckBox,
                 "boolcheckbox": maus.BoolCheckBox,
                 "color": maus.Color,
+                "number": maus.Number,
+                "file": maus.File,
             };
             return new types[type](selector, live, def, multiple);
         }

@@ -40,7 +40,7 @@ module.exports = function (grunt) {
             compile: {
                 name: "<%= pkg.name %>",
                 description: "<%= pkg.description %>",
-                version: "2.2",
+                version: "2.3",
                 url: "<%= pkg.homepage %>",
                 options: {
                     paths: "src",

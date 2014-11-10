@@ -1,7 +1,7 @@
 {
     "name": "maus",
     "main": "src/maus.js",
-    "version": "2.2.0",
+    "version": "2.3.0",
     "homepage": "https://github.com/TsukimiShion/maus",
     "authors": [
         "Tsukimi Shion <tsukimishion@gmail.com>"

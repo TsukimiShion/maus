@@ -354,6 +354,66 @@ $(function(){
             chai.assert.ok(_.isNull(target.get()), "OK");
         });
     });
+    suite("Text password", function(){
+        var selector = "[name='password']";
+        test("normal", function(){
+            var text = new maus.Text(selector);
+            chai.assert.ok(_.isEqual(text.jq(), $(selector)), "OK");
+        });
+        test("constructor def", function(){
+            var val = "hello";
+            var text = new maus.Text(selector, null, val);
+            chai.assert.equal(text.getDef(), val, "OK");
+        });
+    });
+    suite("Text.def password", function(){
+        test("normal", function(){
+            var text = new maus.Text("[name='password']");
+            var def = "yahoo";
+            var val = "google";
+            text.setDef(def);
+            text.set(val);
+            text.def();
+            chai.assert.equal(text.get(), def, "OK");
+        });
+    });
+    suite("Text.setDef, getDef password", function(){
+        test("normal", function(){
+            var text = new maus.Text("[name='password']");
+            chai.assert.equal(text.getDef(), "", "OK");
+            var val = "yahoo";
+            text.setDef(val);
+            chai.assert.equal(text.getDef(), val, "OK");
+        });
+    });
+    suite("Text.set, get password", function(){
+        test("normal", function(){
+            var text = new maus.Text("[name='password']");
+            var val = "yahoo";
+            text.set(val);
+            chai.assert.equal(text.get(), val, "OK");
+            text.set(null);
+            chai.assert.equal(text.get(), "", "OK");
+            text.set(val);
+            text.set(undefined);
+            chai.assert.equal(text.get(), "", "OK");
+        });
+    });
+    suite("Text.clear password", function(){
+        test("normal", function(){
+            var text = new maus.Text("[name='password']");
+            text.set("yahoo");
+            text.clear();
+            chai.assert.equal(text.get(), "", "OK");
+        });
+    });
+    suite("File", function(){
+        var selector = "[name='file']";
+        test("normal", function(){
+            var file = new maus.File(selector);
+            chai.assert.ok(_.isEqual(file.jq(), $(selector)), "OK");
+        });
+    });
 
     mocha.run();
 });
