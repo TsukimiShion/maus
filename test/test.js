@@ -117,10 +117,8 @@ $(function(){
                 }
             });
             controls.form.set({name: "John", sex: "male"});
-            console.log(controls.form.get());
             chai.assert.ok(_.isEqual({name: "John", sex: "male"}, controls.form.get()), "OK");
             controls.form.clear();
-            console.log(controls.form.get());
             chai.assert.ok(_.isEqual({name:"", sex: null}, controls.form.get()), "OK");
         });
     });
@@ -318,7 +316,7 @@ $(function(){
             chai.assert.ok(_.isEqual(target.jq(), $(selector)), "OK");
         });
         test("constructor def", function(){
-            var val = true;
+            var val = "#ff0000";
             var target = new maus.Color(selector, null, val);
             chai.assert.equal(target.getDef(), val, "OK");
         });
@@ -329,6 +327,31 @@ $(function(){
             var target = new maus.Color(selector);
             target.set("red");
             chai.assert.equal(target.get(), maus.colors["red"], "OK");
+        });
+    });
+    suite("Number", function(){
+        var selector = "[name='age']";
+        test("normal", function(){
+            var target = new maus.Number(selector);
+            chai.assert.ok(_.isEqual(target.jq(), $(selector)), "OK");
+        });
+        test("constructor def", function(){
+            var val = 10;
+            var target = new maus.Number(selector, null, val);
+            chai.assert.equal(target.getDef(), val, "OK");
+        });
+    });
+    suite("Number.set, get", function(){
+        var selector = "[name='age']";
+        test("normal", function(){
+            var target = new maus.Number(selector);
+            target.set(10);
+            chai.assert.ok(target.get() === 10, "OK");
+        });
+        test("null", function(){
+            var target = new maus.Number(selector);
+            target.set(null);
+            chai.assert.ok(_.isNull(target.get()), "OK");
         });
     });
 

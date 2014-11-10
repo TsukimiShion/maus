@@ -40,18 +40,24 @@ module.exports = function (grunt) {
             compile: {
                 name: "<%= pkg.name %>",
                 description: "<%= pkg.description %>",
-                version: "2.1",
+                version: "2.2",
                 url: "<%= pkg.homepage %>",
                 options: {
                     paths: "src",
                     outdir: "yuidoc"
                 }
             }
+        },
+        jsonlint: {
+            sample: {
+                src: "*.json"
+            }
         }
     });
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.loadNpmTasks("grunt-contrib-yuidoc");
+    grunt.loadNpmTasks("grunt-jsonlint");
     grunt.loadNpmTasks("grunt-bower-task");
     grunt.loadNpmTasks("grunt-mocha");
 };

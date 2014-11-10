@@ -973,6 +973,102 @@ window.maus = new function(){
     };
     this.Color.prototype = new Form;
 
+    this.Number = function(selector, live, def){
+        /**
+         * This class helps to operate input:number.
+         * @class Number
+         * @constructor
+         * @extends maus.Form
+         * @namespace maus
+         * @param {String|Element|jQuery} selector
+         * @param [live]
+         * @param [def=""] The default value.
+         * @example
+         *     var number = new maus.Number("[type='number']");
+         */
+        var self = this;
+        Form.call(this, selector, live, def === undefined ? "" : def);
+        this.get = function(){
+            /**
+             * Return the value.
+             * @method get
+             * @return {Number}
+             * @example
+             *     var number = new maus.Number("[type='number']");
+             *     number.set(3);
+             *     console.log(number.get()); // 3
+             */
+            var val = this.val();
+            if (val === ""){
+                val = null;
+            } else {
+                val = Number(val);
+            }
+            return val;
+        };
+        this.set = function(val){
+            /**
+             * Set the value.
+             * @method set
+             * @param {Number|null} val
+             * @return this
+             * @example
+             *     var number = new maus.Number("[type='number']");
+             *     number.set(3);
+             *     console.log(number.get()); // 3
+             *     number.set(null);
+             *     console.log(number.get()); // null
+             */
+            this.val(val);
+            return this;
+        };
+        this.clear = function(){
+            /**
+             * Clear the value.
+             * @method clear
+             * @return this
+             * @example
+             *     var number = new maus.Number("[type='number']");
+             *     number.clear();
+             *     console.log(number.get()); // null
+             */
+            return this.set("");
+        };
+        function _vchange(e){
+            var val = self.get();
+            if (self._val !== val){
+                self._val = val;
+                $(this).trigger("vchange.fm", val);
+            }
+        }
+        this.on_vchange = function(){
+            if (live !== undefined){
+                if (live){
+                    $(live).on("change keyup", selector, _vchange);
+                } else {
+                    this.on("change keyup", _vchange);
+                }
+            }
+            return this;
+        };
+
+        this.off_vchange = function(){
+            if (live !== undefined){
+                if (live){
+                    $(live).off("change", selector, _vchange);
+                    $(live).off("keyup", selector, _vchange);
+                } else {
+                    this.off("change", _vchange);
+                    this.off("keyup", _vchange);
+                }
+            }
+            return this;
+        };
+
+        this.on_vchange();
+    };
+    this.Number.prototype = new Form;
+
     this.controls = function(obj){
         /**
          * The function to make maus.J instances.

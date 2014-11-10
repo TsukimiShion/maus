@@ -1,6 +1,6 @@
 {
   "name": "maus",
-  "version": "2.1.2",
+  "version": "2.2.0",
   "description": "The jQuery extension library (not jQuery plugin).",
   "main": "src/maus.js",
   "scripts": {
@@ -29,6 +29,7 @@
     "grunt-contrib-jshint": "^0.10.0",
     "grunt-contrib-uglify": "^0.6.0",
     "grunt-contrib-yuidoc": "^0.5.2",
+    "grunt-jsonlint": "^1.0.4",
     "grunt-mocha": "^0.4.11"
   },
   "dependencies": {
