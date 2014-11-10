@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>maus.Text - maus</title>
+    <title>maus.File - maus</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -102,7 +102,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>maus.Text Class</h1>
+                        <h1>maus.File Class</h1>
 <div class="box meta">
     
 
@@ -114,7 +114,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_maus.js.html#l422"><code>src&#x2F;maus.js:422</code></a>
+            Defined in: <a href="../files/src_maus.js.html#l1073"><code>src&#x2F;maus.js:1073</code></a>
         </div>
     
 
@@ -126,15 +126,25 @@
 
 
 <div class="box intro">
-    <p>This class helps to operate input:text or textarea.</p>
+    <p>This class helps to operate input:file.</p>
+<blockquote>
+<h5 id="note-">Note:</h5>
+<p>Some browsers have a security feature that prevents javascript from knowing your file&#39;s local full path.
+So maus.File has the following limitations.</p>
+</blockquote>
+<ul>
+<li>The def, setDef, getDef methods do nothing.</li>
+<li>The set method is not defined.</li>
+<li>The get method may not return the correct full path. The return value of the get method depends on the browser.</li>
+</ul>
 
 </div>
 
 
     <div class="constructor">
         <h2>Constructor</h2>
-        <div id="method_maus.Text" class="method item">
-    <h3 class="name"><code>maus.Text</code></h3>
+        <div id="method_maus.File" class="method item">
+    <h3 class="name"><code>maus.File</code></h3>
 
     
         <div class="args">
@@ -149,12 +159,6 @@
                 <li class="arg">
                     
                         <code class="optional">[live]</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code class="optional">[def=&quot;&quot;]</code>
                     
                 </li>
             
@@ -187,7 +191,7 @@
             
         
         
-        <a href="../files/src_maus.js.html#l422"><code>src&#x2F;maus.js:422</code></a>
+        <a href="../files/src_maus.js.html#l1073"><code>src&#x2F;maus.js:1073</code></a>
         
         </p>
 
@@ -238,23 +242,6 @@
                     
                 </li>
             
-                <li class="param">
-                    
-                        <code class="param-name optional">[def=&quot;&quot;]</code>
-                        <span class="type">Object</span>
-                        <span class="flag optional" title="This parameter is optional.">optional</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The default value.</p>
-
-                    </div>
-
-                    
-                </li>
-            
             </ul>
         </div>
     
@@ -266,7 +253,7 @@
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>var text = new maus.Text(&quot;:text&quot;);</code></pre>
+                <pre class="code prettyprint"><code>var file = new maus.File(&quot;[type=&#39;file&#39;]&quot;);</code></pre>
 
             </div>
         </div>
@@ -346,13 +333,6 @@
                         
                             <li class="index-item method inherited">
                                 <a href="#method_on_vchange">on_vchange</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method">
-                                <a href="#method_set">set</a>
 
                                 
                                 
@@ -444,7 +424,7 @@
             
         
         
-        <a href="../files/src_maus.js.html#l466"><code>src&#x2F;maus.js:466</code></a>
+        <a href="../files/src_maus.js.html#l1130"><code>src&#x2F;maus.js:1130</code></a>
         
         </p>
 
@@ -480,9 +460,9 @@
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>var text = new maus.Text(&quot;textarea&quot;);
-text.clear();
-console.log(text.get()); // &quot;&quot;</code></pre>
+                <pre class="code prettyprint"><code>var file = new maus.File(&quot;[type=&#39;file&#39;]&quot;);
+file.clear();
+console.log(file.get()); // &quot;&quot;</code></pre>
 
             </div>
         </div>
@@ -490,17 +470,13 @@ console.log(text.get()); // &quot;&quot;</code></pre>
 </div>
 
                 
-                    <div id="method_def" class="method item inherited">
+                    <div id="method_def" class="method item">
     <h3 class="name"><code>def</code></h3>
 
     
         <span class="paren">()</span>
     
 
-    
-        <span class="returns-inline">
-            <span class="type"></span>
-        </span>
     
 
     
@@ -517,13 +493,16 @@ console.log(text.get()); // &quot;&quot;</code></pre>
 
     <div class="meta">
         
+            <p>Inherited from
+            <a href="../classes/maus.Form.html#method_def">
+                maus.Form
+            </a>
             
-                <p>Inherited from
-                <a href="../classes/maus.Form.html#method_def">maus.Form</a>:
+            but overwritten in
             
         
         
-        <a href="../files/src_maus.js.html#l311"><code>src&#x2F;maus.js:311</code></a>
+        <a href="../files/src_maus.js.html#l1108"><code>src&#x2F;maus.js:1108</code></a>
         
         </p>
 
@@ -534,40 +513,14 @@ console.log(text.get()); // &quot;&quot;</code></pre>
     </div>
 
     <div class="description">
-        <p>Change the value to the default value.</p>
+        <p>Do nothing.</p>
 
     </div>
 
     
 
     
-        <div class="returns">
-            <h4>Returns:</h4>
 
-            <div class="returns-description">
-                
-                    
-                    <p>this</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <pre class="code prettyprint"><code>var text = new maus.Text(&quot;:text&quot;);
-console.log(text.get()); // &quot;&quot;
-text.setDef(&quot;hello&quot;);
-console.log(text.get()); // &quot;&quot;
-text.def();
-console.log(text.get()); // &quot;hello&quot;</code></pre>
-
-            </div>
-        </div>
     
 </div>
 
@@ -608,7 +561,7 @@ console.log(text.get()); // &quot;hello&quot;</code></pre>
             
         
         
-        <a href="../files/src_maus.js.html#l437"><code>src&#x2F;maus.js:437</code></a>
+        <a href="../files/src_maus.js.html#l1116"><code>src&#x2F;maus.js:1116</code></a>
         
         </p>
 
@@ -620,6 +573,9 @@ console.log(text.get()); // &quot;hello&quot;</code></pre>
 
     <div class="description">
         <p>Return the value.</p>
+<blockquote>
+<p>Note: The return value depends on the browser.</p>
+</blockquote>
 
     </div>
 
@@ -644,9 +600,9 @@ console.log(text.get()); // &quot;hello&quot;</code></pre>
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>var text = new maus.Text(&quot;textarea&quot;);
-text.set(&quot;hello&quot;);
-console.log(text.get()); // &quot;hello&quot;</code></pre>
+                <pre class="code prettyprint"><code>var file = new maus.File(&quot;[type=&#39;file&#39;]&quot;);
+// We assume the HTMLImputElement selects the file ~/.vimrc .
+console.log(file.get()); // &quot;C:\fakepath\.vimrc&quot; (This value depends on the browser.)</code></pre>
 
             </div>
         </div>
@@ -654,17 +610,13 @@ console.log(text.get()); // &quot;hello&quot;</code></pre>
 </div>
 
                 
-                    <div id="method_getDef" class="method item inherited">
+                    <div id="method_getDef" class="method item">
     <h3 class="name"><code>getDef</code></h3>
 
     
         <span class="paren">()</span>
     
 
-    
-        <span class="returns-inline">
-            <span class="type">String | Array of String | Null</span>
-        </span>
     
 
     
@@ -681,13 +633,16 @@ console.log(text.get()); // &quot;hello&quot;</code></pre>
 
     <div class="meta">
         
+            <p>Inherited from
+            <a href="../classes/maus.Form.html#method_getDef">
+                maus.Form
+            </a>
             
-                <p>Inherited from
-                <a href="../classes/maus.Form.html#method_getDef">maus.Form</a>:
+            but overwritten in
             
         
         
-        <a href="../files/src_maus.js.html#l327"><code>src&#x2F;maus.js:327</code></a>
+        <a href="../files/src_maus.js.html#l1094"><code>src&#x2F;maus.js:1094</code></a>
         
         </p>
 
@@ -698,38 +653,14 @@ console.log(text.get()); // &quot;hello&quot;</code></pre>
     </div>
 
     <div class="description">
-        <p>Return the default value.</p>
+        <p>Do nothing.</p>
 
     </div>
 
     
 
     
-        <div class="returns">
-            <h4>Returns:</h4>
 
-            <div class="returns-description">
-                
-                    
-                        <span class="type">String | Array of String | Null</span>:
-                    
-                
-            </div>
-        </div>
-    
-
-    
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <pre class="code prettyprint"><code>var text = new maus.Text(&quot;:text&quot;);
-console.log(text.getDef()); // &quot;&quot;
-text.setDef(&quot;hello&quot;);
-console.log(text.getDef()); // &quot;hello&quot;</code></pre>
-
-            </div>
-        </div>
     
 </div>
 
@@ -817,7 +748,7 @@ Otherwise, this method is equivalent to <code>$(live).on(event, selector, func)<
                     
 
                     <div class="param-description">
-                        
+                         
                     </div>
 
                     
@@ -832,7 +763,7 @@ Otherwise, this method is equivalent to <code>$(live).on(event, selector, func)<
                     
 
                     <div class="param-description">
-                        
+                         
                     </div>
 
                     
@@ -1031,145 +962,13 @@ text.on_vchange();</code></pre>
 </div>
 
                 
-                    <div id="method_set" class="method item">
-    <h3 class="name"><code>set</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>val</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type"></span>
-        </span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_maus.js.html#l449"><code>src&#x2F;maus.js:449</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Set the value.</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">val</code>
-                        <span class="type">String | Null</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                    <p>this</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <pre class="code prettyprint"><code>var text = new maus.Text(&quot;textarea&quot;);
-text.set(&quot;hello&quot;);
-console.log(text.get()); // &quot;hello&quot;
-text.set(null);
-console.log(text.get()); // &quot;&quot;
-text.set(&quot;hello&quot;);</code></pre>
-
-            </div>
-        </div>
-    
-</div>
-
-                
-                    <div id="method_setDef" class="method item inherited">
+                    <div id="method_setDef" class="method item">
     <h3 class="name"><code>setDef</code></h3>
 
     
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>val</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
+        <span class="paren">()</span>
     
 
-    
-        <span class="returns-inline">
-            <span class="type"></span>
-        </span>
     
 
     
@@ -1186,13 +985,16 @@ text.set(&quot;hello&quot;);</code></pre>
 
     <div class="meta">
         
+            <p>Inherited from
+            <a href="../classes/maus.Form.html#method_setDef">
+                maus.Form
+            </a>
             
-                <p>Inherited from
-                <a href="../classes/maus.Form.html#method_setDef">maus.Form</a>:
+            but overwritten in
             
         
         
-        <a href="../files/src_maus.js.html#l341"><code>src&#x2F;maus.js:341</code></a>
+        <a href="../files/src_maus.js.html#l1101"><code>src&#x2F;maus.js:1101</code></a>
         
         </p>
 
@@ -1203,62 +1005,14 @@ text.set(&quot;hello&quot;);</code></pre>
     </div>
 
     <div class="description">
-        <p>Set the default value.</p>
+        <p>Do nothing.</p>
 
     </div>
 
     
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">val</code>
-                        <span class="type">String | Array of String | Null</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The default value.</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
 
     
-        <div class="returns">
-            <h4>Returns:</h4>
 
-            <div class="returns-description">
-                
-                    
-                    <p>this</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <pre class="code prettyprint"><code>var text = new maus.Text(&quot;:text&quot;);
-console.log(text.getDef()); // &quot;&quot;
-text.setDef(&quot;hello&quot;);
-console.log(text.getDef()); // &quot;hello&quot;</code></pre>
-
-            </div>
-        </div>
     
 </div>
 
