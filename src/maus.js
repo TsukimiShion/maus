@@ -1010,6 +1010,77 @@ window.maus = new function(){
     };
     this.File.prototype = new Form;
 
+    this.Email = function(selector, context, descend){
+        /**
+         * This class helps to operate input:email.
+         * @class Email
+         * @constructor
+         * @extends maus.Form
+         * @namespace maus
+         * @param {String|Element|Array of Element|jQuery} selector This parameter is passed to $(). For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {Element|jQuery|String} [context] This parameter is valid if **selector** is a string. A DOM Element, Document, or jQuery to use as context.  For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {boolean} [descend=false] This parameter is valid if **selector** is a string. If **selector** is a string and **descend** is **true**, this maus.J instance does not process currently selected elements but also descendant elements that are added to the document at a later time. If **descend** is false, this maus.J instance processes only currently selected elements.
+         * @example
+         *     var email = new maus.Email("[type='email']");
+         */
+
+        Form.apply(this, arguments);
+        this.get = function(){
+            /**
+             * Return the value.
+             * @method get
+             * @return {String|Array of String}
+             * @example
+             *     var email = new maus.Email("[type='email']");
+             *     email.set("foo@gmail.com");
+             *     console.log(email.get()); // "foo@gmail.com"
+             */
+            if (this.prop("multiple")){
+                return this.val().split(",").map(function(val){
+                    return val.trim();
+                }).filter(function(val){
+                    return val !== "";
+                });
+            } else {
+                return this.val();
+            }
+        };
+        this.set = function(vals){
+            /**
+             * Set the value.
+             * @method set
+             * @param {String|null|Array of String} val
+             * @return this
+             * @example
+             *     var email = new maus.Email("[type='email']");
+             *     email.set("foo@gmail.com");
+             *     console.log(email.get()); // "foo@gmail.com"
+             *     email.set(null);
+             *     console.log(email.get()); // ""
+             */
+            if (this.prop("multiple") && _.isArray(vals)){
+                this.val(vals.join(", "));
+            } else {
+                this.val(vals);
+            }
+            return this;
+        };
+        this.clear = function(){
+            /**
+             * Clear the value.
+             * @method clear
+             * @return this
+             * @example
+             *     var email = new maus.Email("[type='email']");
+             *     email.clear();
+             *     console.log(email.get()); // ""
+             */
+            return this.set("");
+        };
+        this.setDef("");
+    };
+    this.Email.prototype = new Form;
+
     this.controls = function(obj){
         /**
          * The function to make maus.J instances.
@@ -1025,12 +1096,13 @@ window.maus = new function(){
          * - "color": create a maus.Color object.
          * - "number": create a maus.Number object.
          * - "file": create a maus.File object.
+         * - "email": create a maus.Email object.
          *
          * The meaning of **selector**, **context**, **descend** is equivalent to maus.Form .
          *
          * @method controls
          * @param {Object|String|Array} obj
-         * @return {Object|maus.J|maus.Text|maus.Radio|maus.Select|maus.BoolCheckBox|maus.CheckBox|maus.Color|maus.Number|maus.File}
+         * @return {Object|maus.J|maus.Text|maus.Radio|maus.Select|maus.BoolCheckBox|maus.CheckBox|maus.Color|maus.Number|maus.File|maus.Email}
          * @for maus
          * @example
          *     // ex1
@@ -1089,6 +1161,7 @@ window.maus = new function(){
                 "color": maus.Color,
                 "number": maus.Number,
                 "file": maus.File,
+                "email": maus.Email,
             };
 
             var type = types[arr[0]];
