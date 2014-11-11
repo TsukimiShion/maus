@@ -7,6 +7,78 @@ $(function(){
         test("normal", function(){
             var body = new maus.J("body");
         });
+        test("selector", function(){
+            var lis = new maus.J("ul#J li");
+            var jq = $("ul#J li");
+            chai.assert.equal(lis.size(), 2, "lis.size() must be 2.");
+            chai.assert.equal(jq.size(), 2, "jq.size() must be 2.");
+            $("ul#J").append("<li>c</li>");
+            chai.assert.equal(lis.size(), 2, "lis.size() must be 2.");
+            chai.assert.equal(jq.size(), 2, "jq.size() must be 2.");
+            lis.filter(":last").remove();
+        });
+        test("element", function(){
+            var elem = $("ul#J li").get(0);
+            var li = new maus.J(elem);
+            var jq = $(elem);
+            chai.assert.equal(li.size(), 1, "li.size() must be 1.");
+            chai.assert.equal(jq.size(), 1, "jq.size() must be 1.");
+            $("ul#J").append("<li>c</li>");
+            chai.assert.equal(li.size(), 1, "li.size() must be 1.");
+            chai.assert.equal(jq.size(), 1, "jq.size() must be 1.");
+            $("ul#J li:last").remove();
+        });
+        test("elements", function(){
+            var elems = $("ul#J li").get();
+            var lis = new maus.J(elems);
+            var jq = $(elems);
+            chai.assert.equal(lis.size(), 2, "lis.size() must be 2.");
+            chai.assert.equal(jq.size(), 2, "jq.size() must be 2.");
+            $("ul#J").append("<li>c</li>");
+            chai.assert.equal(lis.size(), 2, "lis.size() must be 2.");
+            chai.assert.equal(jq.size(), 2, "jq.size() must be 2.");
+            $("ul#J li:last").remove();
+        });
+        test("jquery", function(){
+            var jq = $("ul#J li");
+            var lis = new maus.J(jq);
+            chai.assert.equal(lis.size(), 2, "OK");
+            chai.assert.equal(jq.size(), 2, "OK");
+            $("ul#J").append("<li>c</li>");
+            chai.assert.equal(lis.size(), 2, "OK");
+            chai.assert.equal(jq.size(), 2, "OK");
+            $("ul#J li:last").remove();
+        });
+        test("selector context", function(){
+            var jq = $("li", "ul#J");
+            var lis = new maus.J("li", "ul#J");
+            chai.assert.equal(lis.size(), 2, "OK");
+            chai.assert.equal(jq.size(), 2, "OK");
+            $("ul#J").append("<li>c</li>");
+            chai.assert.equal(lis.size(), 2, "OK");
+            chai.assert.equal(jq.size(), 2, "OK");
+            $("ul#J li:last").remove();
+        });
+        test("selector descend", function(){
+            var jq = $("ul#J li");
+            var lis = new maus.J("ul#J li", true);
+            chai.assert.equal(lis.size(), 2, "OK");
+            chai.assert.equal(jq.size(), 2, "OK");
+            $("ul#J").append("<li>c</li>");
+            chai.assert.equal(lis.size(), 3, "OK");
+            chai.assert.equal(jq.size(), 2, "OK");
+            $("ul#J li:last").remove();
+        });
+        test("selector context descend", function(){
+            var jq = $("li", "ul#J");
+            var lis = new maus.J("li", "ul#J", true);
+            chai.assert.equal(lis.size(), 2, "OK");
+            chai.assert.equal(jq.size(), 2, "OK");
+            $("ul#J").append("<li>c</li>");
+            chai.assert.equal(lis.size(), 3, "OK");
+            chai.assert.equal(jq.size(), 2, "OK");
+            $("ul#J li:last").remove();
+        });
     });
     suite("J.jq", function(){
         test("normal", function(){
@@ -127,11 +199,6 @@ $(function(){
             var text = new maus.Text(":text");
             chai.assert.ok(_.isEqual(text.jq(), $(":text")), "OK");
         });
-        test("constructor def", function(){
-            var val = "hello";
-            var text = new maus.Text(":text", undefined, val);
-            chai.assert.equal(text.getDef(), val, "OK");
-        });
     });
     suite("Text.def", function(){
         test("normal", function(){
@@ -180,11 +247,6 @@ $(function(){
             var select = new maus.Select(selector);
             chai.assert.ok(_.isEqual(select.jq(), $(selector)), "OK");
         });
-        test("constructor def", function(){
-            var val = "1";
-            var select = new maus.Select(selector, undefined, val);
-            chai.assert.equal(select.getDef(), val, "OK");
-        });
     });
     suite("Select.set, get", function(){
         test("normal", function(){
@@ -204,7 +266,7 @@ $(function(){
     });
     suite("Select multiple", function(){
         test("normal", function(){
-            var select = new maus.Select("select[name='name']", undefined, undefined, true);
+            var select = new maus.Select("select[name='name']");
             chai.assert.equal(select.get(), null, "OK");
             var val = "Ace";
             select.set(val);
@@ -218,12 +280,6 @@ $(function(){
             var selector = "[name='sports']";
             var target = new maus.CheckBox(selector);
             chai.assert.ok(_.isEqual(target.jq(), $(selector)), "OK");
-        });
-        test("constructor def", function(){
-            var selector = "[name='sports']";
-            var val = "soccer";
-            var target = new maus.CheckBox(selector, undefined, val);
-            chai.assert.equal(target.getDef(), val, "OK");
         });
     });
     suite("CheckBox.set, get", function(){
@@ -254,11 +310,6 @@ $(function(){
             var target = new maus.Radio(selector);
             chai.assert.ok(_.isEqual(target.jq(), $(selector)), "OK");
         });
-        test("constructor def", function(){
-            var val = "female";
-            var target = new maus.Radio(selector, undefined, val);
-            chai.assert.equal(target.getDef(), val, "OK");
-        });
     });
     suite("Radio.set, get", function(){
         test("normal", function(){
@@ -283,11 +334,6 @@ $(function(){
         test("normal", function(){
             var target = new maus.BoolCheckBox(selector);
             chai.assert.ok(_.isEqual(target.jq(), $(selector)), "OK");
-        });
-        test("constructor def", function(){
-            var val = true;
-            var target = new maus.BoolCheckBox(selector, undefined, val);
-            chai.assert.equal(target.getDef(), val, "OK");
         });
     });
     suite("BoolCheckBox.set, get", function(){
@@ -315,11 +361,6 @@ $(function(){
             var target = new maus.Color(selector);
             chai.assert.ok(_.isEqual(target.jq(), $(selector)), "OK");
         });
-        test("constructor def", function(){
-            var val = "#ff0000";
-            var target = new maus.Color(selector, null, val);
-            chai.assert.equal(target.getDef(), val, "OK");
-        });
     });
     suite("Color.set, get", function(){
         var selector = "[name='bg-color']";
@@ -334,11 +375,6 @@ $(function(){
         test("normal", function(){
             var target = new maus.Number(selector);
             chai.assert.ok(_.isEqual(target.jq(), $(selector)), "OK");
-        });
-        test("constructor def", function(){
-            var val = 10;
-            var target = new maus.Number(selector, null, val);
-            chai.assert.equal(target.getDef(), val, "OK");
         });
     });
     suite("Number.set, get", function(){
@@ -359,11 +395,6 @@ $(function(){
         test("normal", function(){
             var text = new maus.Text(selector);
             chai.assert.ok(_.isEqual(text.jq(), $(selector)), "OK");
-        });
-        test("constructor def", function(){
-            var val = "hello";
-            var text = new maus.Text(selector, null, val);
-            chai.assert.equal(text.getDef(), val, "OK");
         });
     });
     suite("Text.def password", function(){
@@ -409,6 +440,13 @@ $(function(){
     });
     suite("File", function(){
         var selector = "[name='file']";
+        test("normal", function(){
+            var file = new maus.File(selector);
+            chai.assert.ok(_.isEqual(file.jq(), $(selector)), "OK");
+        });
+    });
+    suite("File multiple", function(){
+        var selector = "[name='files']";
         test("normal", function(){
             var file = new maus.File(selector);
             chai.assert.ok(_.isEqual(file.jq(), $(selector)), "OK");

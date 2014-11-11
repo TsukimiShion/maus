@@ -1,6 +1,6 @@
 {
   "name": "maus",
-  "version": "2.3.1",
+  "version": "3.0.0",
   "description": "The jQuery extension library (not jQuery plugin).",
   "main": "src/maus.js",
   "scripts": {

@@ -7,23 +7,6 @@ window.maus = new function(){
 
     var maus = this;
 
-    this.j = function(selector){
-        /**
-         * The function to make a J instance.
-         *
-         * ``` maus.j(selector) ``` is equal to ``` new maus.J(selector) ``` .
-         *
-         * @method j
-         * @param {String|Element|Array of Element|jQuery} selector This argument is passed to $().
-         * @return {maus.J}
-         * @example
-         *     // ex1
-         *     var body = maus.j("body"); // new maus.J("body")
-         *     body.css("background-color", "red"); // $("body").css("background-color", "red");
-         */
-        return new maus.J(selector);
-    };
-
     /**
      * 140 color names are defined in the HTML and CSS color specification (17 standard colors plus 123 more).
      * The keys of ``` maus.colors ``` are color keywords and the values of them are their hexadecimal values.
@@ -177,33 +160,118 @@ window.maus = new function(){
         "peachpuff": "#ffdab9"
     };
 
-    this.J = function(selector){
+    this.j = function(selector, context, descend){
+        /**
+         * The function to make a J instance.
+         *
+         * ``` maus.j(selector) ``` is equal to ``` new maus.J(selector) ``` .
+         *
+         * @method j
+         * @param {String|Element|Array of Element|jQuery} selector This parameter is passed to $(). For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {Element|jQuery|String} [context] This parameter is valid if **selector** is a string. A DOM Element, Document, or jQuery to use as context.  For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {boolean} [descend=false] This parameter is valid if **selector** is a string. If **selector** is a string and **descend** is **true**, this maus.J instance does not process currently selected elements but also descendant elements that are added to the document at a later time. If **descend** is false, this maus.J instance processes only currently selected elements.
+         * @return {maus.J}
+         * @example
+         *     // ex1
+         *     var body = maus.j("body"); // new maus.J("body")
+         *     body.css("background-color", "red"); // $("body").css("background-color", "red");
+         */
+        return new maus.J.apply(maus, arguments);
+        // return new maus.J(selector, context, descend);
+    };
+
+    this.J = function(selector, context, descend){
         /**
          * jQuery Wrapper Class.
          *
          * @class J
          * @namespace maus
          * @constructor
-         * @param {String|Element|Array of Element|jQuery} selector This argument is passed to $().
+         * @param {String|Element|Array of Element|jQuery} selector This parameter is passed to $(). For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {Element|jQuery|String} [context] This parameter is valid if **selector** is a string. A DOM Element, Document, or jQuery to use as context.  For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {boolean} [descend=false] This parameter is valid if **selector** is a string. If **selector** is a string and **descend** is **true**, this maus.J instance does not process currently selected elements but also descendant elements that are added to the document at a later time. If **descend** is false, this maus.J instance processes only currently selected elements.
+         * @example
+         *     // ex1
+         *     var lis = new maus.J("li");
+         *     var lis2 = new maus.J("li", true); // context is omitted.
+         *     lis.size(); // 2
+         *     lis2.size(); // 2
+         *     $("ul").append("<li></li>");
+         *     lis.size(); // 2
+         *     lis2.size(); // 3
+         *
+         * @example
+         *     // ex2: maus.J accepts various parameters.
+         *     new maus.J("li"); // selector: String
+         *     var elems = $("li").get();
+         *     new maus.J(elems); // selector: Array of Element
+         *     var elem = $("li").get(0);
+         *     new maus.J(elem); // selector: Element
+         *     new maus.J($("li")); // selector: jQuery
+         *     new maus.J("li", "ul"); // selector: String, context: String
+         *     new maus.J("li", elem); // selector: String, context: Element
+         *     new maus.J("li", $("li")); // selector: String, context: jQuery
+         *     new maus.J("li", true); // selector: String, descend: true
+         *     new maus.J("li", "ul", true); // selector: String, context: String, descend: true
+         *     new maus.J("li", elem, true); // selector: String, context: Element, descend: true
+         *     new maus.J("li", "ul", true); // selector: String, context: jQuery, descend: true
+         */
+
+        /**
+         * Get the jQuery object.
+         * @method jq
+         * @return {jQuery} The jQuery object.
          * @example
          *     // ex1
          *     var body = new maus.J("body");
-         *     body.css("background-color", "red"); // $("body").css("background-color", "red");
+         *     body.jq(); // $("body")
          */
 
         var self = this;
-        this.jq = function(){
-            /**
-             * Get the jQuery object.
-             * @method jq
-             * @return {jQuery} The jQuery object.
-             * @example
-             *     // ex1
-             *     var body = new maus.J("body");
-             *     body.jq(); // $("body")
-             */
-            return $(selector);
-        };
+
+        (function(len){
+            var jq;
+            if (_.isString(selector)){
+                if (len === 1){
+                    jq = $(selector);
+                    self.jq = function(){
+                        return jq;
+                    };
+                } else if (len === 2){
+                    if (context instanceof HTMLElement || context instanceof $ || _.isString(context)){
+                        jq = $(selector, context);
+                        self.jq = function(){
+                            return jq;
+                        };
+                    } else if (context){
+                        self.jq = function(){
+                            return $(selector);
+                        };
+                    } else {
+                        jq = $(selector);
+                        self.jq = function(){
+                            return jq;
+                        };
+                    }
+                } else if (len > 2){
+                    if (descend){
+                        self.jq = function(){
+                            return $(selector, context);
+                        };
+                    } else {
+                        jq = $(selector, context);
+                        self.jq = function(){
+                            return jq;
+                        };
+                    }
+                }
+            } else {
+                jq = $(selector);
+                self.jq = function(){
+                    return jq;
+                };
+            }
+        })(arguments.length);
         function _call(thisArg, key){
             function call2(){
                 var self = thisArg.jq();
@@ -281,9 +349,61 @@ window.maus = new function(){
                 return self.display(key);
             };
         });
+
+        (function(J_selector){
+            /**
+             * Attach the event handler function for the event to the selected elements.
+             * This method is similar to ``` jQuery.on() ``` .
+             * For detail of the parameters **events**, **data**, **handler**, please refer http://api.jquery.com/on/ .
+             *
+             * The main difference between this method and jQuery.on is the meaning of **selector**.
+             *
+             * @method lon
+             * @param {String|Object} events
+             * @param {String} selector
+             * @param {Anything} [data]
+             * @param {Function} [handler]
+             * @return this
+             * @example
+             *     // ex1: In case selector of maus.Form is a String
+             *     //      and selector of maus.Form.lon is specified.
+             *     var selector = ":text";
+             *     var text = new maus.Text(selector);
+             *     text.lon("change", document, callback); // $(document).on("change", selector, callback);
+             *
+             * @example
+             *     // ex2: In case selector of maus.Form is not a String.
+             *     var selector = $(":text");
+             *     var text = new maus.Text(selector);
+             *     text.lon("change", document, callback); // $(document).find(text.jq()).on("change", callback);
+             */
+            if (_.isString(J_selector)){
+                self.lon = function(events, selector, data, handler){
+                    var len = arguments.length;
+                    if (len === 2){
+                        return $(selector).on(events, J_selector);
+                    } else if (len === 3){
+                        return $(selector).on(events, J_selector, data);
+                    } else if (len > 3){
+                        return $(selector).on(events, J_selector, data, handler);
+                    }
+                };
+            } else {
+                self.lon = function(events, selector, data, handler){
+                    var len = arguments.length;
+                    if (len === 2){
+                        return $(selector).find(J_selector).on(events);
+                    } else if (len === 3){
+                        return $(selector).find(J_selector).on(events, null, data);
+                    } else if (len > 3){
+                        return $(selector).find(J_selector).on(events, null, data, handler);
+                    }
+                };
+            }
+        })(selector);
     };
 
-    function Form(selector, live, def){
+    function Form(selector, context, descend){
         /**
          * The Base Class of Text, CheckBox, etc.
          * You cannot access this class.
@@ -291,22 +411,15 @@ window.maus = new function(){
          * @class Form
          * @constructor
          * @namespace maus
-         * @param {String|Element|jQuery} selector
-         * @param {undefined|false|selector} [live=undefined]
-         * @param {undefined|String|Array of String} [def=undefined] The default value.
-         */
-
-        /**
-         * If live is undefined, you can't use the **vchange.fm** event and on_vchange and off_vchange method.
-         * @attribute live
-         * @type {undefined|false|selector}
-         * @writeOnce
-         * @default undefined
+         * @param {String|Element|Array of Element|jQuery} selector This parameter is passed to $(). For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {Element|jQuery|String} [context] This parameter is valid if **selector** is a string. A DOM Element, Document, or jQuery to use as context.  For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {boolean} [descend=false] This parameter is valid if **selector** is a string. If **selector** is a string and **descend** is **true**, this maus.J instance does not process currently selected elements but also descendant elements that are added to the document at a later time. If **descend** is false, this maus.J instance processes only currently selected elements.
          */
         
         var _default;
 
-        maus.J.call(this, selector);
+        maus.J.apply(this, arguments);
+        // maus.J.call(this, selector, context, descend);
         this.def = function(){
             /**
              * Change the value to the default value.
@@ -320,7 +433,6 @@ window.maus = new function(){
              *     text.def();
              *     console.log(text.get()); // "hello"
              */
-            // return this.set(this._default);
             return this.set(_default);
         };
         this.getDef = function(){
@@ -334,7 +446,6 @@ window.maus = new function(){
              *     text.setDef("hello");
              *     console.log(text.getDef()); // "hello"
              */
-            // return this._default;
             return _default;
         };
         this.setDef = function(val){
@@ -349,91 +460,28 @@ window.maus = new function(){
              *     text.setDef("hello");
              *     console.log(text.getDef()); // "hello"
              */
-            // this._default = val;
             _default = val;
             return this;
         };
-        this.setDef(def);
-        this.lon = function(event, func){
-            /**
-             * Attach the event handler function for the event to the selected elements.
-             * This method is similar to ``` jQuery.on() ``` .
-             * If live is undefined, this method does nothing.
-             * If live is false, this method is equivalent to ``` $(selector).on(event, func) ``` .
-             * Otherwise, this method is equivalent to ``` $(live).on(event, selector, func) ``` .
-             * @method lon
-             * @param {String} event 
-             * @param {Function} func 
-             * @return this
-             * @example
-             *     var text = new maus.Text(":text", false);
-             *     text.lon("vchange.fm", function(e, val){
-             *         // Execute whenever the value of textbox changes.
-             *         // val is the value of textbox.
-             *         console.log(val);
-             *     });
-             */
-            if (live !== undefined){
-                if (live){
-                    $(live).on(event, selector, func);
-                } else {
-                    this.on(event, func);
-                }
-            }
-            return this;
-        };
-
-        /**
-         * Attach an event handler function for **vchange.fm** event.
-         * @method on_vchange
-         * @return this
-         * @example
-         *     var text = new maus.Text(":text", false);
-         *     text.off_vchange();
-         *     text.on_vchange();
-         */
-
-        /**
-         * Remove an event handler function for **vchange.fm** event.
-         * @method off_vchange
-         * @return this
-         * @example
-         *     var text = new maus.Text(":text", false);
-         *     text.off_vchange();
-         */
     }
     Form.prototype = new maus.J;
 
-    /**
-     * If live is not undefined, this event occurs when the value of form changes.
-     * If you don't want this event to occur, call this.off_vchange().
-     * After call this.off_vchange(), if you want this event to occur again, call this.on_vchange().
-     * @event vchange.fm
-     * @example
-     *     var text = new maus.Text(":text", false);
-     *     text.lon("vchange.fm", function(e, val){
-     *         // Execute whenever the value of textbox changes.
-     *         // val is the value of textbox.
-     *         console.log(val);
-     *     });
-     */
-
-    this.Text = function(selector, live, def){
+    this.Text = function(selector, context, descend){
         /**
          * This class helps to operate input:text or textarea.
          * @class Text
          * @constructor
          * @extends maus.Form
          * @namespace maus
-         * @param {String|Element|jQuery} selector
-         * @param [live]
-         * @param [def=""] The default value.
+         * @param {String|Element|Array of Element|jQuery} selector This parameter is passed to $(). For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {Element|jQuery|String} [context] This parameter is valid if **selector** is a string. A DOM Element, Document, or jQuery to use as context.  For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {boolean} [descend=false] This parameter is valid if **selector** is a string. If **selector** is a string and **descend** is **true**, this maus.J instance does not process currently selected elements but also descendant elements that are added to the document at a later time. If **descend** is false, this maus.J instance processes only currently selected elements.
          * @example
          *     var text = new maus.Text(":text");
          */
-        var self = this;
 
-        Form.call(this, selector, live, def === undefined ? "" : def);
+        Form.apply(this, arguments);
+        // Form.call(this, selector, context, descend);
         this.get = function(){
             /**
              * Return the value.
@@ -475,50 +523,31 @@ window.maus = new function(){
              */
             return this.set("");
         };
-        function _vchange(e){
-            $(this).trigger("vchange.fm", self.get());
-        }
-        this.on_vchange = function(){
-            if (live !== undefined){
-                if (live){
-                    $(live).on("input", selector, _vchange);
-                } else {
-                    this.on("input", _vchange);
-                }
-            }
-            return this;
-        };
-        this.off_vchange = function(){
-            if (live !== undefined){
-                if (live){
-                    $(live).on("input", selector, _vchange);
-                } else {
-                    this.on("input", _vchange);
-                }
-            }
-            return this;
-        };
-        this.on_vchange();
+        this.setDef("");
     };
     this.Text.prototype = new Form;
 
-    this.Select = function(selector, live, def, multiple){
+    this.Select = function(selector, context, descend){
         /**
          * This class helps to operate select.
+         *
+         * > ##### Note:
+         * Since the version 3.0.0, the parameter **multiple** has been abolished.
+         * Whether the select element can select multiple items is automatically checked using **multiple** attribute.
+         *
          * @class Select
          * @constructor
          * @extends maus.Form
          * @namespace maus
-         * @param {String|Element|jQuery} selector
-         * @param [live]
-         * @param [def=null] The default value.
-         * @param {boolean} [multiple=false] The value of select's multiple attribute.
+         * @param {String|Element|Array of Element|jQuery} selector This parameter is passed to $(). For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {Element|jQuery|String} [context] This parameter is valid if **selector** is a string. A DOM Element, Document, or jQuery to use as context.  For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {boolean} [descend=false] This parameter is valid if **selector** is a string. If **selector** is a string and **descend** is **true**, this maus.J instance does not process currently selected elements but also descendant elements that are added to the document at a later time. If **descend** is false, this maus.J instance processes only currently selected elements.
          * @example
          *     var select = new maus.Select("select");
-         *     var multi_select = new maus.Select("select", undefined, undefined, true); // multiple select
          */
-        Form.call(this, selector, live, def === undefined ? null : def);
-        var self = this;
+
+        Form.apply(this, arguments);
+        // Form.call(this, selector, context, descend);
         this.get = function(){
             /**
              * Return the value.
@@ -530,7 +559,7 @@ window.maus = new function(){
              *     console.log(select.get()); // String or null
              * @example
              *     // ex2: multiple
-             *     var select = new maus.Select("select", undefined, undefined, multiple);
+             *     var select = new maus.Select("select");
              *     select.set("hello");
              *     console.log(select.get()); // ["hello"]
              *     select.clear();
@@ -554,7 +583,7 @@ window.maus = new function(){
              *
              * @example
              *     // ex2: multiple
-             *     var select = new maus.Select("select", undefined, undefined, multiple);
+             *     var select = new maus.Select("select");
              *     select.set("hello");
              *     console.log(select.get()); // ["hello"]
              *     select.set(["bad", "good"]);
@@ -574,64 +603,30 @@ window.maus = new function(){
              * @method clear
              * @return this
              * @example
-             *     // ex1 single
              *     var select = new maus.Select("select");
-             *     select.clear();
-             *     console.log(select.get()); // null
-             * @example
-             *     // ex2 single
-             *     var select = new maus.Select("select", undefined, undefined, multiple);
              *     select.clear();
              *     console.log(select.get()); // null
              */
             return this.set([]);
         };
-        function _vchange(e){
-            if (multiple){
-                $(this).trigger("vchange.fm", [self.get()]);
-            } else {
-                $(this).trigger("vchange.fm", self.get());
-            }
-        }
-        this.on_vchange = function(){
-            if (live !== undefined){
-                if (live){
-                    $(live).on("change", selector, _vchange);
-                } else {
-                    this.on("change", _vchange);
-                }
-            }
-            return this;
-        };
-        this.off_vchange = function(){
-            if (live !== undefined){
-                if (live){
-                    $(live).off("change", selector, _vchange);
-                } else {
-                    this.off("change", _vchange);
-                }
-            }
-            return this;
-        };
-        this.on_vchange();
+        this.setDef(null);
     };
     this.Select.prototype = new Form;
     
-    this.Radio = function(selector, live, def){
+    this.Radio = function(selector, context, descend){
         /**
          * This class helps to operate input:radio.
          * @class Radio
          * @constructor
          * @extends maus.Form
          * @namespace maus
-         * @param {String|Element|jQuery} selector
-         * @param [live]
-         * @param [def=null] The default value.If def == null, it means no item is checked.
+         * @param {String|Element|Array of Element|jQuery} selector This parameter is passed to $(). For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {Element|jQuery|String} [context] This parameter is valid if **selector** is a string. A DOM Element, Document, or jQuery to use as context.  For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {boolean} [descend=false] This parameter is valid if **selector** is a string. If **selector** is a string and **descend** is **true**, this maus.J instance does not process currently selected elements but also descendant elements that are added to the document at a later time. If **descend** is false, this maus.J instance processes only currently selected elements.
          */
-        Form.call(this, selector, live, def === undefined ? null : def);
-        var self = this;
-        var checked_selector = _.template(selector + "[value='<%= value %>']");
-        var checked = new maus.J(selector + ":checked");
+        Form.apply(this, arguments);
+        // Form.call(this, selector, context, descend);
+        var checked_selector = _.template("[value='<%= value %>']");
         this.get = function(){
             /**
              * Return the value.
@@ -642,7 +637,7 @@ window.maus = new function(){
              *     radio.set("good");
              *     console.log(radio.get()); // "good"
              */
-            var val = checked.val();
+            var val = this.filter(":checked").val();
             return val === undefined ? null : val;
         };
         this.set = function(val){
@@ -662,7 +657,7 @@ window.maus = new function(){
                 this.clear();
                 return this;
             } else {
-                $(checked_selector({value: val})).prop("checked", true);
+                this.filter(checked_selector({value: val})).prop("checked", true);
                 return this;
             }
         };
@@ -676,51 +671,28 @@ window.maus = new function(){
              *     radio.clear();
              *     console.log(radio.get()); // null
              */
-            checked.checked(false);
+            this.checked(false);
+            // checked.checked(false);
             return this;
         };
-        function _vchange(e){
-            $(this).trigger("vchange.fm", self.get());
-        }
-        this.on_vchange = function(){
-            if (live !== undefined){
-                if (live){
-                    $(live).on("change", selector, _vchange);
-                } else {
-                    this.on("change", _vchange);
-                }
-            }
-            return this;
-        };
-        this.off_vchange = function(){
-            if (live !== undefined){
-                if (live){
-                    $(live).off("change", selector, _vchange);
-                } else {
-                    this.off("change", _vchange);
-                }
-            }
-            return this;
-        };
-        this.on_vchange();
+        this.setDef(null);
     };
     this.Radio.prototype = new Form;
 
-    this.CheckBox = function(selector, live, def){
+    this.CheckBox = function(selector, context, descend){
         /**
          * This class helps to operate input:checkbox.
          * @class CheckBox
          * @constructor
          * @extends maus.Form
          * @namespace maus
-         * @param {String|Element|jQuery} selector
-         * @param [live]
-         * @param [def=[]] The default value. I def is [], it means no item is checked.
+         * @param {String|Element|Array of Element|jQuery} selector This parameter is passed to $(). For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {Element|jQuery|String} [context] This parameter is valid if **selector** is a string. A DOM Element, Document, or jQuery to use as context.  For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {boolean} [descend=false] This parameter is valid if **selector** is a string. If **selector** is a string and **descend** is **true**, this maus.J instance does not process currently selected elements but also descendant elements that are added to the document at a later time. If **descend** is false, this maus.J instance processes only currently selected elements.
          */
-        Form.call(this, selector, live, def === undefined ? [] : def);
-        var self = this;
-        var checked_selector = _.template(selector + "[value='<%= value %>']");
-        var checked = new maus.J(selector + ":checked");
+        Form.apply(this, arguments);
+        // Form.call(this, selector, context, descend);
+        var checked_selector = _.template("[value='<%= value %>']");
         this.get = function(){
             /**
              * Return the value.
@@ -733,7 +705,7 @@ window.maus = new function(){
              *     console.log(checkbox.get()); // ["good"]
              */
             var vals = [];
-            checked.each(function(){
+            this.filter(":checked").each(function(){
                 vals.push($(this).val());
             });
             return vals;
@@ -748,7 +720,9 @@ window.maus = new function(){
              *     checkbox.clear();
              *     console.log(checkbox.get()); // []
              */
-            checked.checked(false);
+            this.filter(":checked").each(function(){
+                $(this).prop("checked", false);
+            });
             return this;
         };
         this.set = function(vals){
@@ -767,64 +741,41 @@ window.maus = new function(){
              *     console.log(checkbox.get()); // []
              */
             this.clear();
+            var self = this;
             if (vals instanceof Array){
                 vals.forEach(function(val){
-                    $(checked_selector({value: val})).prop("checked", true);
+                    self.filter(checked_selector({value: val})).prop("checked", true);
                 });
             } else if (_.isString(vals)){
-                $(checked_selector({value: vals})).prop("checked", true);
+                this.filter(checked_selector({value: vals})).prop("checked", true);
             } else if (vals === null){
                 this.clear();
             }
             return this;
         };
-        function _vchange(e){
-            $(this).trigger("vchange.fm", [self.get()]);
-        }
-        this.on_vchange = function(){
-            if (live !== undefined){
-                if (live){
-                    $(live).on("change", selector, _vchange);
-                } else {
-                    this.on("change", _vchange);
-                }
-            }
-            return this;
-        };
-
-        this.off_vchange = function(){
-            if (live !== undefined){
-                if (live){
-                    $(live).off("change", selector, _vchange);
-                } else {
-                    this.off("change", _vchange);
-                }
-            }
-            return this;
-        };
-        this.on_vchange();
+        this.setDef([]);
     };
     this.CheckBox.prototype = new Form;
 
-    this.BoolCheckBox = function(selector, live, def){
+    this.BoolCheckBox = function(selector, context, descend){
         /**
          * This class helps to operate input:checkbox.
          * If you use this class, the following conditions should be satisfied.
          *
          * - ``` $(selector).size() ``` is 1.
-         * - You want to check Whether this checkbox is checked.
+         * - You want to check whether this checkbox is checked.
          * - You don't want to check the value of the checked checkbox.
          *
          * @class BoolCheckBox
          * @constructor
          * @extends maus.Form
          * @namespace maus
-         * @param {String|Element|jQuery} selector
-         * @param [live]
-         * @param [def=false] The default value.
+         * @param {String|Element|Array of Element|jQuery} selector This parameter is passed to $(). For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {Element|jQuery|String} [context] This parameter is valid if **selector** is a string. A DOM Element, Document, or jQuery to use as context.  For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {boolean} [descend=false] This parameter is valid if **selector** is a string. If **selector** is a string and **descend** is **true**, this maus.J instance does not process currently selected elements but also descendant elements that are added to the document at a later time. If **descend** is false, this maus.J instance processes only currently selected elements.
          */
-        Form.call(this, selector, live, def === undefined ? false : def);
-        var self = this;
+        Form.apply(this, arguments);
+        // Form.call(this, selector, context, descend);
         this.get = function(){
             /**
              * Return whether the checkbox is checked.
@@ -868,35 +819,11 @@ window.maus = new function(){
             this.checked(Boolean(val));
             return this;
         };
-        function _vchange(e){
-            $(this).trigger("vchange.fm", self.get());
-        }
-        this.on_vchange = function(){
-            if (live !== undefined){
-                if (live){
-                    $(live).on("change", selector, _vchange);
-                } else {
-                    this.on("change", _vchange);
-                }
-            }
-            return this;
-        };
-
-        this.off_vchange = function(){
-            if (live !== undefined){
-                if (live){
-                    $(live).off("change", selector, _vchange);
-                } else {
-                    this.off("change", _vchange);
-                }
-            }
-            return this;
-        };
-        this.on_vchange();
+        this.setDef(false);
     };
     this.BoolCheckBox.prototype = new Form;
 
-    this.Color = function(selector, live, def){
+    this.Color = function(selector, context, descend){
         /**
          * This class helps to operate input:color.
          *
@@ -904,14 +831,14 @@ window.maus = new function(){
          * @constructor
          * @extends maus.Form
          * @namespace maus
-         * @param {String|Element|jQuery} selector
-         * @param [live]
-         * @param [def] The default value.
+         * @param {String|Element|Array of Element|jQuery} selector This parameter is passed to $(). For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {Element|jQuery|String} [context] This parameter is valid if **selector** is a string. A DOM Element, Document, or jQuery to use as context.  For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {boolean} [descend=false] This parameter is valid if **selector** is a string. If **selector** is a string and **descend** is **true**, this maus.J instance does not process currently selected elements but also descendant elements that are added to the document at a later time. If **descend** is false, this maus.J instance processes only currently selected elements.
          * @example
          *     var text = new maus.Color("[type='color']");
          */
-        Form.call(this, selector, live, def);
-        var self = this;
+        Form.apply(this, arguments);
+        // Form.call(this, selector, context, descend);
         this.get = function(){
             /**
              * Return the value.
@@ -942,54 +869,30 @@ window.maus = new function(){
             this.val(val);
             return this;
         };
-        function _vchange(e){
-            $(this).trigger("vchange.fm", self.get());
-        }
-        this.on_vchange = function(){
-            if (live !== undefined){
-                if (live){
-                    $(live).on("change", selector, _vchange);
-                } else {
-                    this.on("change", _vchange);
-                }
-            }
-            return this;
-        };
-
-        this.off_vchange = function(){
-            if (live !== undefined){
-                if (live){
-                    $(live).off("change", selector, _vchange);
-                } else {
-                    this.off("change", _vchange);
-                }
-            }
-            return this;
-        };
-        this.on_vchange();
+        this.setDef("#ffffff");
     };
     this.Color.prototype = new Form;
 
-    this.Number = function(selector, live, def){
+    this.Number = function(selector, context, descend){
         /**
          * This class helps to operate input:number.
          * @class Number
          * @constructor
          * @extends maus.Form
          * @namespace maus
-         * @param {String|Element|jQuery} selector
-         * @param [live]
-         * @param [def=""] The default value.
+         * @param {String|Element|Array of Element|jQuery} selector This parameter is passed to $(). For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {Element|jQuery|String} [context] This parameter is valid if **selector** is a string. A DOM Element, Document, or jQuery to use as context.  For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {boolean} [descend=false] This parameter is valid if **selector** is a string. If **selector** is a string and **descend** is **true**, this maus.J instance does not process currently selected elements but also descendant elements that are added to the document at a later time. If **descend** is false, this maus.J instance processes only currently selected elements.
          * @example
          *     var number = new maus.Number("[type='number']");
          */
-        var self = this;
-        Form.call(this, selector, live, def === undefined ? "" : def);
+        Form.apply(this, arguments);
+        // Form.call(this, selector, context, descend);
         this.get = function(){
             /**
              * Return the value.
              * @method get
-             * @return {Number}
+             * @return {Number|null}
              * @example
              *     var number = new maus.Number("[type='number']");
              *     number.set(3);
@@ -1026,36 +929,11 @@ window.maus = new function(){
              */
             return this.set("");
         };
-        function _vchange(e){
-            $(this).trigger("vchange.fm", self.get());
-        }
-        this.on_vchange = function(){
-            if (live !== undefined){
-                if (live){
-                    $(live).on("input", selector, _vchange);
-                } else {
-                    this.on("input", _vchange);
-                }
-            }
-            return this;
-        };
-
-        this.off_vchange = function(){
-            if (live !== undefined){
-                if (live){
-                    $(live).off("input", selector, _vchange);
-                } else {
-                    this.off("input", _vchange);
-                }
-            }
-            return this;
-        };
-
-        this.on_vchange();
+        this.setDef(null);
     };
     this.Number.prototype = new Form;
 
-    this.File = function(selector, live){
+    this.File = function(selector, context, descend){
         /**
          * This class helps to operate input:file.
          * > ##### Note: 
@@ -1070,12 +948,14 @@ window.maus = new function(){
          * @constructor
          * @extends maus.Form
          * @namespace maus
-         * @param {String|Element|jQuery} selector
-         * @param [live]
+         * @param {String|Element|Array of Element|jQuery} selector This parameter is passed to $(). For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {Element|jQuery|String} [context] This parameter is valid if **selector** is a string. A DOM Element, Document, or jQuery to use as context.  For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {boolean} [descend=false] This parameter is valid if **selector** is a string. If **selector** is a string and **descend** is **true**, this maus.J instance does not process currently selected elements but also descendant elements that are added to the document at a later time. If **descend** is false, this maus.J instance processes only currently selected elements.
          * @example
          *     var file = new maus.File("[type='file']");
          */
-        Form.call(this, selector, live, null);
+        Form.apply(this, arguments);
+        // Form.call(this, selector, context, descend);
         this.getDef = function(){
             /**
              * Do nothing.
@@ -1097,20 +977,23 @@ window.maus = new function(){
              * @method def
              */
         };
-        var self = this;
         this.get = function(){
             /**
-             * Return the value.
-             * > Note: The return value depends on the browser.
+             * Return the selected files.
              *
              * @method get
-             * @return {String}
+             * @return {File|Array of File|null}
              * @example
              *     var file = new maus.File("[type='file']");
-             *     // We assume the HTMLImputElement selects the file ~/.vimrc .
-             *     console.log(file.get()); // "C:\fakepath\.vimrc" (This value depends on the browser.)
+             *     console.log(file.get()); // 
              */
-            return this.val();
+            var ifile = this.jq().get(0);
+            if (ifile.multiple){
+                return _.toArray(ifile.files);
+            } else {
+                var file = ifile.files[0];
+                return file ? file : null;
+            }
         };
         this.clear = function(){
             /**
@@ -1120,41 +1003,17 @@ window.maus = new function(){
              * @example
              *     var file = new maus.File("[type='file']");
              *     file.clear();
-             *     console.log(file.get()); // ""
+             *     console.log(file.get()); // null | []
              */
             return this.jq().val("");
         };
-        function _vchange(e){
-            $(this).trigger("vchange.fm", self.get());
-        }
-        this.on_vchange = function(){
-            if (live !== undefined){
-                if (live){
-                    $(live).on("change", selector, _vchange);
-                } else {
-                    this.on("change", _vchange);
-                }
-            }
-            return this;
-        };
-        this.off_vchange = function(){
-            if (live !== undefined){
-                if (live){
-                    $(live).off("change", selector, _vchange);
-                } else {
-                    this.off("change", _vchange);
-                }
-            }
-            return this;
-        };
-        this.on_vchange();
     };
     this.File.prototype = new Form;
 
     this.controls = function(obj){
         /**
          * The function to make maus.J instances.
-         * If the argument ``` obj ``` includes Array objects, they must be [**type**, **selector**, **live**, **def**, **multiple**].
+         * If the argument ``` obj ``` includes Array objects, they must be [**type**, **selector**, **context**, **descend**].
          * **type** and **selector** require, and others are optional.
          * type must be one of the following value.
          *
@@ -1167,7 +1026,7 @@ window.maus = new function(){
          * - "number": create a maus.Number object.
          * - "file": create a maus.File object.
          *
-         * The meaning of **selector**, **live**, **def**, **multiple** is equivalent to maus.Form .
+         * The meaning of **selector**, **context**, **descend** is equivalent to maus.Form .
          *
          * @method controls
          * @param {Object|String|Array} obj
@@ -1209,11 +1068,17 @@ window.maus = new function(){
          */
 
         function form(arr){
-            var type = arr[0];
-            var selector = arr[1];
-            var live = arr[2];
-            var def = arr[3];
-            var multiple = arr[4];
+
+            function applyConstructor(Constructor, args){
+                function construct(args){
+                    Constructor.apply(this, args);
+                }
+
+                construct.prototype = Constructor.prototype;
+
+                return new construct(args);
+            }
+
             var types = {
                 "text": maus.Text,
                 "select": maus.Select,
@@ -1225,7 +1090,9 @@ window.maus = new function(){
                 "number": maus.Number,
                 "file": maus.File,
             };
-            return new types[type](selector, live, def, multiple);
+
+            var type = types[arr[0]];
+            return applyConstructor(type, _.toArray(arr).slice(1));
         }
 
         function forms(params){
@@ -1234,147 +1101,96 @@ window.maus = new function(){
                 ret[key] = form(vals);
             });
 
-            if (!("get" in params)){
-                ret.get = function(names){
-                    var items = {};
-                    var name;
-                    if (names === undefined){
-                        for (name in params){
-                            items[name] = ret[name].get();
-                        }
-                    } else if (names instanceof Array){
-                        names.forEach(function(name){
-                            items[name] = ret[name].get();
-                        });
-                    } else {
-                        for (var index=0; index < arguments.length; index++){
-                            name = arguments[index];
-                            items[name] = ret[name].get();
-                        }
+            ret.get = function(names){
+                var items = {};
+                var name;
+                if (names == null){
+                    for (name in params){
+                        items[name] = ret[name].get();
                     }
-                    return items;
-                };
-            }
-
-            if (!("set" in params)){
-                ret.set = function(items){
-                    _.each(items, function(val, key){
-                        ret[key].set(val);
+                } else if (names instanceof Array){
+                    names.forEach(function(name){
+                        items[name] = ret[name].get();
                     });
-                    return ret;
-                };
-            }
-
-            if (!("clear" in params)){
-                ret.clear = function(names){
-                    var name;
-                    if (names === undefined){
-                        for (name in params){
-                            ret[name].clear();
-                        }
-                    } else if (names instanceof Array){
-                        names.forEach(function(name){
-                            ret[name].clear();
-                        });
-                    } else {
-                        for (var index=0; index < arguments.length; index++){
-                            ret[arguments[index]].clear();
-                        }
+                } else {
+                    for (var index=0; index < arguments.length; index++){
+                        name = arguments[index];
+                        items[name] = ret[name].get();
                     }
-                    return ret;
-                };
-            }
+                }
+                return items;
+            };
 
-            if (!("def" in params)){
-                ret.def = function(names){
-                    var name;
-                    if (names === undefined){
-                        for (name in params){
-                            ret[name].def();
-                        }
-                    } else if (names instanceof Array){
-                        names.forEach(function(name){
-                            ret[name].def();
-                        });
-                    } else {
-                        for (var index=0; index < arguments.length; index++){
-                            ret[arguments[index]].def();
-                        }
+            ret.set = function(items){
+                _.each(items, function(val, key){
+                    ret[key].set(val);
+                });
+                return ret;
+            };
+
+            ret.clear = function(names){
+                var name;
+                if (names == null){
+                    for (name in params){
+                        ret[name].clear();
                     }
-                    return ret;
-                };
-            }
-
-            if (!("getDef" in params)){
-                ret.getDef = function(names){
-                    var items = {};
-                    var name;
-                    if (names === undefined){
-                        for (name in params){
-                            items[name] = ret[name].getDef();
-                        }
-                    } else if (names instanceof Array){
-                        names.forEach(function(name){
-                            items[name] = ret[name].getDef();
-                        });
-                    } else {
-                        for (var index=0; index < arguments.length; index++){
-                            name = arguments[index];
-                            items[name] = ret[name].getDef();
-                        }
-                    }
-                    return items;
-                };
-            }
-
-            if (!("setDef" in params)){
-                ret.setDef = function(items){
-                    _.each(items, function(val, key){
-                        ret[key].setDef(val);
+                } else if (names instanceof Array){
+                    names.forEach(function(name){
+                        ret[name].clear();
                     });
-                    return ret;
-                };
-            }
-
-            if (!("on_vchange" in params)){
-                ret.on_vchange = function(names){
-                    var name;
-                    if (names === undefined){
-                        for (name in params){
-                            ret[name].on_vchange();
-                        }
-                    } else if (names instanceof Array){
-                        names.forEach(function(name){
-                            ret[name].on_vchange();
-                        });
-                    } else {
-                        for (var index=0; index < arguments.length; index++){
-                            ret[arguments[index]].on_vchange();
-                        }
+                } else {
+                    for (var index=0; index < arguments.length; index++){
+                        ret[arguments[index]].clear();
                     }
-                    return ret;
-                };
-            }
+                }
+                return ret;
+            };
 
-            if (!("off_vchange" in params)){
-                ret.off_vchange = function(names){
-                    var name;
-                    if (names === undefined){
-                        for (name in params){
-                            ret[name].off_vchange();
-                        }
-                    } else if (names instanceof Array){
-                        names.forEach(function(name){
-                            ret[name].off_vchange();
-                        });
-                    } else {
-                        for (var index=0; index < arguments.length; index++){
-                            ret[arguments[index]].off_vchange();
-                        }
+            ret.def = function(names){
+                var name;
+                if (names == null){
+                    for (name in params){
+                        ret[name].def();
                     }
-                    return ret;
-                };
-            }
+                } else if (names instanceof Array){
+                    names.forEach(function(name){
+                        ret[name].def();
+                    });
+                } else {
+                    for (var index=0; index < arguments.length; index++){
+                        ret[arguments[index]].def();
+                    }
+                }
+                return ret;
+            };
+
+            ret.getDef = function(names){
+                var items = {};
+                var name;
+                if (names == null){
+                    for (name in params){
+                        items[name] = ret[name].getDef();
+                    }
+                } else if (names instanceof Array){
+                    names.forEach(function(name){
+                        items[name] = ret[name].getDef();
+                    });
+                } else {
+                    for (var index=0; index < arguments.length; index++){
+                        name = arguments[index];
+                        items[name] = ret[name].getDef();
+                    }
+                }
+                return items;
+            };
+
+            ret.setDef = function(items){
+                _.each(items, function(val, key){
+                    ret[key].setDef(val);
+                });
+                return ret;
+            };
+
             return ret;
         }
 
