@@ -7,6 +7,8 @@ window.maus = new function(){
 
     var maus = this;
 
+    /* global _: false */
+
     /**
      * 140 color names are defined in the HTML and CSS color specification (17 standard colors plus 123 more).
      * The keys of ``` maus.colors ``` are color keywords and the values of them are their hexadecimal values.
@@ -160,7 +162,7 @@ window.maus = new function(){
         "peachpuff": "#ffdab9"
     };
 
-    this.j = function(selector, context, descend){
+    this.j = function(){
         /**
          * The function to make a J instance.
          *
@@ -177,10 +179,9 @@ window.maus = new function(){
          *     body.css("background-color", "red"); // $("body").css("background-color", "red");
          */
         return new maus.J.apply(maus, arguments);
-        // return new maus.J(selector, context, descend);
     };
 
-    this.J = function(selector, context, descend){
+    this.J = function(selector, arg1, arg2){
         /**
          * jQuery Wrapper Class.
          *
@@ -227,6 +228,9 @@ window.maus = new function(){
          *     body.jq(); // $("body")
          */
 
+        var context,
+            descend = false;
+
         var self = this;
 
         (function(len){
@@ -238,12 +242,14 @@ window.maus = new function(){
                         return jq;
                     };
                 } else if (len === 2){
-                    if (context instanceof HTMLElement || context instanceof $ || _.isString(context)){
+                    if (arg1 instanceof HTMLElement || arg1 instanceof $ || _.isString(arg1)){
+                        context = arg1;
                         jq = $(selector, context);
                         self.jq = function(){
                             return jq;
                         };
-                    } else if (context){
+                    } else if (arg1){
+                        descend = true;
                         self.jq = function(){
                             return $(selector);
                         };
@@ -254,6 +260,8 @@ window.maus = new function(){
                         };
                     }
                 } else if (len > 2){
+                    context = arg1;
+                    descend = arg2;
                     if (descend){
                         self.jq = function(){
                             return $(selector, context);
@@ -403,7 +411,7 @@ window.maus = new function(){
         })(selector);
     };
 
-    function Form(selector, context, descend){
+    function Form(){
         /**
          * The Base Class of Text, CheckBox, etc.
          * You cannot access this class.
@@ -466,7 +474,7 @@ window.maus = new function(){
     }
     Form.prototype = new maus.J;
 
-    this.Text = function(selector, context, descend){
+    this.Text = function(){
         /**
          * This class helps to operate input:text or textarea.
          * @class Text
@@ -481,7 +489,6 @@ window.maus = new function(){
          */
 
         Form.apply(this, arguments);
-        // Form.call(this, selector, context, descend);
         this.get = function(){
             /**
              * Return the value.
@@ -527,7 +534,7 @@ window.maus = new function(){
     };
     this.Text.prototype = new Form;
 
-    this.Select = function(selector, context, descend){
+    this.Select = function(){
         /**
          * This class helps to operate select.
          *
@@ -547,7 +554,6 @@ window.maus = new function(){
          */
 
         Form.apply(this, arguments);
-        // Form.call(this, selector, context, descend);
         this.get = function(){
             /**
              * Return the value.
@@ -613,7 +619,7 @@ window.maus = new function(){
     };
     this.Select.prototype = new Form;
     
-    this.Radio = function(selector, context, descend){
+    this.Radio = function(){
         /**
          * This class helps to operate input:radio.
          * @class Radio
@@ -625,7 +631,6 @@ window.maus = new function(){
          * @param {boolean} [descend=false] This parameter is valid if **selector** is a string. If **selector** is a string and **descend** is **true**, this maus.J instance does not process currently selected elements but also descendant elements that are added to the document at a later time. If **descend** is false, this maus.J instance processes only currently selected elements.
          */
         Form.apply(this, arguments);
-        // Form.call(this, selector, context, descend);
         var checked_selector = _.template("[value='<%= value %>']");
         this.get = function(){
             /**
@@ -672,14 +677,13 @@ window.maus = new function(){
              *     console.log(radio.get()); // null
              */
             this.checked(false);
-            // checked.checked(false);
             return this;
         };
         this.setDef(null);
     };
     this.Radio.prototype = new Form;
 
-    this.CheckBox = function(selector, context, descend){
+    this.CheckBox = function(){
         /**
          * This class helps to operate input:checkbox.
          * @class CheckBox
@@ -691,7 +695,6 @@ window.maus = new function(){
          * @param {boolean} [descend=false] This parameter is valid if **selector** is a string. If **selector** is a string and **descend** is **true**, this maus.J instance does not process currently selected elements but also descendant elements that are added to the document at a later time. If **descend** is false, this maus.J instance processes only currently selected elements.
          */
         Form.apply(this, arguments);
-        // Form.call(this, selector, context, descend);
         var checked_selector = _.template("[value='<%= value %>']");
         this.get = function(){
             /**
@@ -757,7 +760,7 @@ window.maus = new function(){
     };
     this.CheckBox.prototype = new Form;
 
-    this.BoolCheckBox = function(selector, context, descend){
+    this.BoolCheckBox = function(){
         /**
          * This class helps to operate input:checkbox.
          * If you use this class, the following conditions should be satisfied.
@@ -775,7 +778,6 @@ window.maus = new function(){
          * @param {boolean} [descend=false] This parameter is valid if **selector** is a string. If **selector** is a string and **descend** is **true**, this maus.J instance does not process currently selected elements but also descendant elements that are added to the document at a later time. If **descend** is false, this maus.J instance processes only currently selected elements.
          */
         Form.apply(this, arguments);
-        // Form.call(this, selector, context, descend);
         this.get = function(){
             /**
              * Return whether the checkbox is checked.
@@ -823,7 +825,7 @@ window.maus = new function(){
     };
     this.BoolCheckBox.prototype = new Form;
 
-    this.Color = function(selector, context, descend){
+    this.Color = function(){
         /**
          * This class helps to operate input:color.
          *
@@ -838,7 +840,6 @@ window.maus = new function(){
          *     var text = new maus.Color("[type='color']");
          */
         Form.apply(this, arguments);
-        // Form.call(this, selector, context, descend);
         this.get = function(){
             /**
              * Return the value.
@@ -873,7 +874,7 @@ window.maus = new function(){
     };
     this.Color.prototype = new Form;
 
-    this.Number = function(selector, context, descend){
+    this.Number = function(){
         /**
          * This class helps to operate input:number.
          * @class Number
@@ -933,7 +934,7 @@ window.maus = new function(){
     };
     this.Number.prototype = new Form;
 
-    this.File = function(selector, context, descend){
+    this.File = function(){
         /**
          * This class helps to operate input:file.
          * > ##### Note: 
@@ -955,7 +956,6 @@ window.maus = new function(){
          *     var file = new maus.File("[type='file']");
          */
         Form.apply(this, arguments);
-        // Form.call(this, selector, context, descend);
         this.getDef = function(){
             /**
              * Do nothing.
@@ -1010,6 +1010,77 @@ window.maus = new function(){
     };
     this.File.prototype = new Form;
 
+    this.Email = function(){
+        /**
+         * This class helps to operate input:email.
+         * @class Email
+         * @constructor
+         * @extends maus.Form
+         * @namespace maus
+         * @param {String|Element|Array of Element|jQuery} selector This parameter is passed to $(). For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {Element|jQuery|String} [context] This parameter is valid if **selector** is a string. A DOM Element, Document, or jQuery to use as context.  For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {boolean} [descend=false] This parameter is valid if **selector** is a string. If **selector** is a string and **descend** is **true**, this maus.J instance does not process currently selected elements but also descendant elements that are added to the document at a later time. If **descend** is false, this maus.J instance processes only currently selected elements.
+         * @example
+         *     var email = new maus.Email("[type='email']");
+         */
+
+        Form.apply(this, arguments);
+        this.get = function(){
+            /**
+             * Return the value.
+             * @method get
+             * @return {String|Array of String}
+             * @example
+             *     var email = new maus.Email("[type='email']");
+             *     email.set("foo@gmail.com");
+             *     console.log(email.get()); // "foo@gmail.com"
+             */
+            if (this.prop("multiple")){
+                return this.val().split(",").map(function(val){
+                    return val.trim();
+                }).filter(function(val){
+                    return val !== "";
+                });
+            } else {
+                return this.val();
+            }
+        };
+        this.set = function(vals){
+            /**
+             * Set the value.
+             * @method set
+             * @param {String|null|Array of String} val
+             * @return this
+             * @example
+             *     var email = new maus.Email("[type='email']");
+             *     email.set("foo@gmail.com");
+             *     console.log(email.get()); // "foo@gmail.com"
+             *     email.set(null);
+             *     console.log(email.get()); // ""
+             */
+            if (this.prop("multiple") && _.isArray(vals)){
+                this.val(vals.join(", "));
+            } else {
+                this.val(vals);
+            }
+            return this;
+        };
+        this.clear = function(){
+            /**
+             * Clear the value.
+             * @method clear
+             * @return this
+             * @example
+             *     var email = new maus.Email("[type='email']");
+             *     email.clear();
+             *     console.log(email.get()); // ""
+             */
+            return this.set("");
+        };
+        this.setDef("");
+    };
+    this.Email.prototype = new Form;
+
     this.controls = function(obj){
         /**
          * The function to make maus.J instances.
@@ -1025,12 +1096,13 @@ window.maus = new function(){
          * - "color": create a maus.Color object.
          * - "number": create a maus.Number object.
          * - "file": create a maus.File object.
+         * - "email": create a maus.Email object.
          *
          * The meaning of **selector**, **context**, **descend** is equivalent to maus.Form .
          *
          * @method controls
          * @param {Object|String|Array} obj
-         * @return {Object|maus.J|maus.Text|maus.Radio|maus.Select|maus.BoolCheckBox|maus.CheckBox|maus.Color|maus.Number|maus.File}
+         * @return {Object|maus.J|maus.Text|maus.Radio|maus.Select|maus.BoolCheckBox|maus.CheckBox|maus.Color|maus.Number|maus.File|maus.Email}
          * @for maus
          * @example
          *     // ex1
@@ -1073,9 +1145,7 @@ window.maus = new function(){
                 function construct(args){
                     Constructor.apply(this, args);
                 }
-
                 construct.prototype = Constructor.prototype;
-
                 return new construct(args);
             }
 
@@ -1089,6 +1159,7 @@ window.maus = new function(){
                 "color": maus.Color,
                 "number": maus.Number,
                 "file": maus.File,
+                "email": maus.Email,
             };
 
             var type = types[arr[0]];
