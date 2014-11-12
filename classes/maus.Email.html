@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>maus.CheckBox - maus</title>
+    <title>maus.Email - maus</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -104,7 +104,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>maus.CheckBox Class</h1>
+                        <h1>maus.Email Class</h1>
 <div class="box meta">
     
 
@@ -116,7 +116,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_maus.js.html#l687"><code>src&#x2F;maus.js:687</code></a>
+            Defined in: <a href="../files/src_maus.js.html#l1014"><code>src&#x2F;maus.js:1014</code></a>
         </div>
     
 
@@ -128,15 +128,15 @@
 
 
 <div class="box intro">
-    <p>This class helps to operate input:checkbox.</p>
+    <p>This class helps to operate input:email.</p>
 
 </div>
 
 
     <div class="constructor">
         <h2>Constructor</h2>
-        <div id="method_maus.CheckBox" class="method item">
-    <h3 class="name"><code>maus.CheckBox</code></h3>
+        <div id="method_maus.Email" class="method item">
+    <h3 class="name"><code>maus.Email</code></h3>
 
     
         <div class="args">
@@ -189,7 +189,7 @@
             
         
         
-        <a href="../files/src_maus.js.html#l687"><code>src&#x2F;maus.js:687</code></a>
+        <a href="../files/src_maus.js.html#l1014"><code>src&#x2F;maus.js:1014</code></a>
         
         </p>
 
@@ -265,6 +265,15 @@
 
     
 
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>var email = new maus.Email(&quot;[type=&#39;email&#39;]&quot;);</code></pre>
+
+            </div>
+        </div>
     
 </div>
 
@@ -387,7 +396,7 @@
             
         
         
-        <a href="../files/src_maus.js.html#l717"><code>src&#x2F;maus.js:717</code></a>
+        <a href="../files/src_maus.js.html#l1089"><code>src&#x2F;maus.js:1089</code></a>
         
         </p>
 
@@ -423,9 +432,14 @@
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>var checkbox = new maus.CheckBox(&quot;:checkbox&quot;);
-checkbox.clear();
-console.log(checkbox.get()); // []</code></pre>
+                <pre class="code prettyprint"><code>var email = new maus.Email(&quot;[type=&#39;email&#39;]&quot;);
+email.clear();
+console.log(email.get()); // &quot;&quot;</code></pre>
+<pre class="code prettyprint"><code>// multiple
+var email = new maus.Email(&quot;[type=&#39;email&#39;]&quot;);
+email.set([&quot;foo@gmail.com&quot;, &quot;bar@gmail.com&quot;]);
+email.clear();
+console.log(email.get()); // []</code></pre>
 
             </div>
         </div>
@@ -524,7 +538,7 @@ console.log(text.get()); // &quot;hello&quot;</code></pre>
 
     
         <span class="returns-inline">
-            <span class="type">Array of String</span>
+            <span class="type">String | Array of String</span>
         </span>
     
 
@@ -551,7 +565,7 @@ console.log(text.get()); // &quot;hello&quot;</code></pre>
             
         
         
-        <a href="../files/src_maus.js.html#l700"><code>src&#x2F;maus.js:700</code></a>
+        <a href="../files/src_maus.js.html#l1029"><code>src&#x2F;maus.js:1029</code></a>
         
         </p>
 
@@ -575,7 +589,7 @@ console.log(text.get()); // &quot;hello&quot;</code></pre>
             <div class="returns-description">
                 
                     
-                        <span class="type">Array of String</span>:
+                        <span class="type">String | Array of String</span>:
                     
                 
             </div>
@@ -587,10 +601,17 @@ console.log(text.get()); // &quot;hello&quot;</code></pre>
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>var checkbox = new maus.CheckBox(&quot;:checkbox&quot;);
-console.log(checkbox.get()); // []
-checkbox.set(&quot;good&quot;);
-console.log(checkbox.get()); // [&quot;good&quot;]</code></pre>
+                <pre class="code prettyprint"><code>var email = new maus.Email(&quot;[type=&#39;email&#39;]&quot;);
+email.set(&quot;foo@gmail.com&quot;);
+console.log(email.get()); // &quot;foo@gmail.com&quot;
+email.clear();
+console.log(email.get()); // &quot;&quot;</code></pre>
+<pre class="code prettyprint"><code>// multiple
+var email = new maus.Email(&quot;[type=&#39;email&#39;]&quot;);
+email.set([&quot;foo@gmail.com&quot;, &quot;bar@gmail.com&quot;]);
+console.log(email.get()); // [&quot;foo@gmail.com&quot;, &quot;bar@gmail.com&quot;]
+email.clear();
+console.log(email.get()); // []</code></pre>
 
             </div>
         </div>
@@ -724,7 +745,7 @@ console.log(text.getDef()); // &quot;hello&quot;</code></pre>
             
         
         
-        <a href="../files/src_maus.js.html#l732"><code>src&#x2F;maus.js:732</code></a>
+        <a href="../files/src_maus.js.html#l1059"><code>src&#x2F;maus.js:1059</code></a>
         
         </p>
 
@@ -748,7 +769,7 @@ console.log(text.getDef()); // &quot;hello&quot;</code></pre>
                 <li class="param">
                     
                         <code class="param-name">val</code>
-                        <span class="type">String | Array of String | Null</span>
+                        <span class="type">String | Null | Array of String</span>
                     
 
                     
@@ -783,13 +804,19 @@ console.log(text.getDef()); // &quot;hello&quot;</code></pre>
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>var checkbox = new maus.CheckBox(&quot;:checkbox&quot;);
-checkbox.set(&quot;hello&quot;);
-console.log(checkbox.get()); // [&quot;hello&quot;]
-checkbox.set([&quot;good&quot;, &quot;bad&quot;]);
-console.log(checkbox.get()); // [&quot;good&quot;, &quot;bad&quot;]
-checkbox.set(null);
-console.log(checkbox.get()); // []</code></pre>
+                <pre class="code prettyprint"><code>var email = new maus.Email(&quot;[type=&#39;email&#39;]&quot;);
+email.set(&quot;foo@gmail.com&quot;);
+console.log(email.get()); // &quot;foo@gmail.com&quot;
+email.set(null);
+console.log(email.get()); // &quot;&quot;</code></pre>
+<pre class="code prettyprint"><code>// multiple
+var email = new maus.Email(&quot;[type=&#39;email&#39;]&quot;);
+email.set(&quot;foo@gmail.com&quot;);
+console.log(email.get()); // [&quot;foo@gmail.com&quot;]
+email.set(null);
+console.log(email.get()); // []
+email.set([&quot;foo@gmail.com&quot;, &quot;bar@gmail.com&quot;]);
+console.log(email.get()); // [&quot;foo@gmail.com&quot;, &quot;bar@gmail.com&quot;]</code></pre>
 
             </div>
         </div>
