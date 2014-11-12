@@ -1,7 +1,6 @@
 {
     "eqeqeq": true,
     "forin": true,
-    "quotmark": "double",
     "maxparams": 4,
     "supernew": true,
     "node": true,
@@ -24,9 +23,5 @@
     "nonstandard": true,
     "strict": true,
     "undef": true,
-    "unused": true,
-
-    "globals": {
-        "_": false
-    }
+    "unused": true
 }

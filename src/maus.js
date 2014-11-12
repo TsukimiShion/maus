@@ -7,6 +7,8 @@ window.maus = new function(){
 
     var maus = this;
 
+    /* global _: false */
+
     /**
      * 140 color names are defined in the HTML and CSS color specification (17 standard colors plus 123 more).
      * The keys of ``` maus.colors ``` are color keywords and the values of them are their hexadecimal values.
@@ -1080,6 +1082,136 @@ window.maus = new function(){
         this.setDef("");
     };
     this.Email.prototype = new Form;
+
+    this.DateForm = function(selector, arg1, arg2){
+        /**
+         * @class DateForm
+         * @constructor
+         * @extends maus.Form
+         * @namespace maus
+         * @param {String|Element|Array of Element|jQuery} selector This parameter is passed to $(). For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {Element|jQuery|String} [context] This parameter is valid if **selector** is a string. A DOM Element, Document, or jQuery to use as context.  For detail, please refer http://api.jquery.com/jQuery/ .
+         * @param {Object} [options] 
+         * @example
+         *     var date = new maus.DateForm("#date");
+         */
+
+        (function(len, self){
+            var Elems = {
+                year: $("<input type='number' min='0' max='9999'>"),
+                month: $("<input type='number' min='1' max='12'>"),
+                date: $("<input type='number' min='1' max='31'>"),
+            };
+            var sep = '/',
+                context = null,
+                options = {
+                    separator: "/",
+                };
+            if (len === 1){
+                Form.call(self, selector);
+            } else if (len === 2){
+                if (arg1 instanceof HTMLElement || arg1 instanceof $ || _.isString(arg1)){
+                    context = arg1;
+                    Form.call(self, selector, context);
+                } else {
+                    _.extend(options, arg1);
+                    Form.call(self, selector);
+                }
+            } else if (len > 2){
+                context = arg1;
+                _.extend(options, arg2);
+                Form.call(self, selector, context);
+            }
+            self.empty();
+            self.append([Elems.year, options.separator, Elems.month, options.separator, Elems.date]);
+            self.year = new maus.Number(Elems.year);
+            self.month = new maus.Number(Elems.month);
+            self.date = new maus.Number(Elems.date);
+        })(arguments.length, this);
+
+        this.get = function(){
+            /**
+             * Return the value.
+             * @method get
+             * @return {String|Array of String}
+             * @example
+             *     var date = new maus.DateForm("#date");
+             *     date.set(2014, 12, 24);
+             *     date.get(); // {year: 2014, month: 12, date: 24}
+             *     date.set(null);
+             *     date.get(); // {year: null, month: null, date: null}
+             */
+            return {
+                year: this.year.get(),
+                month: this.month.get(),
+                date: this.date.get(),
+            };
+        };
+        this.set = function(year, month, date){
+            /**
+             * Set the value.
+             * @method set
+             * @param {String|null|Array of String} val
+             * @return this
+             * @example
+             *     var date = new maus.DateForm("#date");
+             *     date.set(new Date());
+             *     date.set(null);
+             *     date.set(2014, 12, 24);
+             *     date.set(2014, null, 24);
+             *     date.set(Date.now());
+             *     date.set({ year: 2014, month: 11, date: 12 });
+             *     date.set({ year: 2014, date: 12 });
+             */
+            var self = this;
+            var len = arguments.length;
+            if (len === 1){
+                if (_.isNumber(year)){
+                    var _date = new Date(year);
+                    this.year.set(_date.getFullYear());
+                    this.month.set(_date.getMonth()+1);
+                    this.date.set(_date.getDate());
+                } else if (year instanceof Date){
+                    this.year.set(year.getFullYear());
+                    this.month.set(year.getMonth() + 1);
+                    this.date.set(year.getDate());
+                } else if (_.isObject(year)){
+                    _.each(year, function(val, key){
+                        if (key === "year"){
+                            self.year.set(val);
+                        } else if (key === "month"){
+                            self.month.set(val);
+                        } else if (key === "date"){
+                            self.date.set(val);
+                        }
+                    });
+                } else if (_.isNull(year)){
+                    this.year.set(null);
+                    this.month.set(null);
+                    this.date.set(null);
+                }
+            } else if (len > 2){
+                this.year.set(year);
+                this.month.set(month);
+                this.date.set(date);
+            }
+            return this;
+        };
+        this.clear = function(){
+            /**
+             * Clear the value.
+             * @method clear
+             * @return this
+             * @example
+             *     var email = new maus.Email("[type='email']");
+             *     email.clear();
+             *     console.log(email.get()); // ""
+             */
+            return this.set(null);
+        };
+        this.setDef(null);
+    };
+    this.DateForm.prototype = new Form;
 
     this.controls = function(obj){
         /**
