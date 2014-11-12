@@ -367,7 +367,7 @@ $(function(){
         test("normal", function(){
             var target = new maus.Color(selector);
             target.set("red");
-            chai.assert.equal(target.get(), maus.colors["red"], "OK");
+            chai.assert.equal(target.get(), maus.colors.red, "OK");
         });
     });
     suite("Number", function(){
@@ -522,67 +522,6 @@ $(function(){
             email.set(val);
             email.clear();
             chai.assert.ok(_.isEqual(email.get(), []), "OK");
-        });
-    });
-    suite("DateForm", function(){
-        test("normal", function(){
-            var date = new maus.DateForm("#date_form");
-            chai.assert.ok(_.isEqual(date.jq(), $("#date_form")), "OK");
-        });
-    });
-    suite("DateForm.def", function(){
-        test("normal", function(){
-            var date = new maus.DateForm("#date_form");
-            var def = {year: 2012, month: 10, date: 30};
-            var val = {year: 2014, month: 11};
-            date.setDef(def);
-            date.set(val);
-            date.def();
-            chai.assert.ok(_.isEqual(date.get(), def), "OK");
-        });
-    });
-    suite("DateForm.setDef, getDef", function(){
-        test("normal", function(){
-            var date = new maus.DateForm("#date_form");
-            chai.assert.ok(_.isNull(date.getDef()), "OK");
-            var val = {year: 2014, month: 11};
-            date.setDef(val);
-            chai.assert.ok(_.isEqual(date.getDef(), val), "OK");
-        });
-    });
-    suite("DateForm.set, get", function(){
-        test("normal", function(){
-            var date = new maus.DateForm("#date_form");
-            var val = {year: 2014, month: 11};
-            date.set(val);
-            var ret = date.get();
-            delete ret.date;
-            chai.assert.ok(_.isEqual(val, ret), "OK");
-            val = { year: 2014, month: 11, date: 12 };
-            date.set(val);
-            chai.assert.ok(_.isEqual(date.get(), val), "OK");
-            date.set(null);
-            val = { year: null, month: null, date: null };
-            chai.assert.ok(_.isEqual(date.get(), val), "OK");
-            val = { year: 2014, month: 11, date: 12 };
-            date.set(val.year, val.month, val.date);
-            chai.assert.ok(_.isEqual(date.get(), val), "OK");
-            date.set(new Date());
-            date.set(Date.now());
-            date.set(null);
-        });
-    });
-    suite("Date.clear", function(){
-        test("normal", function(){
-            var date = new maus.DateForm("#date_form");
-            var val = {year: 2014, month: 11};
-            date.set(val);
-            var ret = date.get();
-            delete ret.date;
-            chai.assert.ok(_.isEqual(ret, val), "OK");
-            date.clear();
-            val = { year: null, month: null, date: null };
-            chai.assert.ok(_.isEqual(date.get(), val), "OK");
         });
     });
 

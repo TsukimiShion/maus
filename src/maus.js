@@ -162,7 +162,7 @@ window.maus = new function(){
         "peachpuff": "#ffdab9"
     };
 
-    this.j = function(selector, context, descend){
+    this.j = function(){
         /**
          * The function to make a J instance.
          *
@@ -179,10 +179,9 @@ window.maus = new function(){
          *     body.css("background-color", "red"); // $("body").css("background-color", "red");
          */
         return new maus.J.apply(maus, arguments);
-        // return new maus.J(selector, context, descend);
     };
 
-    this.J = function(selector, context, descend){
+    this.J = function(selector, arg1, arg2){
         /**
          * jQuery Wrapper Class.
          *
@@ -229,6 +228,9 @@ window.maus = new function(){
          *     body.jq(); // $("body")
          */
 
+        var context,
+            descend = false;
+
         var self = this;
 
         (function(len){
@@ -240,12 +242,14 @@ window.maus = new function(){
                         return jq;
                     };
                 } else if (len === 2){
-                    if (context instanceof HTMLElement || context instanceof $ || _.isString(context)){
+                    if (arg1 instanceof HTMLElement || arg1 instanceof $ || _.isString(arg1)){
+                        context = arg1;
                         jq = $(selector, context);
                         self.jq = function(){
                             return jq;
                         };
-                    } else if (context){
+                    } else if (arg1){
+                        descend = true;
                         self.jq = function(){
                             return $(selector);
                         };
@@ -256,6 +260,8 @@ window.maus = new function(){
                         };
                     }
                 } else if (len > 2){
+                    context = arg1;
+                    descend = arg2;
                     if (descend){
                         self.jq = function(){
                             return $(selector, context);
@@ -405,7 +411,7 @@ window.maus = new function(){
         })(selector);
     };
 
-    function Form(selector, context, descend){
+    function Form(){
         /**
          * The Base Class of Text, CheckBox, etc.
          * You cannot access this class.
@@ -468,7 +474,7 @@ window.maus = new function(){
     }
     Form.prototype = new maus.J;
 
-    this.Text = function(selector, context, descend){
+    this.Text = function(){
         /**
          * This class helps to operate input:text or textarea.
          * @class Text
@@ -483,7 +489,6 @@ window.maus = new function(){
          */
 
         Form.apply(this, arguments);
-        // Form.call(this, selector, context, descend);
         this.get = function(){
             /**
              * Return the value.
@@ -529,7 +534,7 @@ window.maus = new function(){
     };
     this.Text.prototype = new Form;
 
-    this.Select = function(selector, context, descend){
+    this.Select = function(){
         /**
          * This class helps to operate select.
          *
@@ -549,7 +554,6 @@ window.maus = new function(){
          */
 
         Form.apply(this, arguments);
-        // Form.call(this, selector, context, descend);
         this.get = function(){
             /**
              * Return the value.
@@ -615,7 +619,7 @@ window.maus = new function(){
     };
     this.Select.prototype = new Form;
     
-    this.Radio = function(selector, context, descend){
+    this.Radio = function(){
         /**
          * This class helps to operate input:radio.
          * @class Radio
@@ -627,7 +631,6 @@ window.maus = new function(){
          * @param {boolean} [descend=false] This parameter is valid if **selector** is a string. If **selector** is a string and **descend** is **true**, this maus.J instance does not process currently selected elements but also descendant elements that are added to the document at a later time. If **descend** is false, this maus.J instance processes only currently selected elements.
          */
         Form.apply(this, arguments);
-        // Form.call(this, selector, context, descend);
         var checked_selector = _.template("[value='<%= value %>']");
         this.get = function(){
             /**
@@ -674,14 +677,13 @@ window.maus = new function(){
              *     console.log(radio.get()); // null
              */
             this.checked(false);
-            // checked.checked(false);
             return this;
         };
         this.setDef(null);
     };
     this.Radio.prototype = new Form;
 
-    this.CheckBox = function(selector, context, descend){
+    this.CheckBox = function(){
         /**
          * This class helps to operate input:checkbox.
          * @class CheckBox
@@ -693,7 +695,6 @@ window.maus = new function(){
          * @param {boolean} [descend=false] This parameter is valid if **selector** is a string. If **selector** is a string and **descend** is **true**, this maus.J instance does not process currently selected elements but also descendant elements that are added to the document at a later time. If **descend** is false, this maus.J instance processes only currently selected elements.
          */
         Form.apply(this, arguments);
-        // Form.call(this, selector, context, descend);
         var checked_selector = _.template("[value='<%= value %>']");
         this.get = function(){
             /**
@@ -759,7 +760,7 @@ window.maus = new function(){
     };
     this.CheckBox.prototype = new Form;
 
-    this.BoolCheckBox = function(selector, context, descend){
+    this.BoolCheckBox = function(){
         /**
          * This class helps to operate input:checkbox.
          * If you use this class, the following conditions should be satisfied.
@@ -777,7 +778,6 @@ window.maus = new function(){
          * @param {boolean} [descend=false] This parameter is valid if **selector** is a string. If **selector** is a string and **descend** is **true**, this maus.J instance does not process currently selected elements but also descendant elements that are added to the document at a later time. If **descend** is false, this maus.J instance processes only currently selected elements.
          */
         Form.apply(this, arguments);
-        // Form.call(this, selector, context, descend);
         this.get = function(){
             /**
              * Return whether the checkbox is checked.
@@ -825,7 +825,7 @@ window.maus = new function(){
     };
     this.BoolCheckBox.prototype = new Form;
 
-    this.Color = function(selector, context, descend){
+    this.Color = function(){
         /**
          * This class helps to operate input:color.
          *
@@ -840,7 +840,6 @@ window.maus = new function(){
          *     var text = new maus.Color("[type='color']");
          */
         Form.apply(this, arguments);
-        // Form.call(this, selector, context, descend);
         this.get = function(){
             /**
              * Return the value.
@@ -875,7 +874,7 @@ window.maus = new function(){
     };
     this.Color.prototype = new Form;
 
-    this.Number = function(selector, context, descend){
+    this.Number = function(){
         /**
          * This class helps to operate input:number.
          * @class Number
@@ -935,7 +934,7 @@ window.maus = new function(){
     };
     this.Number.prototype = new Form;
 
-    this.File = function(selector, context, descend){
+    this.File = function(){
         /**
          * This class helps to operate input:file.
          * > ##### Note: 
@@ -957,7 +956,6 @@ window.maus = new function(){
          *     var file = new maus.File("[type='file']");
          */
         Form.apply(this, arguments);
-        // Form.call(this, selector, context, descend);
         this.getDef = function(){
             /**
              * Do nothing.
@@ -1012,7 +1010,7 @@ window.maus = new function(){
     };
     this.File.prototype = new Form;
 
-    this.Email = function(selector, context, descend){
+    this.Email = function(){
         /**
          * This class helps to operate input:email.
          * @class Email
@@ -1083,136 +1081,6 @@ window.maus = new function(){
     };
     this.Email.prototype = new Form;
 
-    this.DateForm = function(selector, arg1, arg2){
-        /**
-         * @class DateForm
-         * @constructor
-         * @extends maus.Form
-         * @namespace maus
-         * @param {String|Element|Array of Element|jQuery} selector This parameter is passed to $(). For detail, please refer http://api.jquery.com/jQuery/ .
-         * @param {Element|jQuery|String} [context] This parameter is valid if **selector** is a string. A DOM Element, Document, or jQuery to use as context.  For detail, please refer http://api.jquery.com/jQuery/ .
-         * @param {Object} [options] 
-         * @example
-         *     var date = new maus.DateForm("#date");
-         */
-
-        (function(len, self){
-            var Elems = {
-                year: $("<input type='number' min='0' max='9999'>"),
-                month: $("<input type='number' min='1' max='12'>"),
-                date: $("<input type='number' min='1' max='31'>"),
-            };
-            var sep = '/',
-                context = null,
-                options = {
-                    separator: "/",
-                };
-            if (len === 1){
-                Form.call(self, selector);
-            } else if (len === 2){
-                if (arg1 instanceof HTMLElement || arg1 instanceof $ || _.isString(arg1)){
-                    context = arg1;
-                    Form.call(self, selector, context);
-                } else {
-                    _.extend(options, arg1);
-                    Form.call(self, selector);
-                }
-            } else if (len > 2){
-                context = arg1;
-                _.extend(options, arg2);
-                Form.call(self, selector, context);
-            }
-            self.empty();
-            self.append([Elems.year, options.separator, Elems.month, options.separator, Elems.date]);
-            self.year = new maus.Number(Elems.year);
-            self.month = new maus.Number(Elems.month);
-            self.date = new maus.Number(Elems.date);
-        })(arguments.length, this);
-
-        this.get = function(){
-            /**
-             * Return the value.
-             * @method get
-             * @return {String|Array of String}
-             * @example
-             *     var date = new maus.DateForm("#date");
-             *     date.set(2014, 12, 24);
-             *     date.get(); // {year: 2014, month: 12, date: 24}
-             *     date.set(null);
-             *     date.get(); // {year: null, month: null, date: null}
-             */
-            return {
-                year: this.year.get(),
-                month: this.month.get(),
-                date: this.date.get(),
-            };
-        };
-        this.set = function(year, month, date){
-            /**
-             * Set the value.
-             * @method set
-             * @param {String|null|Array of String} val
-             * @return this
-             * @example
-             *     var date = new maus.DateForm("#date");
-             *     date.set(new Date());
-             *     date.set(null);
-             *     date.set(2014, 12, 24);
-             *     date.set(2014, null, 24);
-             *     date.set(Date.now());
-             *     date.set({ year: 2014, month: 11, date: 12 });
-             *     date.set({ year: 2014, date: 12 });
-             */
-            var self = this;
-            var len = arguments.length;
-            if (len === 1){
-                if (_.isNumber(year)){
-                    var _date = new Date(year);
-                    this.year.set(_date.getFullYear());
-                    this.month.set(_date.getMonth()+1);
-                    this.date.set(_date.getDate());
-                } else if (year instanceof Date){
-                    this.year.set(year.getFullYear());
-                    this.month.set(year.getMonth() + 1);
-                    this.date.set(year.getDate());
-                } else if (_.isObject(year)){
-                    _.each(year, function(val, key){
-                        if (key === "year"){
-                            self.year.set(val);
-                        } else if (key === "month"){
-                            self.month.set(val);
-                        } else if (key === "date"){
-                            self.date.set(val);
-                        }
-                    });
-                } else if (_.isNull(year)){
-                    this.year.set(null);
-                    this.month.set(null);
-                    this.date.set(null);
-                }
-            } else if (len > 2){
-                this.year.set(year);
-                this.month.set(month);
-                this.date.set(date);
-            }
-            return this;
-        };
-        this.clear = function(){
-            /**
-             * Clear the value.
-             * @method clear
-             * @return this
-             * @example
-             *     var email = new maus.Email("[type='email']");
-             *     email.clear();
-             *     console.log(email.get()); // ""
-             */
-            return this.set(null);
-        };
-        this.setDef(null);
-    };
-    this.DateForm.prototype = new Form;
-
     this.controls = function(obj){
         /**
          * The function to make maus.J instances.
@@ -1277,9 +1145,7 @@ window.maus = new function(){
                 function construct(args){
                     Constructor.apply(this, args);
                 }
-
                 construct.prototype = Constructor.prototype;
-
                 return new construct(args);
             }
 
