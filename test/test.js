@@ -367,7 +367,7 @@ $(function(){
         test("normal", function(){
             var target = new maus.Color(selector);
             target.set("red");
-            chai.assert.equal(target.get(), maus.colors["red"], "OK");
+            chai.assert.equal(target.get(), maus.colors.red, "OK");
         });
     });
     suite("Number", function(){
@@ -450,6 +450,78 @@ $(function(){
         test("normal", function(){
             var file = new maus.File(selector);
             chai.assert.ok(_.isEqual(file.jq(), $(selector)), "OK");
+        });
+    });
+    suite("Email", function(){
+        test("normal", function(){
+            var email = new maus.Email("[name='email']");
+            chai.assert.ok(_.isEqual(email.jq(), $("[name='email']")), "OK");
+        });
+    });
+    suite("Email.def", function(){
+        test("normal", function(){
+            var email = new maus.Email("[name='email']");
+            var def = "foo@gmail.com";
+            var val = "bar@gmail.com";
+            email.setDef(def);
+            email.set(val);
+            email.def();
+            chai.assert.equal(email.get(), def, "OK");
+        });
+    });
+    suite("Email.setDef, getDef", function(){
+        test("normal", function(){
+            var email = new maus.Email("[name='email']");
+            chai.assert.ok(_.isNull(email.getDef()), "OK");
+            var val = "bar@gmail.com";
+            email.setDef(val);
+            chai.assert.equal(email.getDef(), val, "OK");
+        });
+    });
+    suite("Email.set, get", function(){
+        test("normal", function(){
+            var email = new maus.Email("[name='email']");
+            var val = "bar@gmail.com";
+            email.set(val);
+            chai.assert.equal(email.get(), val, "OK");
+            email.set(null);
+            chai.assert.equal(email.get(), "", "OK");
+            email.set(val);
+            email.set(null);
+        });
+    });
+    suite("Email.clear", function(){
+        test("normal", function(){
+            var email = new maus.Email("[name='email']");
+            var val = "bar@gmail.com";
+            email.set(val);
+            email.clear();
+            chai.assert.equal(email.get(), "", "OK");
+        });
+    });
+    suite("Email.set, get multiple", function(){
+        test("normal", function(){
+            var email = new maus.Email("[name='emails']");
+            var foo = "foo@gmail.com";
+            var bar = "bar@gmail.com";
+            email.set(foo);
+            chai.assert.ok(_.isEqual(email.get(), [foo]), "OK");
+            email.set(null);
+            chai.assert.ok(_.isEqual(email.get(), []), "OK");
+            email.set([foo, bar]);
+            chai.assert.ok(_.isEqual(email.get(), [foo, bar]), "OK");
+            email.set(bar);
+            chai.assert.ok(_.isEqual(email.get(), [bar]), "OK");
+            email.set(null);
+        });
+    });
+    suite("Email.clear multiple", function(){
+        test("normal", function(){
+            var email = new maus.Email("[name='emails']");
+            var val = "bar@gmail.com";
+            email.set(val);
+            email.clear();
+            chai.assert.ok(_.isEqual(email.get(), []), "OK");
         });
     });
 
