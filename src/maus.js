@@ -162,28 +162,17 @@ window.maus = new function(){
         "peachpuff": "#ffdab9"
     };
 
-    this.j = function(){
-        /**
-         * The function to make a J instance.
-         *
-         * ``` maus.j(selector) ``` is equal to ``` new maus.J(selector) ``` .
-         *
-         * @method j
-         * @param {String|Element|Array of Element|jQuery} selector This parameter is passed to $(). For detail, please refer http://api.jquery.com/jQuery/ .
-         * @param {Element|jQuery|String} [context] This parameter is valid if **selector** is a string. A DOM Element, Document, or jQuery to use as context.  For detail, please refer http://api.jquery.com/jQuery/ .
-         * @param {boolean} [descend=false] This parameter is valid if **selector** is a string. If **selector** is a string and **descend** is **true**, this maus.J instance does not process currently selected elements but also descendant elements that are added to the document at a later time. If **descend** is false, this maus.J instance processes only currently selected elements.
-         * @return {maus.J}
-         * @example
-         *     // ex1
-         *     var body = maus.j("body"); // new maus.J("body")
-         *     body.css("background-color", "red"); // $("body").css("background-color", "red");
-         */
-        return new maus.J.apply(maus, arguments);
-    };
-
     this.J = function(selector, arg1, arg2){
         /**
          * jQuery Wrapper Class.
+         *
+         * > ##### Note:
+         * Since the version 4.0.0, maus.j has been abolished.
+         * But instead of maus.j, you can call maus.J without the **new** operator.
+         *
+         * ```javascript
+         * var body = maus.J("body"); // new maus.J("body");
+         * ```
          *
          * @class J
          * @namespace maus
@@ -227,6 +216,20 @@ window.maus = new function(){
          *     var body = new maus.J("body");
          *     body.jq(); // $("body")
          */
+
+        function applyConstructor(Constructor, args){
+            function construct(args){
+                Constructor.apply(this, args);
+            }
+
+            construct.prototype = Constructor.prototype;
+
+            return new construct(args);
+        }
+
+        if (!(this instanceof maus.J)){
+            return applyConstructor(maus.J, arguments);
+        }
 
         var context,
             descend = false;
@@ -427,7 +430,6 @@ window.maus = new function(){
         var _default;
 
         maus.J.apply(this, arguments);
-        // maus.J.call(this, selector, context, descend);
         this.def = function(){
             /**
              * Change the value to the default value.
@@ -554,30 +556,79 @@ window.maus = new function(){
          */
 
         Form.apply(this, arguments);
-        this.get = function(){
+        this.get = function(vals){
             /**
-             * Return the value.
+             * If no argument is specified, return the values of selected options.
+             * If no option element is selected, the value is **[]**.
+             * If **vals** parameter is a string, return whether **vals** is selected.
+             * If **vals** parameter is an array of string, return an object.
+             * For example, if ```this.get(["foo", "bar"])``` returns ```{foo: true, bar: false}```,
+             * it means that the value "foo" is selected and "bar" is not selected.
+             * If "multiple" attribute is not "multiple", you should not pass an array.
+             *
              * @method get
-             * @return {String|Array of String|null}
+             * @param {String|Array of String} [vals]
+             * @return {String|Array of String|Object|boolean}
              * @example
              *     // ex1: single
              *     var select = new maus.Select("select");
              *     console.log(select.get()); // String or null
+             *     console.log(select.get("foo")); // "foo" === select.get()
              * @example
              *     // ex2: multiple
              *     var select = new maus.Select("select");
              *     select.set("hello");
              *     console.log(select.get()); // ["hello"]
              *     select.clear();
-             *     console.log(select.get()); // null
+             *     console.log(select.get()); // []
+             *     select.set("hello");
+             *     console.log(select.get("foo")); // false
+             *     console.log(select.get("hello")); // true
+             *     console.log(select.get(["hello", "foo"])); // { hello: true, foo: false }
              */
-            return this.val();
+            var value, ret = {};
+            if (_.isString(vals)){
+                if (this.prop("multiple")){
+                    value = this.val();
+                    return !(_.isNull(value) || value.indexOf(vals) === -1);
+                } else {
+                    return vals === this.val();
+                }
+            } else if (_.isArray(vals)){
+                value = this.val();
+                if (this.prop("multiple")){
+                    if (_.isNull(value)){
+                        vals.forEach(function(val){
+                            ret[val] = false;
+                        });
+                        return ret;
+                    } else {
+                        vals.forEach(function(val){
+                            ret[val] = value.indexOf(val) !== -1;
+                        });
+                        return ret;
+                    }
+                } else {
+                    vals.forEach(function(val){
+                        ret[val] = value === val;
+                    });
+                    return ret;
+                }
+            } else {
+                if (this.prop("multiple")){
+                    ret = this.val();
+                    return _.isNull(ret) ? [] : ret;
+                } else {
+                    return this.val();
+                }
+            }
         };
-        this.set = function(val){
+        this.set = function(arg0, arg1){
             /**
              * Set the value.
              * @method set
-             * @param {String|Array of String|null} val
+             * @param {String|Array of String|Object|null|boolean} arg0
+             * @param {boolean|Array of boolean} [arg1]
              * @return this
              * @example
              *     // ex1: single
@@ -595,12 +646,120 @@ window.maus = new function(){
              *     select.set(["bad", "good"]);
              *     console.log(select.get()); // ["bad", "good"]
              *     select.set(null);
-             *     console.log(select.get()); // null
-             *     select.set(["bad", "good"]);
+             *     console.log(select.get()); // []
+             *     select.set(["hello", "good"]);
+             *     select.set({ bad: true, good: false });
+             *     console.log(select.get()); // ["hello", "bad"]
              *     select.set([]);
              *     console.log(select.get()); // []
+             *     select.set("hello", true);
+             *     console.log(select.get()); // ["hello"]
+             *     select.set(["good", "bad"], true);
+             *     console.log(select.get()); // ["hello", "good", "bad"]
+             *     select.set("bad", false);
+             *     console.log(select.get()); // ["hello", "good"]
+             *     select.set(["good", "bad"], [false, true]);
+             *     console.log(select.get()); // ["hello", "bad"]
+             *     select.set(false);
+             *     console.log(select.get()); // []
+             *     select.set(true);
+             *     console.log(select.get()); // ["hello", "good", "bad"]
              */
-            this.val(val);
+            var len = arguments.length;
+            if (len === 1){
+                if (_.isString(arg0) || _.isArray(arg0) || _.isNull(arg0) || arg0 === false){
+                    this.val(arg0);
+                } else {
+                    if (this.prop("multiple")){
+                        if (arg0 === true){
+                            this.find("option").prop("selected", true);
+                        } else {
+                            var values = this.val();
+                            if (_.isNull(values)){
+                                values = [];
+                            }
+                            _.each(arg0, function(val, key){
+                                var i = values.indexOf(key);
+                                if (i === -1){
+                                    if (val){
+                                        values.push(key);
+                                    }
+                                } else {
+                                    if (!val){
+                                        values.splice(i, 1);
+                                    }
+                                }
+                            });
+                            this.val(values);
+                        }
+                    } else {
+                        var value = null;
+                        _.each(arg0, function(val, key){
+                            if (val){
+                                value = key;
+                            }
+                        });
+                        if (!_.isNull(value)){
+                            this.val(value);
+                        }
+                    }
+                }
+            } else if (len > 1){
+                var a = {};
+                if (_.isString(arg0)){
+                    a[arg0] = arg1;
+                    this.set(a);
+                } else if (_.isArray(arg0)){
+                    if (_.isArray(arg1)){
+                        this.set(_.object(arg0, arg1));
+                    } else {
+                        arg0.forEach(function(key){
+                            a[key] = arg1;
+                        });
+                        this.set(a);
+                    }
+                }
+            }
+            return this;
+        };
+        this.toggleValue = function(vals){
+            /**
+             * If "multiple" attribute is not "multiple", this method does nothing.
+             * 
+             * @method toggleValue
+             * @param {String|Array of String} [vals]
+             * @return this
+             *
+             * @example
+             *     // multiple
+             *     // "hello", "good", "bad"
+             *     var select = new maus.Select("select");
+             *     select.set("hello");
+             *     select.toggleValue();
+             *     console.log(select.get()); // ["bad", "good"]
+             *     select.toggleValue("bad");
+             *     console.log(select.get()); // ["good"]
+             *     select.toggleValue("hello");
+             *     console.log(select.get()); // ["good", "hello"]
+             *     select.toggleValue(["good", "bad"]);
+             *     console.log(select.get()); // ["bad", "hello"]
+             */
+            var self = this;
+            if (this.prop("multiple")){
+                if (_.isString(vals)){
+                    this.set(vals, !(self.get(vals)));
+                } else if (_.isArray(vals)){
+                    var values = this.get(vals);
+                    _.each(values, function(val, key){
+                        values[key] = !val;
+                    });
+                    this.set(values);
+                } else {
+                    this.find("option").each(function(){
+                        $(this).prop("selected", !($(this).prop("selected")));
+                    });
+                }
+            }
             return this;
         };
         this.clear = function(){
@@ -611,9 +770,9 @@ window.maus = new function(){
              * @example
              *     var select = new maus.Select("select");
              *     select.clear();
-             *     console.log(select.get()); // null
+             *     console.log(select.get()); // null or []
              */
-            return this.set([]);
+            return this.set(null);
         };
         this.setDef(null);
     };
@@ -695,23 +854,42 @@ window.maus = new function(){
          * @param {boolean} [descend=false] This parameter is valid if **selector** is a string. If **selector** is a string and **descend** is **true**, this maus.J instance does not process currently selected elements but also descendant elements that are added to the document at a later time. If **descend** is false, this maus.J instance processes only currently selected elements.
          */
         Form.apply(this, arguments);
-        var checked_selector = _.template("[value='<%= value %>']");
-        this.get = function(){
+
+        var _item = _.template("[value='<%= value %>']");
+        var self = this;
+        function getItem(val){
+            return self.filter(_item({value: val}));
+        }
+        this.get = function(vals){
             /**
              * Return the value.
              * @method get
-             * @return {Array of String}
+             * @param {String|Array of String} [vals]
+             * @return {String|Array of String|Object|boolean}
              * @example
              *     var checkbox = new maus.CheckBox(":checkbox");
              *     console.log(checkbox.get()); // []
              *     checkbox.set("good");
              *     console.log(checkbox.get()); // ["good"]
+             *     console.log(checkbox.get("good")); // true
+             *     console.log(checkbox.get("bad")); // false
+             *     console.log(checkbox.get(["good", "bad"])); // { good: true, bad: false }
              */
-            var vals = [];
-            this.filter(":checked").each(function(){
-                vals.push($(this).val());
-            });
-            return vals;
+            if (_.isString(vals)){
+                return getItem(vals).prop("checked");
+            } else if (_.isArray(vals)){
+                var ret = {};
+                vals.forEach(function(val){
+                    ret[val] = getItem(val).prop("checked");
+                });
+                return ret;
+            } else {
+                var values = [];
+                this.filter(":checked").each(function(){
+                    values.push($(this).val());
+                });
+                return values;
+            }
         };
         this.clear = function(){
             /**
@@ -728,31 +906,92 @@ window.maus = new function(){
             });
             return this;
         };
-        this.set = function(vals){
+        this.set = function(arg0, arg1){
             /**
              * Set the value.
              * @method set
-             * @param {String|Array of String|null} val
+             * @param {String|Array of String|null|Object|boolean} arg0
+             * @param {boolean|Array of boolean} arg1
              * @return this
              * @example
              *     var checkbox = new maus.CheckBox(":checkbox");
-             *     checkbox.set("hello");
-             *     console.log(checkbox.get()); // ["hello"]
-             *     checkbox.set(["good", "bad"]);
-             *     console.log(checkbox.get()); // ["good", "bad"]
-             *     checkbox.set(null);
-             *     console.log(checkbox.get()); // []
+             *     console.log(checkbox.set("hello").get()); // ["hello"]
+             *     console.log(checkbox.set(["good", "bad"]).get()); // ["good", "bad"]
+             *     console.log(checkbox.set("hello", true).get()); // ["good", "bad", "hello"]
+             *     console.log(checkbox.set(["good", "hello"], false).get()); // ["bad"]
+             *     console.log(checkbox.set(["good", "bad"], [true, false]).get()); // ["good"]
+             *     console.log(checkbox.set(null).get()); // []
+             *     console.log(checkbox.set(true).get()); // ["good", "bad", "hello"]
+             *     console.log(checkbox.set(false).get()); // []
              */
-            this.clear();
+            var len = arguments.length;
+            if (len === 1){
+                if (_.isArray(arg0)){
+                    this.clear();
+                    arg0.forEach(function(val){
+                        getItem(val).prop("checked", true);
+                    });
+                } else if (_.isString(arg0)){
+                    this.clear();
+                    getItem(arg0).prop("checked", true);
+                } else if (_.isNull(arg0)){
+                    this.clear();
+                } else if (_.isBoolean(arg0)){
+                    this.prop("checked", arg0);
+                } else {
+                    _.each(arg0, function(val, key){
+                        getItem(key).prop("checked", val);
+                    });
+                }
+            } else if (len > 1){
+                if (_.isArray(arg0)){
+                    if (_.isArray(arg1)){
+                        this.set(_.object(arg0, arg1));
+                    } else {
+                        arg0.forEach(function(val){
+                            getItem(val).prop("checked", arg1);
+                        });
+                    }
+                } else if (_.isString(arg0)){
+                    getItem(arg0).prop("checked", arg1);
+                }
+            }
+            return this;
+        };
+        this.toggleValue = function(vals){
+            /**
+             * 
+             * 
+             * @method toggleValue
+             * @param {String|Array of String} [vals]
+             * @return this
+             *
+             * @example
+             *     // "hello", "good", "bad"
+             *     var checkbox = new maus.CheckBox(":checkbox");
+             *     checkbox.set("hello");
+             *     checkbox.toggleValue();
+             *     console.log(checkbox.get()); // ["bad", "good"]
+             *     checkbox.toggleValue("bad");
+             *     console.log(checkbox.get()); // ["good"]
+             *     checkbox.toggleValue("hello");
+             *     console.log(checkbox.get()); // ["good", "hello"]
+             *     checkbox.toggleValue(["good", "bad"]);
+             *     console.log(checkbox.get()); // ["bad", "hello"]
+             */
             var self = this;
-            if (vals instanceof Array){
-                vals.forEach(function(val){
-                    self.filter(checked_selector({value: val})).prop("checked", true);
+            if (_.isString(vals)){
+                this.set(vals, !(self.get(vals)));
+            } else if (_.isArray(vals)){
+                var values = this.get(vals);
+                _.each(values, function(val, key){
+                    values[key] = !val;
                 });
-            } else if (_.isString(vals)){
-                this.filter(checked_selector({value: vals})).prop("checked", true);
-            } else if (vals === null){
-                this.clear();
+                this.set(values);
+            } else {
+                this.each(function(){
+                    $(this).prop("checked", !($(this).prop("checked")));
+                });
             }
             return this;
         };
@@ -819,6 +1058,22 @@ window.maus = new function(){
              *     console.log(checkbox.get()); // false
              */
             this.checked(Boolean(val));
+            return this;
+        };
+        this.toggleValue = function(){
+            /**
+             * 
+             * @method toggleValue
+             * @return this
+             * @example
+             *     var checkbox = new maus.BoolCheckBox(":checkbox");
+             *     checkbox.set(true);
+             *     checkbox.toggleValue();
+             *     console.log(checkbox.get()); // false
+             *     checkbox.toggleValue();
+             *     console.log(checkbox.get()); // true
+             */
+            this.set(!(this.get()));
             return this;
         };
         this.setDef(false);

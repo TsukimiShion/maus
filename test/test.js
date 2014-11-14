@@ -229,8 +229,6 @@ $(function(){
             text.set(null);
             chai.assert.equal(text.get(), "", "OK");
             text.set(val);
-            text.set(undefined);
-            chai.assert.equal(text.get(), "", "OK");
         });
     });
     suite("Text.clear", function(){
@@ -266,13 +264,53 @@ $(function(){
     });
     suite("Select multiple", function(){
         test("normal", function(){
+            var names = ["John", "Mike", "Ace"];
             var select = new maus.Select("select[name='name']");
-            chai.assert.equal(select.get(), null, "OK");
-            var val = "Ace";
-            select.set(val);
-            chai.assert.ok(_.isEqual(select.get(), [val]), "OK");
+            chai.assert.ok(_.isEqual(select.get(), []));
+            select.set(names[0]);
+            chai.assert.ok(_.isEqual(select.get(), [names[0]]));
             select.clear();
-            chai.assert.ok(_.isEqual(select.get(), null), "OK");
+            chai.assert.ok(_.isEqual(select.get(), []));
+            select.set(names[0]);
+            select.set(names.slice(1));
+            chai.assert.ok(select.get(names[1]));
+            chai.assert.notOk(select.get(names[0]));
+            var vals = {};
+            vals[names[0]] = true;
+            vals[names[1]] = false;
+            select.set(vals);
+            chai.assert.ok(select.get(names[0]));
+            chai.assert.notOk(select.get(names[1]));
+            chai.assert.ok(select.get(names[2]));
+            chai.assert.ok(
+                _.isEqual(
+                    select.get(names),
+                    { John: true, Mike: false, Ace: true }
+                ));
+            select.set(names[0], false);
+            chai.assert.ok(_.isEqual(select.get(), [names[2]]));
+            select.set(names.slice(0, 2), true);
+            chai.assert.ok(_.isEqual(select.get(), names));
+            select.set([names[0], names[2]], [true, false]);
+            chai.assert.ok(_.isEqual(select.get(), names.slice(0, 2)));
+            select.set(false);
+            chai.assert.ok(_.isEqual(select.get(), []));
+            select.set(true);
+            chai.assert.ok(_.isEqual(select.get(), names));
+            select.clear();
+        });
+        test("toggleValue", function(){
+            var names = ["John", "Mike", "Ace"];
+            var select = new maus.Select("select[name='name']");
+            select.set(names[0]);
+            select.toggleValue();
+            chai.assert.ok(_.isEqual(select.get(), [names[1], names[2]]));
+            select.toggleValue(names[1]);
+            chai.assert.ok(_.isEqual(select.get(), [names[2]]), "OK");
+            select.toggleValue(names[0]);
+            chai.assert.ok(_.isEqual(select.get(), [names[0], names[2]]));
+            select.toggleValue([names[0], names[1]]);
+            chai.assert.ok(_.isEqual(select.get(), [names[1], names[2]]));
         });
     });
     suite("CheckBox", function(){
@@ -288,10 +326,49 @@ $(function(){
             var target = new maus.CheckBox(selector);
             var val = "soccer";
             target.set(val);
-            chai.assert.ok(_.isEqual(target.get(), [val]), "OK");
+            chai.assert.ok(_.isEqual(target.get(), [val]));
+            chai.assert.ok(target.get(val));
+            chai.assert.notOk(target.get("baseball"));
             var vals = ["soccer", "baseball"];
             target.set(vals);
-            chai.assert.ok(_.isEqual(target.get(), vals), "OK");
+            chai.assert.ok(_.isEqual(target.get(), vals));
+            target.set({ tennis: true, baseball: false});
+            chai.assert.ok(_.isEqual(target.get(), ["soccer", "tennis"]));
+            chai.assert.ok(
+                _.isEqual(
+                    target.get(["soccer", "baseball"]),
+                    { soccer: true, baseball: false}
+                ), "OK");
+            target.set(null);
+            target.set("soccer", true);
+            chai.assert.ok(_.isEqual(target.get(), ["soccer"]));
+            target.set(["tennis", "baseball"], true);
+            chai.assert.ok(_.isEqual(target.get(), ["soccer", "baseball", "tennis"]));
+            target.set("baseball", false);
+            chai.assert.ok(_.isEqual(target.get(), ["soccer", "tennis"]));
+            target.set(["tennis", "baseball"], [false, true]);
+            chai.assert.ok(_.isEqual(target.get(), ["soccer", "baseball"]));
+            target.set(false);
+            chai.assert.ok(_.isEqual(target.get(), []));
+            target.set(true);
+            chai.assert.ok(_.isEqual(target.get(), ["soccer", "baseball", "tennis"]));
+            target.set(null);
+        });
+    });
+    suite("CheckBox.toggleValue", function(){
+        test("normal", function(){
+            var sports = ["soccer", "baseball", "tennis"];
+            var selector = "[name='sports']";
+            var target = new maus.CheckBox(selector);
+            target.set(sports[0]);
+            target.toggleValue();
+            chai.assert.ok(_.isEqual(target.get(), [sports[1], sports[2]]));
+            target.toggleValue(sports[1]);
+            chai.assert.ok(_.isEqual(target.get(), [sports[2]]), "OK");
+            target.toggleValue(sports[0]);
+            chai.assert.ok(_.isEqual(target.get(), [sports[0], sports[2]]));
+            target.toggleValue([sports[0], sports[1]]);
+            chai.assert.ok(_.isEqual(target.get(), [sports[1], sports[2]]));
         });
     });
     suite("CheckBox.clear", function(){
@@ -301,14 +378,14 @@ $(function(){
             var vals = ["soccer", "baseball"];
             target.set(vals);
             target.clear();
-            chai.assert.ok(_.isEqual(target.get(), []), "OK");
+            chai.assert.ok(_.isEqual(target.get(), []));
         });
     });
     suite("Radio", function(){
         var selector = ":radio[name='sex']";
         test("normal", function(){
             var target = new maus.Radio(selector);
-            chai.assert.ok(_.isEqual(target.jq(), $(selector)), "OK");
+            chai.assert.ok(_.isEqual(target.jq(), $(selector)));
         });
     });
     suite("Radio.set, get", function(){
@@ -343,6 +420,17 @@ $(function(){
             target.set(true);
             chai.assert.ok(target.get(), "OK");
             target.set(false);
+            chai.assert.notOk(target.get(), "OK");
+        });
+    });
+    suite("BoolCheckBox.toggleValue", function(){
+        var selector = "#checked-target";
+        test("normal", function(){
+            var target = new maus.BoolCheckBox(selector);
+            target.set(false);
+            target.toggleValue();
+            chai.assert.ok(target.get(), "OK");
+            target.toggleValue();
             chai.assert.notOk(target.get(), "OK");
         });
     });
